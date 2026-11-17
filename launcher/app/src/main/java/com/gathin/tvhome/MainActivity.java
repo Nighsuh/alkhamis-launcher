@@ -4039,15 +4039,26 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     }
 
     /** The header opens launcher settings directly; hold OK keeps the extra home actions available. */
+    private void openLauncherSettings() {
+        startActivityForResult(new Intent(this, LauncherSettingsActivity.class), LAUNCHER_SETTINGS_REQUEST);
+    }
+
+    /** The TV's own Settings app, the dock tile a long-press treats as Settings. */
+    private boolean isSettingsApp(String pkg) {
+        if (pkg == null || pkg.isEmpty()) return false;
+        if ("com.android.tv.settings".equals(pkg) || "com.android.settings".equals(pkg)) return true;
+        ResolveInfo info = getPackageManager().resolveActivity(new Intent(Settings.ACTION_SETTINGS), 0);
+        return info != null && info.activityInfo != null && pkg.equals(info.activityInfo.packageName);
+    }
+
     private void showSettingsMenu() {
         View anchor = findViewById(R.id.btnSettings);
         View panel = getLayoutInflater().inflate(R.layout.popup_inputs, root, false);
         LinearLayout rows = panel.findViewById(R.id.rows);
         PopupWindow popup = glassPopup(panel, (int) (200 * density));
+        addSettingsMenuRow(rows, popup, R.string.alkhamis_launcher_settings, this::openLauncherSettings);
         addSettingsMenuRow(rows, popup, R.string.featured_dock, () ->
                 startActivity(new Intent(this, DockManagerActivity.class)));
-        if (!launcherSettingsButton) addSettingsMenuRow(rows, popup, R.string.launcher_settings, () -> startActivityForResult(
-                new Intent(this, LauncherSettingsActivity.class), LAUNCHER_SETTINGS_REQUEST));
         // Firmware that ships its own settings app next to the AOSP one (Xiaomi China is one): the
         // vendor app holds pages the AOSP settings has no row for, such as Account & Security with
         // the ADB switch. Offered here only while one of them is installed.
@@ -4175,6 +4186,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         LinearLayout rows = panel.findViewById(R.id.rows);
         PopupWindow popup = glassPopup(panel, (int) (280 * density));
         boolean inDock = position < dockEnd();
+        if (isSettingsApp(pkg)) addSettingsMenuRow(rows, popup, R.string.alkhamis_launcher_settings, this::openLauncherSettings);
         if (inDock) addSettingsMenuRow(rows, popup, R.string.dock_remove, () -> removeFromDock(pkg));
         else addSettingsMenuRow(rows, popup, R.string.tile_add_to_dock, () -> addToDock(pkg));
         addSettingsMenuRow(rows, popup, R.string.featured_dock, () ->

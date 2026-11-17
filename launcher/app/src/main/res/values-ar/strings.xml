@@ -62,6 +62,7 @@
     <string name="card_state_new_key">مفتاح جديد</string>
     <string name="card_state_new_label">اسم جديد</string>
     <string name="launcher_settings">إعدادات المشغّل</string>
+    <string name="alkhamis_launcher_settings">إعدادات Alkhamis Launcher</string>
     <string name="native_settings">إعدادات المُصنّع</string>
     <string name="columns_label">تطبيقات في كل صف</string>
     <string name="columns_hint">صف التطبيقات يتسع لهذا العدد. الباقي ينزل إلى الصفوف تحته.</string>
@@ -72,8 +73,8 @@
     <string name="open_on_start_label">الفتح عند التشغيل</string>
     <string name="open_on_start_state">الفتح عند التشغيل: %1$s</string>
     <string name="advanced_effects_warning">ترفع البطاقات وتكبّر الأيقونات وتنعّم انتقالات الألوان. قد تزيد استهلاك الذاكرة حسب التلفاز.</string>
-    <string name="follow_theme">اتّباع السمة (إعادة ضبط الخيارات)</string>
-    <string name="follow_theme_hint">استخدم تخطيط السمة الحالية وحركتها أو القيم المضمّنة. تطبيق سمة أو إعادة ضبطها يمحو خيارات التلفاز أيضًا.</string>
+    <string name="follow_theme">اتّباع الثيم (إعادة ضبط الخيارات)</string>
+    <string name="follow_theme_hint">استخدم تخطيط الثيم الحالي وحركته أو القيم المضمّنة. تطبيق ثيم أو إعادة ضبطه يمحو خيارات التلفاز أيضًا.</string>
     <string name="tv_settings">إعدادات نظام التلفاز</string>
     <string name="on">تشغيل</string>
     <string name="off">إيقاف</string>
@@ -221,20 +222,20 @@
     <string name="wallpaper_reset">استعادة الافتراضي</string>
     <string name="wallpaper_reset_done">عُدت إلى صورة الضريح، تعتيم ٤٥٪.</string>
 
-    <string name="themes">السمات</string>
-    <string name="themes_coming_soon">السمات · قريبًا</string>
-    <string name="themes_coming_soon_note">سمات إضافية في التحديثات القادمة.</string>
-    <string name="themes_ready">تتوفّر سمات من الشبكة.</string>
-    <string name="themes_use_shrine">استخدام سمة الضريح</string>
+    <string name="themes">الثيمات</string>
+    <string name="themes_coming_soon">الثيمات · قريبًا</string>
+    <string name="themes_coming_soon_note">ثيمات إضافية في التحديثات القادمة.</string>
+    <string name="themes_ready">تتوفّر ثيمات من الشبكة.</string>
+    <string name="themes_use_shrine">استخدام ثيم الضريح</string>
     <string name="themes_url_hint">عنوان فهرس https</string>
     <string name="themes_url_bad">يجب أن يبدأ عنوان الفهرس بـ https.</string>
     <string name="themes_refresh">حفظ العنوان وتحديث</string>
     <string name="themes_loading">جارٍ فحص القائمة…</string>
-    <string name="themes_none_yet">لا سمات إضافية في القائمة بعد.</string>
-    <string name="themes_pick">موافق يطبّق السمة. الضريح هو الافتراضي ويبقى في الأعلى.</string>
-    <string name="themes_downloading">جارٍ تنزيل السمة…</string>
-    <string name="themes_applied">طُبّقت السمة.</string>
-    <string name="themes_failed">تعذّر تطبيق السمة.</string>
+    <string name="themes_none_yet">لا ثيمات إضافية في القائمة بعد.</string>
+    <string name="themes_pick">موافق يطبّق الثيم. الضريح هو الافتراضي ويبقى في الأعلى.</string>
+    <string name="themes_downloading">جارٍ تنزيل الثيم…</string>
+    <string name="themes_applied">طُبّق الثيم.</string>
+    <string name="themes_failed">تعذّر تطبيق الثيم.</string>
 
     <string name="chip_settings_locked">الإعدادات تبقى في الشريط. يمكن نقلها فقط.</string>
     <string name="screensaver_title">حافظة الشاشة والنوم</string>
@@ -288,7 +289,7 @@
     <string name="wallpaper_state">الخلفية: %1$s</string>
     <string name="wallpaper_none">بلا</string>
     <string name="wallpaper_applied">تغيّرت الخلفية</string>
-    <string name="wallpaper_theme_default">افتراضي السمة</string>
+    <string name="wallpaper_theme_default">افتراضي الثيم</string>
     <string name="quick_picture">العرض</string>
     <string name="quick_network">الشبكة</string>
     <string name="quick_apps">التطبيقات</string>

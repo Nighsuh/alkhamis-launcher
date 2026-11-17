@@ -60,6 +60,7 @@
     <string name="home_screen_fmt">Set Free My TV to Original first.</string>
     <string name="home_screen_wifi">The Wi-Fi is saved by that app, so nothing changed.</string>
     <string name="launcher_settings">Launcher settings</string>
+    <string name="alkhamis_launcher_settings">Alkhamis Launcher settings</string>
     <string name="native_settings">Native settings</string>
     <string name="columns_label">Apps per row</string>
     <string name="columns_hint">The dock row holds this many apps. The rest move to the rows below.</string>

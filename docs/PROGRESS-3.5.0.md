@@ -21,6 +21,16 @@ Port of the 3.2.10-shrine tree onto CleanYourTV v3.5.0 (`d11bd68c9ac45b2fb384809
 - Monkey, 1000 events, Arabic then English. Both finished with exit 0. No `FATAL EXCEPTION` for `com.gathin.tvhome`.
 - Memory after eight column changes: 3.2.10 TOTAL PSS 43,072 KB (that session still had 8 activities). 3.5.0 TOTAL PSS 50,492 KB with 2 activities. The extra is about 7 MB, in line with the shrine wallpaper and the prayer cards, not a growing activity leak.
 
+## 3.5.1-shrine
+
+versionCode 24, same key and package, on the same branch.
+
+- Long-press on the top-bar Settings shortcut and on the Settings dock tile opens the menu with Alkhamis Launcher settings first and focused. Checked in English and Arabic.
+- Arabic theme wording is ثيم / ثيمات. The Arabic theme picker title is الثيمات, and the shrine row is استخدام ثيم الضريح.
+- Six dummy leanback activities were installed on the API 30 emulator. With four columns, Down moves the page: the prayer cards slide up with the dock and then leave the screen. The clock stays.
+- Upgrade from 3.5.0-shrine to 3.5.1-shrine installed as versionCode 24.
+- Monkey, 500 events, Arabic: exit 0, no fatal exception for this package.
+
 ## Not done
 
 - API 34 system image was not installed. API 30 was the image that finished in time.
