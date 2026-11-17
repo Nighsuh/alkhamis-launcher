@@ -9,6 +9,7 @@ the screen without a README line fails in CI, while rewording a README line stay
 row's own label - the text the TV shows - is still there. The numbers next to the rows (4 to 7, 0 to 3,
 the four dock opacities) come from the same two files.
 """
+import html
 import re
 import unittest
 import xml.etree.ElementTree as ET
@@ -32,7 +33,7 @@ def english_strings(text):
     """name -> value for every <string> in res/values/strings.xml (the English text Android shows)."""
     out = {}
     for match in re.finditer(r"<string name=\"([a-z_0-9]+)\"[^>]*>(.*?)</string>", text, re.S):
-        out[match.group(1)] = match.group(2).strip()
+        out[match.group(1)] = html.unescape(match.group(2).strip())
     return out
 
 

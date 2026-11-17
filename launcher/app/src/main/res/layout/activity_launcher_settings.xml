@@ -135,14 +135,6 @@
             android:textColor="#FFFFFFFF"
             android:textSize="20sp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="@string/columns_hint"
-            android:textColor="#FFACB8C1"
-            android:textSize="14sp" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -154,6 +146,14 @@
             <TextView android:id="@+id/columns6" style="@style/SettingsColumnChoice" android:text="6" />
             <TextView android:id="@+id/columns7" style="@style/SettingsColumnChoice" android:text="7" />
         </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/columns_hint"
+            android:textColor="#FFACB8C1"
+            android:textSize="14sp" />
 
         <TextView
             android:layout_width="match_parent"

@@ -284,7 +284,7 @@
     <string name="chip_on">%1$s · On</string>
     <string name="chip_off">%1$s · Off</string>
 
-    <string name="wallpaper_screen_title">Wallpaper</string>
+    <string name="wallpaper_screen_title">Wallpaper changer</string>
     <string name="wallpaper_dim_value">Dim %1$d%%</string>
     <string name="wallpaper_shrine">Shrine wallpaper</string>
     <string name="wallpaper_using_shrine">Using the shrine picture.</string>

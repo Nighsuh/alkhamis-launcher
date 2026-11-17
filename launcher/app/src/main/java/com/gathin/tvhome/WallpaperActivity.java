@@ -141,6 +141,7 @@ public final class WallpaperActivity extends Activity {
         StorageManager manager = activity.getSystemService(StorageManager.class);
         if (manager != null) {
             for (StorageVolume volume : manager.getStorageVolumes()) {
+                if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.R) continue;
                 File dir = volume.getDirectory();
                 if (dir != null) add(out, dir);
             }

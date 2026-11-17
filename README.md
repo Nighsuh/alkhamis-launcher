@@ -6,7 +6,7 @@ Alkhamis Launcher 3.5.1-shrine is a shrine-themed Android TV home screen. Packag
 
 Alkhamis Launcher ‏3.5.1-shrine شاشة رئيسية لتلفاز أندرويد بثيم الضريح. الحزمة `com.gathin.tvhome`. مبنية على CleanYourTV الإصدار 3.5.0 (ترخيص MIT، حقوق Gathin)، مع شريط الضريح، والعربية والإنجليزية واتجاه اليمين إلى اليسار، وبطاقات الصلاة، واختيار الشاشة الرئيسية. ثيم الضريح هو الافتراضي ويُطبَّق عند أول تشغيل. رقم الإصدار 24 يُثبَّت فوق 3.5.0-shrine بنفس مفتاح التوقيع. التغييرات في [CHANGELOG.md](CHANGELOG.md). ملاحظات التثبيت في [SHRINE.md](SHRINE.md).
 
-The upstream CleanYourTV guide follows. The launcher in this repository is the shrine build described above, not an unsigned upstream debug build.
+The upstream CleanYourTV guide follows. The launcher in this repository is the shrine build described above, not an unsigned upstream debug build. Port notes: [3.5.0](docs/PROGRESS-3.5.0.md), [3.2.10](docs/PROGRESS-3.2.10.md), [3.2.9](docs/PROGRESS-3.2.9.md), and the [theme catalog](docs/THEMES-CATALOG.md).
 
 <p align="center">
   <a href="https://cleanyour.tv"><img src="https://raw.githubusercontent.com/Gathin23/cleanyourtv/main/docs/banner.png" alt="CleanYourTV. Your TV, minus the ads. Strip the bloatware from any Android TV or Google TV over Wi-Fi and replace the ad-filled home screen with a clean launcher that looks like an Apple TV. No root, no cable, nothing uninstalled, and a one-line restore." width="800"></a>

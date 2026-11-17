@@ -34,10 +34,13 @@ Themes set the same keys plus a background colour and a wallpaper.
 
 ## Launcher settings and the default home
 
-Click **Settings** for the TV's own settings. Hold OK on it for its menu:
+Click **Settings** for the TV's own settings. Hold OK on it, or on the Settings tile in the dock, for its menu.
+The first row is focused:
 
+- **Alkhamis Launcher settings**, the launcher's own page.
+- **Featured dock**.
 - **Launcher settings**. With `launcher_settings_button` a click opens those instead, and the menu
-  leaves the row out.
+  leaves that older row out.
 - **Native settings**, where the TV ships a settings app of its own beside Android's - Xiaomi China,
   TCL/FFALCON and Fire OS are in `settings_fallback_components` - because that app holds pages
   Android's has no row for, such as Xiaomi's Account & Security with the ADB switch.
@@ -50,6 +53,8 @@ Click **Settings** for the TV's own settings. Hold OK on it for its menu:
 
 The launcher's own page has these rows, top to bottom:
 
+- **Language**, **Featured dock**, **Top bar shortcuts**, **Wallpaper changer**, **Themes**,
+  **Screensaver and sleep**, **Prayer times**, **Widgets**, **Date & time**.
 - **Reorder apps**, only with `launcher_settings_button`, the same as the menu's.
 - **Apps per row** 4, 5, 6 or 7; **Rows below dock** 0 to 3, how many rows of tiles stay visible under the
   dock band; **Dock band opacity** 100%, 70%, 50% or 30%. The last two only do anything while the dock is
@@ -65,6 +70,7 @@ The launcher's own page has these rows, top to bottom:
   time Home comes up after the TV starts. Once per boot, so Home and Back still reach the launcher.
 - **Follow theme (reset on-TV choices)**, which clears every choice above. Pushing or resetting a theme
   clears them too.
+- **About & updates**.
 - **Choose default home** opens Android's home picker, and **TV system settings** the TV's own settings
   page.
 

@@ -205,7 +205,7 @@
     <string name="chip_on">%1$s · ظاهر</string>
     <string name="chip_off">%1$s · مخفي</string>
 
-    <string name="wallpaper_screen_title">الخلفية</string>
+    <string name="wallpaper_screen_title">تغيير الخلفية</string>
     <string name="wallpaper_dim_value">التعتيم %1$d%%</string>
     <string name="wallpaper_shrine">خلفية الضريح</string>
     <string name="wallpaper_using_shrine">تُستخدم صورة الضريح.</string>
