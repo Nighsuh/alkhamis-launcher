@@ -1,0 +1,16 @@
+{
+  "dock_apps": [
+    "com.google.android.youtube.tv",
+    "net.mbc.shahidTV",
+    "com.netflix.ninja",
+    "com.amazon.amazonvideo.livingroom",
+    "com.osn.go",
+    "com.disneyplus.mea"
+  ],
+  "columns": 6,
+  "wallpaper": true,
+  "wallpaper_dim": 45,
+  "dock_opacity": 70,
+  "glass_style": "rim",
+  "wallpaper_rotation_minutes": 0
+}

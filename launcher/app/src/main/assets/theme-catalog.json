@@ -1,0 +1,207 @@
+{
+  "themes": [
+    {
+      "id": "aerial",
+      "name": "Aerial",
+      "name_en": "Aerial",
+      "name_ar": "المشهد الجوي",
+      "builtin": true
+    },
+    {
+      "id": "ambient-glass",
+      "name": "Ambient Glass",
+      "name_en": "Ambient Glass",
+      "name_ar": "زجاج هادئ",
+      "builtin": true
+    },
+    {
+      "id": "aurora",
+      "name": "Aurora",
+      "name_en": "Aurora",
+      "name_ar": "الشفق",
+      "builtin": true
+    },
+    {
+      "id": "blocky",
+      "name": "Blocky",
+      "name_en": "Blocky",
+      "name_ar": "المكعبات",
+      "builtin": true
+    },
+    {
+      "id": "christmas",
+      "name": "Christmas",
+      "name_en": "Christmas",
+      "name_ar": "الميلاد",
+      "builtin": true
+    },
+    {
+      "id": "cinematic",
+      "name": "Cinematic",
+      "name_en": "Cinematic",
+      "name_ar": "سينما",
+      "builtin": true
+    },
+    {
+      "id": "default",
+      "name": "Default",
+      "name_en": "Default",
+      "name_ar": "الافتراضي",
+      "builtin": true
+    },
+    {
+      "id": "diwali",
+      "name": "Diwali",
+      "name_en": "Diwali",
+      "name_ar": "ديوالي",
+      "builtin": true
+    },
+    {
+      "id": "dock-glass",
+      "name": "Dock Glass",
+      "name_en": "Dock Glass",
+      "name_ar": "زجاج الشريط",
+      "builtin": true
+    },
+    {
+      "id": "dussehra",
+      "name": "Dussehra",
+      "name_en": "Dussehra",
+      "name_ar": "دوشيرا",
+      "builtin": true
+    },
+    {
+      "id": "family",
+      "name": "Family",
+      "name_en": "Family",
+      "name_ar": "العائلة",
+      "builtin": true
+    },
+    {
+      "id": "glass",
+      "name": "Glass",
+      "name_en": "Glass",
+      "name_ar": "زجاج",
+      "builtin": true
+    },
+    {
+      "id": "glass-gallery",
+      "name": "Glass Gallery",
+      "name_en": "Glass Gallery",
+      "name_ar": "معرض الزجاج",
+      "builtin": true
+    },
+    {
+      "id": "halloween",
+      "name": "Halloween",
+      "name_en": "Halloween",
+      "name_ar": "الهالوين",
+      "builtin": true
+    },
+    {
+      "id": "istanbul",
+      "name": "Istanbul",
+      "name_en": "Istanbul",
+      "name_ar": "إسطنبول",
+      "builtin": true
+    },
+    {
+      "id": "istanbul_v2",
+      "name": "Istanbul v2",
+      "name_en": "Istanbul v2",
+      "name_ar": "إسطنبول ٢",
+      "builtin": true
+    },
+    {
+      "id": "minimal",
+      "name": "Minimal",
+      "name_en": "Minimal",
+      "name_ar": "بسيط",
+      "builtin": true
+    },
+    {
+      "id": "nature-calm",
+      "name": "Nature Calm",
+      "name_en": "Nature Calm",
+      "name_ar": "طبيعة هادئة",
+      "builtin": true
+    },
+    {
+      "id": "red-rain",
+      "name": "Red Rain",
+      "name_en": "Red Rain",
+      "name_ar": "مطر أحمر",
+      "builtin": true
+    },
+    {
+      "id": "retro",
+      "name": "Retro",
+      "name_en": "Retro",
+      "name_ar": "كلاسيكي",
+      "builtin": true
+    },
+    {
+      "id": "ridgelines",
+      "name": "Ridgelines",
+      "name_en": "Ridgelines",
+      "name_ar": "خطوط الجبال",
+      "builtin": true
+    },
+    {
+      "id": "ruska",
+      "name": "Ruska",
+      "name_en": "Ruska",
+      "name_ar": "روسكا",
+      "builtin": true
+    },
+    {
+      "id": "scenes",
+      "name": "Scenes",
+      "name_en": "Scenes",
+      "name_ar": "مشاهد",
+      "builtin": true
+    },
+    {
+      "id": "six-columns",
+      "name": "Six Columns",
+      "name_en": "Six Columns",
+      "name_ar": "ستة أعمدة",
+      "builtin": true
+    },
+    {
+      "id": "stockholm",
+      "name": "Stockholm",
+      "name_en": "Stockholm",
+      "name_ar": "ستوكهولم",
+      "builtin": true
+    },
+    {
+      "id": "storm",
+      "name": "Storm",
+      "name_en": "Storm",
+      "name_ar": "عاصفة",
+      "builtin": true
+    },
+    {
+      "id": "sweden",
+      "name": "Sweden",
+      "name_en": "Sweden",
+      "name_ar": "السويد",
+      "builtin": true
+    },
+    {
+      "id": "twilight",
+      "name": "Twilight",
+      "name_en": "Twilight",
+      "name_ar": "الغسق",
+      "builtin": true
+    },
+    {
+      "id": "weeb",
+      "name": "Weeb",
+      "name_en": "Weeb",
+      "name_ar": "أنمي",
+      "builtin": true
+    }
+  ]
+}
