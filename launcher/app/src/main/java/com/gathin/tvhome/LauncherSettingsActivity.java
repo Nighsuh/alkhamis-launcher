@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.LinearLayout;
@@ -192,8 +191,6 @@ public final class LauncherSettingsActivity extends Activity {
             changed();
             refresh();
         });
-        findViewById(R.id.tvSettingsChoice).setOnClickListener(v ->
-                open(SystemSettings.intent(this, Settings.ACTION_SETTINGS)));
         refresh();
         paintThemes();
         findViewById(R.id.homeScreenChoice).requestFocus();

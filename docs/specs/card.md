@@ -144,9 +144,9 @@ any violation drops that one card, with a log line and no other effect.
    the accent; in the grid, the name line under the focused tile shows the label and the caption,
    as far as they fit on one line. A card uses the app's own banner (or icon) for its artwork.
 7. Hide. A hidden card leaves the app's ordinary tile exactly as before: hiding a card never
-   removes an app, and showing one never installs anything. A card is hidden or shown again from
-   the Module cards list: hold OK on the Settings pill. The list shows every discovered card with
-   its app label, package, full signer digest and state; OK toggles Shown and Hidden.
+   removes an app, and showing one never installs anything. The first prompt is the decision, and
+   the launcher remembers it for that app's signing key and card name. The Settings menu no longer
+   opens the Module cards list.
 8. Uninstall. Removing the module removes the card. Its record stays, so a reinstall with the same
    signing key needs no new prompt.
 9. Launch. A card launches the declaring activity by explicit component with no extras and no data,

@@ -10,9 +10,8 @@ final class TvFocus {
     static void vertical(View view) {
         view.setOnKeyListener((v, key, event) -> {
             if (event.getAction() != KeyEvent.ACTION_DOWN) return false;
-            int dir = key == KeyEvent.KEYCODE_DPAD_DOWN ? View.FOCUS_DOWN
-                    : key == KeyEvent.KEYCODE_DPAD_UP ? View.FOCUS_UP : 0;
-            if (dir == 0) return false;
+            if (key != KeyEvent.KEYCODE_DPAD_DOWN && key != KeyEvent.KEYCODE_DPAD_UP) return false;
+            int dir = key == KeyEvent.KEYCODE_DPAD_DOWN ? View.FOCUS_DOWN : View.FOCUS_UP;
             View next = v.focusSearch(dir);
             if (next == null || next == v) return false;
             next.requestFocus();

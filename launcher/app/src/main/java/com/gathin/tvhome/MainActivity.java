@@ -846,9 +846,10 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         grid.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView rv, int dx, int dy) {
-                // The widget row lives in the grid's frame. Move it by the same amount as the tiles,
-                // so it leaves the top with the page and comes back on the way up. The clock stays.
+                // The widget row and the clock live above the grid. Move both by the same amount as the
+                // tiles, so the cards scroll with the clock instead of passing under Good morning.
                 trackWidgetStrip(rv);
+                trackClock(rv);
                 if (!glassShown) return;
                 glassTargetY -= dy;
                 glassScrollShift -= dy;
@@ -2685,6 +2686,13 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         strip.setTranslationY(-rv.computeVerticalScrollOffset());
     }
 
+    /** Greeting, clock and date. At rest the offset is 0, so the header stays where the layout put it. */
+    private void trackClock(RecyclerView rv) {
+        View clock = findViewById(R.id.leftBlock);
+        if (clock == null) return;
+        clock.setTranslationY(-rv.computeVerticalScrollOffset());
+    }
+
     /** Up from the dock: the widget row when one is on screen, otherwise the nearest top-bar button. */
     private void focusAboveDock() {
         View strip = findViewById(R.id.widgetStrip);
@@ -4057,8 +4065,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         LinearLayout rows = panel.findViewById(R.id.rows);
         PopupWindow popup = glassPopup(panel, (int) (200 * density));
         addSettingsMenuRow(rows, popup, R.string.alkhamis_launcher_settings, this::openLauncherSettings);
-        addSettingsMenuRow(rows, popup, R.string.featured_dock, () ->
-                startActivity(new Intent(this, DockManagerActivity.class)));
+        addSettingsMenuRow(rows, popup, R.string.tv_settings, () ->
+                open(systemIntent(Settings.ACTION_SETTINGS)));
         // Firmware that ships its own settings app next to the AOSP one (Xiaomi China is one): the
         // vendor app holds pages the AOSP settings has no row for, such as Account & Security with
         // the ADB switch. Offered here only while one of them is installed.
@@ -4068,9 +4076,6 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                 if (vendor != null) open(vendor);
             });
         }
-        if (moduleCards) addSettingsMenuRow(rows, popup, R.string.module_cards, this::showModuleCards);
-        if (dockRow) addSettingsMenuRow(rows, popup, R.string.dock_edit, this::startDockEdit);
-        addSettingsMenuRow(rows, popup, R.string.reorder, this::toggleReorder);
         // A launcher may not restart the TV itself; the Home key helper can open the system power menu instead.
         if (HomeKeyService.canOpenPowerMenu()) addSettingsMenuRow(rows, popup, R.string.power_menu, HomeKeyService::openPowerMenu);
         panel.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
@@ -4182,11 +4187,15 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         String pkg = adapter.packageAt(position);
         // Empty dock slots and the Default-home tile carry the launcher's own package: no menu for them.
         if (key == null || pkg == null || pkg.equals(getPackageName())) return;
+        // The Settings tile uses the same menu as the top-bar shortcut, not the app-tile menu.
+        if (isSettingsApp(pkg)) {
+            showSettingsMenu();
+            return;
+        }
         View panel = getLayoutInflater().inflate(R.layout.popup_inputs, root, false);
         LinearLayout rows = panel.findViewById(R.id.rows);
         PopupWindow popup = glassPopup(panel, (int) (280 * density));
         boolean inDock = position < dockEnd();
-        if (isSettingsApp(pkg)) addSettingsMenuRow(rows, popup, R.string.alkhamis_launcher_settings, this::openLauncherSettings);
         if (inDock) addSettingsMenuRow(rows, popup, R.string.dock_remove, () -> removeFromDock(pkg));
         else addSettingsMenuRow(rows, popup, R.string.tile_add_to_dock, () -> addToDock(pkg));
         addSettingsMenuRow(rows, popup, R.string.featured_dock, () ->

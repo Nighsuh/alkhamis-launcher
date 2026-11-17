@@ -37,19 +37,15 @@ Themes set the same keys plus a background colour and a wallpaper.
 Click **Settings** for the TV's own settings. Hold OK on it, or on the Settings tile in the dock, for its menu.
 The first row is focused:
 
-- **Alkhamis Launcher settings**, the launcher's own page.
-- **Featured dock**.
-- **Launcher settings**. With `launcher_settings_button` a click opens those instead, and the menu
-  leaves that older row out.
+- **Alkhamis Launcher settings**, the launcher's own page. This row is first and focused.
+- **TV system settings**, the TV's own Android settings. This is the only system-settings row in the menu.
 - **Native settings**, where the TV ships a settings app of its own beside Android's - Xiaomi China,
   TCL/FFALCON and Fire OS are in `settings_fallback_components` - because that app holds pages
   Android's has no row for, such as Xiaomi's Account & Security with the ADB switch.
-- **Module cards**, with `module_cards`.
-- **Edit dock**, with `dock_row`.
-- **Reorder apps**: OK picks an app up, the arrows move it, Back places it, and Back again finishes.
-  With `tile_menu` (on by default since 3.3), holding OK on a tile offers **Move**, which picks that app up straight away.
 - **Restart…** while `HomeKeyService` runs, which opens the system power menu (a launcher may not
   restart the TV itself).
+
+Holding OK on an ordinary app tile still offers **Move**. The dock list itself is **Featured dock** on the launcher's page. Module cards stay on (`module_cards`, the default) but the menu no longer has a row for them.
 
 The launcher's own page has these rows, top to bottom:
 
@@ -71,8 +67,7 @@ The launcher's own page has these rows, top to bottom:
 - **Follow theme (reset on-TV choices)**, which clears every choice above. Pushing or resetting a theme
   clears them too.
 - **About & updates**.
-- **Choose default home** opens Android's home picker, and **TV system settings** the TV's own settings
-  page.
+- **Choose default home** opens Android's home picker. The TV's own settings are the menu's **TV system settings** row.
 
 **Change the default home:** Launcher settings and the optional Default-home tile
 (`show_home_settings_shortcut`) open Android's home picker. Choose the original launcher to stop using
@@ -104,8 +99,8 @@ weekends, festival greetings and the Shamsi date. Other languages keep their ori
 ## Module cards
 
 Any TV app can declare its own tile (label, caption, glow). The launcher asks you once per app, keeps it
-hidden by default, and remembers the answer for that app's signing key and card name. Hold OK on Settings
-and choose Module cards to change your mind. How to make one: [`docs/modules.md`](modules.md); the
+hidden by default, and remembers the answer for that app's signing key and card name. The Settings menu
+no longer has a Module cards row. How to make one: [`docs/modules.md`](modules.md); the
 contract: [`docs/specs/card.md`](specs/card.md). Ready-made ones are in [`addons/`](../addons/), and
 [cleanyour.tv/addons](https://cleanyour.tv/addons) shows the themes, switches and add-ons together.
 

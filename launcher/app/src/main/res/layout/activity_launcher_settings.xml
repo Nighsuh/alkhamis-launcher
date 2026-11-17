@@ -22,7 +22,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/launcher_settings"
+            android:text="@string/alkhamis_launcher_settings"
             android:textColor="#FFFFFFFF"
             android:textSize="34sp" />
 
@@ -262,11 +262,5 @@
             style="@style/SettingsRow"
             android:layout_marginTop="28dp"
             android:text="@string/about_updates" />
-
-        <TextView
-            android:id="@+id/tvSettingsChoice"
-            style="@style/SettingsRow"
-            android:layout_marginTop="18dp"
-            android:text="@string/tv_settings" />
     </LinearLayout>
 </ScrollView>

@@ -2,11 +2,27 @@
 
 سجل التغييرات
 
-Tags: `v3.1-shrine`, `v3.2-shrine`, `v3.2.1-shrine`, `v3.2.2-shrine`, `v3.2.3-shrine`, `v3.2.4-shrine`, `v3.2.5-shrine`, `v3.2.6-shrine`, `v3.2.7-shrine`, `v3.2.8-shrine`, `v3.2.9-shrine`, `v3.2.10-shrine`, `v3.5.0-shrine`, `v3.5.1-shrine`.  
+Tags: `v3.1-shrine`, `v3.2-shrine`, `v3.2.1-shrine`, `v3.2.2-shrine`, `v3.2.3-shrine`, `v3.2.4-shrine`, `v3.2.5-shrine`, `v3.2.6-shrine`, `v3.2.7-shrine`, `v3.2.8-shrine`, `v3.2.9-shrine`, `v3.2.10-shrine`, `v3.5.0-shrine`, `v3.5.1-shrine`, `v3.5.2-shrine`.  
 The release file is always `CleanYourTV-Shrine.apk`.
 
 الوسوم: `v3.1-shrine` حتى `v3.5.0-shrine`.  
 اسم ملف الإصدار دائمًا `CleanYourTV-Shrine.apk`.
+
+## 3.5.2-shrine
+
+versionCode 25. Same package (`com.gathin.tvhome`) and the same release key as 3.5.1-shrine, so it installs over that build.
+
+### English
+
+- The home clock, the greeting and the date scroll with the page. At rest they sit where they did. Prayer cards no longer slide under Good morning.
+- The Settings long-press menu no longer lists Module cards. That feature stays on: a card is still offered when an app declares one. The row only opened the list of those cards.
+- That menu had three app rows, and the settings names overlapped. Featured dock (شريط التطبيقات) opened the dock picker, Edit dock (تعديل شريط التطبيقات) started dock editing, and Reorder apps (إعادة ترتيب التطبيقات) started move mode. The page title was Launcher settings (إعدادات المشغّل), the same page, and its last row was TV system settings (إعدادات نظام التلفاز), which opens Android’s settings. Holding OK on the Settings tile also offered App info (معلومات التطبيق), Android’s page for the Settings app. The menu is now Alkhamis Launcher settings, focused, then TV system settings. The page uses that same title and no longer has its own system-settings row. The Settings tile opens this menu. Featured dock stays on the launcher’s page. Holding OK on an app tile still offers Move.
+
+### العربية
+
+- ساعة الشاشة والتحية والتاريخ تتحرك مع الصفحة. في وضع السكون تبقى في مكانها. بطاقات الصلاة لم تعد تمر تحت «صباح الخير».
+- قائمة الضغط المطوّل على الإعدادات لم تعد تعرض بطاقات الوحدات. الميزة تبقى تعمل: البطاقة تُعرض عندما يعلن تطبيق عنها. الصف كان يفتح قائمة تلك البطاقات فقط.
+- في القائمة كانت ثلاثة صفوف للتطبيقات، والأسماء تتداخل. شريط التطبيقات يفتح اختيار التطبيقات، وتعديل شريط التطبيقات يبدأ التعديل، وإعادة ترتيب التطبيقات تبدأ النقل. عنوان الصفحة كان إعدادات المشغّل للصفحة نفسها، وآخر صف فيها إعدادات نظام التلفاز ويفتح إعدادات أندرويد. الضغط المطوّل على أيقونة الإعدادات كان يعرض أيضًا معلومات التطبيق، وهي صفحة أندرويد لتطبيق الإعدادات. القائمة الآن إعدادات Alkhamis Launcher وهي المحددة، ثم إعدادات نظام التلفاز. الصفحة تحمل العنوان نفسه ولم يعد فيها صف لإعدادات النظام. أيقونة الإعدادات تفتح هذه القائمة. شريط التطبيقات يبقى في صفحة الشاشة. الضغط المطوّل على أيقونة تطبيق ما زال يعرض النقل.
 
 ## 3.5.1-shrine
 

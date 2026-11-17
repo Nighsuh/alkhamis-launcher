@@ -139,17 +139,21 @@ public final class WallpaperActivity extends Activity {
         add(out, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES));
         add(out, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
         StorageManager manager = activity.getSystemService(StorageManager.class);
-        if (manager != null) {
-            for (StorageVolume volume : manager.getStorageVolumes()) {
-                if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.R) continue;
-                File dir = volume.getDirectory();
-                if (dir != null) add(out, dir);
-            }
+        if (manager != null && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            addMountedVolumes(out, manager);
         }
         File storage = new File("/storage");
         File[] roots = storage.listFiles();
         if (roots != null) for (File root : roots) if (root.isDirectory() && !root.getName().equals("emulated") && !root.getName().equals("self")) add(out, root);
         return out;
+    }
+
+    @android.annotation.TargetApi(android.os.Build.VERSION_CODES.R)
+    private static void addMountedVolumes(List<File> out, StorageManager manager) {
+        for (StorageVolume volume : manager.getStorageVolumes()) {
+            File dir = volume.getDirectory();
+            if (dir != null) add(out, dir);
+        }
     }
 
     private static void add(List<File> out, File dir) {
