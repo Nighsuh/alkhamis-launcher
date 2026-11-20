@@ -2,11 +2,23 @@
 
 سجل التغييرات
 
-Tags: `v3.1-shrine`, `v3.2-shrine`, `v3.2.1-shrine`, `v3.2.2-shrine`, `v3.2.3-shrine`, `v3.2.4-shrine`, `v3.2.5-shrine`, `v3.2.6-shrine`, `v3.2.7-shrine`, `v3.2.8-shrine`, `v3.2.9-shrine`, `v3.2.10-shrine`, `v3.5.0-shrine`, `v3.5.1-shrine`, `v3.5.2-shrine`.  
+Tags: `v3.1-shrine`, `v3.2-shrine`, `v3.2.1-shrine`, `v3.2.2-shrine`, `v3.2.3-shrine`, `v3.2.4-shrine`, `v3.2.5-shrine`, `v3.2.6-shrine`, `v3.2.7-shrine`, `v3.2.8-shrine`, `v3.2.9-shrine`, `v3.2.10-shrine`, `v3.5.0-shrine`, `v3.5.1-shrine`, `v3.5.2-shrine`, `v3.5.3-shrine`.  
 The release file is always `CleanYourTV-Shrine.apk`.
 
 الوسوم: `v3.1-shrine` حتى `v3.5.0-shrine`.  
 اسم ملف الإصدار دائمًا `CleanYourTV-Shrine.apk`.
+
+## 3.5.3-shrine
+
+versionCode 26. Same package (`com.gathin.tvhome`) and the same release key as 3.5.2-shrine, so it installs over that build.
+
+### English
+
+- The Wi-Fi and Settings pills scroll with the clock and the page. At rest they sit where they did. Pressing Up to reach a pill brings the page back to the top first, so the pill is fully on screen.
+
+### العربية
+
+- زرّا واي فاي والإعدادات يتحركان مع الساعة والصفحة. في وضع السكون يبقيان في مكانهما. الصعود إليهما بالأسهم يُرجع الصفحة إلى أعلاها أولًا، فيظهر الزر كاملًا.
 
 ## 3.5.2-shrine
 

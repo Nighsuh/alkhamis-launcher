@@ -846,8 +846,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         grid.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView rv, int dx, int dy) {
-                // The widget row and the clock live above the grid. Move both by the same amount as the
-                // tiles, so the cards scroll with the clock instead of passing under Good morning.
+                // Clock, pills and the widget row sit above the grid. Move them by the same amount as
+                // the tiles, so nothing stays pinned for the cards to pass under.
                 trackWidgetStrip(rv);
                 trackClock(rv);
                 if (!glassShown) return;
@@ -996,6 +996,12 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         // jump to a tile far below when there is nothing in that direction.
         View.OnKeyListener pillKeys = (v, keyCode, event) -> {
             if (event.getAction() != KeyEvent.ACTION_DOWN) return false;
+            // A scroll can leave a pill focused after it has moved off the top. Bring it back on screen.
+            if (grid.computeVerticalScrollOffset() > 0) {
+                focusWhenAtTop(v);
+                if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) focusTile(Math.max(0, lastFocused));
+                return true;
+            }
             if (keyCode == KeyEvent.KEYCODE_DPAD_UP) return true;
             if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
                 focusTile(singleRow ? lastFocused : Math.max(0, lastFocused));
@@ -1013,14 +1019,16 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         btnReorder.setOnKeyListener(pillKeys);
         btnLibraryTop.setOnKeyListener(pillKeys);
         for (View button : topAppButtons) button.setOnKeyListener(pillKeys);
-        if (advancedEffects) {
-            List<View> pills = new ArrayList<>(Arrays.asList(btnInputs, btnWifi, btnVpn, btnReorder, btnLibraryTop, btnSettings));
-            pills.addAll(topAppButtons);
-            for (View button : pills) {
-                button.setOnFocusChangeListener((view, focused) -> view.animate()
-                        .scaleX(focused ? 1.04f : 1f).scaleY(focused ? 1.04f : 1f)
-                        .setDuration(reducedMotion ? Motion.REDUCED_MS : 160).start());
-            }
+        List<View> pills = new ArrayList<>(Arrays.asList(btnInputs, btnWifi, btnVpn, btnReorder, btnLibraryTop, btnSettings));
+        pills.addAll(topAppButtons);
+        for (View button : pills) {
+            button.setOnFocusChangeListener((view, focused) -> {
+                // Scrolling can move focus onto a pill after the header has left the screen.
+                if (focused && !restoringHome && grid.computeVerticalScrollOffset() > 0) focusWhenAtTop(view);
+                if (!advancedEffects) return;
+                view.animate().scaleX(focused ? 1.04f : 1f).scaleY(focused ? 1.04f : 1f)
+                        .setDuration(reducedMotion ? Motion.REDUCED_MS : 160).start();
+            });
         }
         if (festive) applyFestiveSkin((TextView) btnInputs, (TextView) btnSettings);
 
@@ -1563,7 +1571,10 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                 return true;
             }
         }
-        if (!reordering) return super.dispatchKeyEvent(event);
+        if (!reordering) {
+            if (revealTopBar(event)) return true;
+            return super.dispatchKeyEvent(event);
+        }
         if (dockEditing) return dispatchDockEdit(event);
         boolean down = event.getAction() == KeyEvent.ACTION_DOWN;
         int code = event.getKeyCode();
@@ -1994,7 +2005,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             int dy = decoratedTop - grid.getPaddingTop();
             // A 1px mismatch used to start a scroll on every dock move. Only scroll when the row is
             // actually off; reduced motion does it in one jump so it does not fight the highlight.
-            boolean scroll = !singleRow && adapter.dockFilled() <= COLUMNS && Math.abs(dy) > (int) (8 * density);
+            boolean scroll = !restoringHome && !singleRow && adapter.dockFilled() <= COLUMNS && Math.abs(dy) > (int) (8 * density);
             if (scroll) {
                 if (!animations || reducedMotion) grid.scrollBy(0, dy);
                 else grid.smoothScrollBy(0, dy);
@@ -2686,32 +2697,86 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         strip.setTranslationY(-rv.computeVerticalScrollOffset());
     }
 
-    /** Greeting, clock and date. At rest the offset is 0, so the header stays where the layout put it. */
+    /** Greeting, clock, date and the top-bar pills. At rest the offset is 0, so they stay where the layout put them. */
     private void trackClock(RecyclerView rv) {
-        View clock = findViewById(R.id.leftBlock);
-        if (clock == null) return;
-        clock.setTranslationY(-rv.computeVerticalScrollOffset());
+        View header = findViewById(R.id.header);
+        if (header == null) return;
+        header.setTranslationY(-rv.computeVerticalScrollOffset());
+    }
+
+    /** While true, a focused dock tile must not scroll itself back onto the parked line. */
+    private boolean restoringHome;
+
+    /**
+     * Up from below the header while the page is scrolled. The pills move off the top with the clock,
+     * so focus waits until they are back on screen instead of landing on one that is clipped away.
+     */
+    private boolean revealTopBar(KeyEvent event) {
+        if (event.getAction() != KeyEvent.ACTION_DOWN || event.getKeyCode() != KeyEvent.KEYCODE_DPAD_UP) return false;
+        if (openPopup != null || grid == null || grid.computeVerticalScrollOffset() <= 0) return false;
+        View focused = getCurrentFocus();
+        // Tiles handle Up themselves (the row above, or the widget row). This is the step from that row onto a pill.
+        if (focused == null || focused.getId() == R.id.card || isTopBar(focused)) return false;
+        if (!inWidgetStrip(focused)) {
+            View next = focused.focusSearch(View.FOCUS_UP);
+            if (next == null || !isTopBar(next)) return false;
+            focusWhenAtTop(next);
+            return true;
+        }
+        // The prayer row's Up target is Settings. A clipped pill is a poor focus search result, so name it here.
+        focusWhenAtTop(findViewById(R.id.btnSettings));
+        return true;
+    }
+
+    private boolean isTopBar(View view) {
+        return ancestor(view, R.id.topButtons);
+    }
+
+    private boolean inWidgetStrip(View view) {
+        return ancestor(view, R.id.widgetStrip);
+    }
+
+    private boolean ancestor(View view, int id) {
+        for (View v = view; v != null; v = v.getParent() instanceof View ? (View) v.getParent() : null) {
+            if (v.getId() == id) return true;
+        }
+        return false;
     }
 
     /** Up from the dock: the widget row when one is on screen, otherwise the nearest top-bar button. */
     private void focusAboveDock() {
         View strip = findViewById(R.id.widgetStrip);
-        if (strip instanceof ViewGroup && grid.computeVerticalScrollOffset() > 0) {
-            // The row has scrolled off with the page. Bring the page back, then focus it.
-            grid.scrollToPosition(0);
-        }
         if (strip instanceof ViewGroup) {
             ViewGroup group = (ViewGroup) strip;
             for (int i = 0; i < group.getChildCount(); i++) {
                 View child = group.getChildAt(i);
                 if (child.getVisibility() == View.VISIBLE && child.isFocusable()) {
-                    child.requestFocus();
+                    focusWhenAtTop(child);
                     return;
                 }
             }
         }
         View pill = nearestPill(grid.findFocus());
-        if (pill != null) pill.requestFocus();
+        if (pill != null) focusWhenAtTop(pill);
+    }
+
+    /** Focus {@code target} now, or after the page has scrolled back to the top so a pill is fully visible. */
+    private void focusWhenAtTop(View target) {
+        if (target == null || restoringHome) return;
+        int offset = grid.computeVerticalScrollOffset();
+        if (offset <= 0) {
+            target.requestFocus();
+            return;
+        }
+        // A focused dock tile parks itself again on any scroll, which would undo the return to the top.
+        restoringHome = true;
+        try {
+            grid.stopScroll();
+            grid.scrollBy(0, -grid.computeVerticalScrollOffset());
+            if (!target.hasFocus()) target.requestFocus();
+        } finally {
+            restoringHome = false;
+        }
     }
 
     private View nearestPill(View from) {
