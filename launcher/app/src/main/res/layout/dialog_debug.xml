@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="560dp"
+    android:layout_height="wrap_content"
+    android:background="#F014110E"
+    android:fillViewport="true"
+    android:scrollbars="vertical">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="28dp">
+
+    <TextView
+        android:id="@+id/debugTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#FFE6C57A"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/debugReason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="#FFFFFFFF"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/debugSteps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:focusable="true"
+        android:textColor="#FFE7E0D4"
+        android:textSize="16sp"
+        android:lineSpacingExtra="4dp" />
+
+    <TextView
+        android:id="@+id/debugHonest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:textColor="#FFACB8C1"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/debugOff"
+        style="@style/SettingsRow"
+        android:layout_marginTop="16dp"
+        android:text="@string/debug_off_when_done" />
+
+    <TextView
+        android:id="@+id/debugGo"
+        style="@style/SettingsRow"
+        android:layout_marginTop="14dp"
+        android:text="@string/debug_take_me" />
+
+    <TextView
+        android:id="@+id/debugStepsOnly"
+        style="@style/SettingsRow"
+        android:layout_marginTop="8dp"
+        android:text="@string/debug_steps_only" />
+
+    <TextView
+        android:id="@+id/debugTest"
+        style="@style/SettingsRow"
+        android:layout_marginTop="8dp"
+        android:text="@string/adb_test" />
+
+    <TextView
+        android:id="@+id/debugCancel"
+        style="@style/SettingsRow"
+        android:layout_marginTop="8dp"
+        android:text="@string/debug_cancel" />
+</LinearLayout>
+</ScrollView>
