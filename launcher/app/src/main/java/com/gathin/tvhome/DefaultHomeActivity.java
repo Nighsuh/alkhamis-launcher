@@ -16,6 +16,7 @@ import android.widget.Toast;
  * the Home button service is enabled in the background, with no extra row.
  */
 public final class DefaultHomeActivity extends Activity {
+    static final String EXTRA_PREVIEW_FAIL = "preview_home_fail";
     private View alkhamisRow;
     private View originalRow;
     private TextView alkhamisTitle;
@@ -50,6 +51,14 @@ public final class DefaultHomeActivity extends Activity {
         fmtNote = findViewById(R.id.homeFmtNote);
         alkhamisRow.setOnClickListener(v -> pick(true));
         originalRow.setOnClickListener(v -> pick(false));
+        if (getIntent().getBooleanExtra(EXTRA_PREVIEW_FAIL, false)) {
+            getWindow().getDecorView().post(() -> {
+                if (!isFinishing()) {
+                    report(false, getString(R.string.home_screen_fail, ltr("com.google.android.apps.tv.launcherx"))
+                            + "\n\n" + getString(R.string.home_screen_wifi));
+                }
+            });
+        }
     }
 
     @Override
@@ -121,21 +130,34 @@ public final class DefaultHomeActivity extends Activity {
     private void finishPick(boolean ours, String resolved, String stopped, boolean wantedOurs) {
         working = false;
         paint();
-        if (HomeSwitch.STOP_FMT.equals(stopped)) {
-            report(false, getString(R.string.home_screen_fmt));
-            return;
-        }
-        if (HomeSwitch.STOP_WIFI.equals(stopped)) {
-            report(false, getString(R.string.home_screen_wifi));
-            return;
-        }
-        boolean ok = wantedOurs ? ours : !ours;
+        // The check mark follows the resolver, not the command that was attempted.
+        boolean nowOurs = getPackageName().equals(resolvedHome());
+        boolean ok = wantedOurs ? (ours || nowOurs) : (!ours && !nowOurs);
         if (ok) {
             report(true, "");
             return;
         }
-        String who = wantedOurs ? labelOf(resolved) : getString(R.string.home_screen_alkhamis_title);
-        report(false, getString(R.string.home_screen_fail, who));
+        if (HomeSwitch.STOP_FMT.equals(stopped)) {
+            report(false, getString(R.string.home_screen_fmt));
+            return;
+        }
+        String who = wantedOurs ? labelOf(nowOurs ? getPackageName() : firstOf(resolvedHome(), resolved))
+                : getString(R.string.home_screen_alkhamis_title);
+        String message = getString(R.string.home_screen_fail, ltr(who));
+        if (HomeSwitch.STOP_WIFI.equals(stopped)) {
+            message = message + "\n\n" + getString(R.string.home_screen_wifi);
+        }
+        report(false, message);
+    }
+
+    private static String firstOf(String preferred, String fallback) {
+        if (preferred != null && !preferred.isEmpty()) return preferred;
+        return fallback == null ? "" : fallback;
+    }
+
+    /** Keep a package name left to right inside an Arabic sentence. */
+    private static String ltr(String text) {
+        return "\u2066" + (text == null ? "" : text) + "\u2069";
     }
 
     private String labelOf(String pkg) {

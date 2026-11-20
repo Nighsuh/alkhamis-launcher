@@ -162,7 +162,7 @@
     <string name="home_screen_working">Switching…</string>
     <string name="home_screen_fail">That did not work. Home still opens %1$s.</string>
     <string name="home_screen_fmt">Set Free My TV to Original first.</string>
-    <string name="home_screen_wifi">The Wi-Fi is saved by that app, so nothing changed.</string>
+    <string name="home_screen_wifi">The previous home app was left on because it saved the Wi-Fi. Turning that app off would delete those networks. The Home setting itself does not.</string>
     <string name="alkhamis_launcher_settings">Alkhamis Launcher settings</string>
     <string name="columns_hint">The dock row holds this many apps. The rest move to the rows below.</string>
     <string name="featured_dock">Featured dock</string>

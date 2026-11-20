@@ -216,7 +216,9 @@ final class LocalAdb {
         String pkg = app.getPackageName();
         if (command.equals("pm grant " + pkg + " android.permission.WRITE_SECURE_SETTINGS")) return true;
         if (command.equals("cmd package set-home-activity " + pkg + "/.MainActivity")) return true;
+        if (command.equals("cmd package set-home-activity --user 0 " + pkg + "/.MainActivity")) return true;
         if (command.equals("cmd role add-role-holder --user 0 android.app.role.HOME " + pkg + " 0")) return true;
+        if (command.equals("cmd role add-role-holder android.app.role.HOME " + pkg)) return true;
         if (HomeSwitch.commandAllowed(command, pkg)) return true;
         String disable = "pm disable-user --user 0 ";
         if (command.startsWith(disable)) return PackageGuard.safeName(command.substring(disable.length()));

@@ -54,11 +54,21 @@ final class HomeSwitch {
     }
 
     static String setHome(String self) {
+        return "cmd package set-home-activity --user 0 " + self + "/.MainActivity";
+    }
+
+    /** Older package service builds take the command without --user. */
+    static String setHomeLegacy(String self) {
         return "cmd package set-home-activity " + self + "/.MainActivity";
     }
 
     static String addRole(String self) {
         return "cmd role add-role-holder --user 0 android.app.role.HOME " + self + " 0";
+    }
+
+    /** Android 11–14 builds that reject the flags argument. */
+    static String addRoleShort(String self) {
+        return "cmd role add-role-holder android.app.role.HOME " + self;
     }
 
     static String disable(String pkg) {
@@ -80,7 +90,8 @@ final class HomeSwitch {
                 || command.equals(DISABLED) || command.equals(WIFI) || command.equals(WIFI_ON)) {
             return true;
         }
-        if (self != null && (command.equals(setHome(self)) || command.equals(addRole(self)))) return true;
+        if (self != null && (command.equals(setHome(self)) || command.equals(setHomeLegacy(self))
+                || command.equals(addRole(self)) || command.equals(addRoleShort(self)))) return true;
         String enable = "pm enable ";
         String probe = "pm path ";
         if (command.startsWith(probe)) return PackageGuard.safeName(command.substring(probe.length()));
@@ -160,6 +171,22 @@ final class HomeSwitch {
         return query != null && query.contains(SETUP + "/");
     }
 
+    /**
+     * Packages that may be disabled after Home is set. A package that saved the Wi-Fi stays enabled:
+     * disabling it deletes those networks. When Wi-Fi is on and the dump did not name an owner, nobody
+     * is disabled. Setting the Home role does not touch those networks, so it is not decided here.
+     */
+    static java.util.List<String> disablePlan(java.util.List<String> candidates, Set<String> owners, boolean wifiOn) {
+        java.util.List<String> plan = new java.util.ArrayList<>();
+        if (candidates == null) return plan;
+        if (wifiOn && owners == null) return plan;
+        for (String pkg : candidates) {
+            if (owners != null && owners.contains(pkg)) continue;
+            plan.add(pkg);
+        }
+        return plan;
+    }
+
     /** Why a switch stopped before it changed anything, or "" when it ran. */
     static final String STOP_FMT = "fmt";
     static final String STOP_WIFI = "wifi";
@@ -224,6 +251,7 @@ final class HomeSwitch {
         final java.util.List<String> changed = new java.util.ArrayList<>();
         String last = "";
         boolean stopped;
+        boolean skippedWifi;
 
         Runner(android.content.Context ctx, Outcome outcome) {
             this.ctx = ctx;
@@ -258,25 +286,20 @@ final class HomeSwitch {
             }
             Set<String> owners = wifiOwners(outputs.get(WIFI));
             boolean wifiRunning = "1".equals(outputs.get(WIFI_ON) == null ? "" : outputs.get(WIFI_ON).trim());
-            if (owners == null && wifiRunning) {
-                finishStopped(STOP_WIFI, home);
-                return;
-            }
-            if (owners != null && owners.contains(SETUP) && setupAnswersHome(outputs.get(QUERY))) {
-                finishStopped(STOP_WIFI, home);
-                return;
-            }
-            if (owners != null && owners.contains(home) && !home.isEmpty() && !self.equals(home)) {
-                finishStopped(STOP_WIFI, home);
-                return;
-            }
-            java.util.List<String> plan = new java.util.ArrayList<>();
-            if (setupAnswersHome(outputs.get(QUERY)) && present(SETUP)) plan.add(SETUP);
-            if (present(LAUNCHERX)) plan.add(LAUNCHERX);
-            if (present(TV_LAUNCHER)) plan.add(TV_LAUNCHER);
-            if (TV_LAUNCHER.equals(home) && present(RECOMMENDATIONS)) plan.add(RECOMMENDATIONS);
-            for (String assistant : ASSISTANT) if (present(assistant)) plan.add(assistant);
-            shell(setHome(self), () -> shell(addRole(self), () -> disableAt(plan, 0, () -> verify(self, true))));
+            java.util.List<String> candidates = new java.util.ArrayList<>();
+            if (setupAnswersHome(outputs.get(QUERY)) && present(SETUP)) candidates.add(SETUP);
+            if (present(LAUNCHERX)) candidates.add(LAUNCHERX);
+            if (present(TV_LAUNCHER)) candidates.add(TV_LAUNCHER);
+            if (TV_LAUNCHER.equals(home) && present(RECOMMENDATIONS)) candidates.add(RECOMMENDATIONS);
+            for (String assistant : ASSISTANT) if (present(assistant)) candidates.add(assistant);
+            java.util.List<String> plan = disablePlan(candidates, owners, wifiRunning);
+            skippedWifi = plan.size() < candidates.size();
+            // The role change does not delete saved networks. Disabling the app that saved them does,
+            // so that step is skipped above. TCL Google TV (Android 11–14) keeps Home on the role holder;
+            // set-home-activity and add-role-holder are both tried, and a refusal of one does not skip the other.
+            shellOptional(setHomeLegacy(self), () -> shellOptional(setHome(self), () ->
+                    shellOptional(addRole(self), () -> shellOptional(addRoleShort(self), () ->
+                            disableAt(plan, 0, () -> verify(self, true))))));
         }
 
         void turnListedOn(String[] names) {
@@ -300,7 +323,7 @@ final class HomeSwitch {
             }
             String pkg = plan.get(index);
             String command = disable(pkg);
-            shell(command, () -> {
+            shellOptional(command, () -> {
                 if (turnedOff(outputs.get(command))) changed.add(pkg);
                 disableAt(plan, index + 1, then);
             });
@@ -331,6 +354,15 @@ final class HomeSwitch {
         }
 
         void shell(String command, Runnable then) {
+            shell(command, then, false);
+        }
+
+        /** Like {@link #shell}, but a refused command does not end the switch. The next command still runs. */
+        void shellOptional(String command, Runnable then) {
+            shell(command, then, true);
+        }
+
+        void shell(String command, Runnable then, boolean optional) {
             if (stopped) return;
             log.append("$ ").append(command).append('\n');
             LocalAdb.get(ctx).runRaw(command, (ok, message) -> {
@@ -338,7 +370,7 @@ final class HomeSwitch {
                 outputs.put(command, text);
                 last = text;
                 log.append(text).append("\n\n");
-                if (!ok) finishStopped("", packageOfResolve(text));
+                if (!ok && !optional) finishStopped("", packageOfResolve(text));
                 else then.run();
             });
         }
@@ -346,7 +378,9 @@ final class HomeSwitch {
         void finish(String resolved) {
             if (stopped) return;
             stopped = true;
-            outcome.finished(ctx.getPackageName().equals(resolved), resolved, log.toString(), "", changed);
+            boolean ours = ctx.getPackageName().equals(resolved);
+            String why = skippedWifi && !ours ? STOP_WIFI : "";
+            outcome.finished(ours, resolved, log.toString(), why, changed);
         }
 
         void finishStopped(String why, String resolved) {

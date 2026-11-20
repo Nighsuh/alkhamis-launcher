@@ -36,9 +36,9 @@
     <string name="home_screen_original_sub">الشاشة الأصلية للتلفاز</string>
     <string name="home_screen_note">التبديل يستغرق بضع ثوانٍ.</string>
     <string name="home_screen_working">جارٍ التبديل…</string>
-    <string name="home_screen_fail">لم ينجح ذلك. الرئيسية ما زالت تفتح %1$s.</string>
+    <string name="home_screen_fail">لم تتبدّل الشاشة الرئيسية. ما زالت تفتح %1$s.\n\nفعّل خيارات المطوّر، ثم تصحيح الشبكة أو التصحيح اللاسلكي، وأعد المحاولة. في أندرويد 11 وما بعده قد يطلب التلفاز رمز اقتران. أو اضبطها يدويًا: الإعدادات، ثم التطبيقات، ثم التطبيقات التلقائية، ثم الشاشة الرئيسية.</string>
     <string name="home_screen_fmt">اضبط Free My TV على الأصلية أولًا.</string>
-    <string name="home_screen_wifi">شبكة الواي فاي محفوظة بذلك التطبيق، فلم يتغيّر شيء.</string>
+    <string name="home_screen_wifi">بقيت الشاشة السابقة تعمل لأنها حفظت شبكة الواي فاي. إيقاف ذلك التطبيق يمسح تلك الشبكات. ضبط الشاشة الرئيسية نفسه لا يمسحها.</string>
     <string name="input_key_service_description">يفتح قائمة المدخلات عند الضغط على زر المدخلات في جهاز التحكم.</string>
     <string name="home_key_name">زر الرئيسية</string>
     <string name="home_key_description">يجعل زر الرئيسية في جهاز التحكم يفتح هذه الشاشة.</string>

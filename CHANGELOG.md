@@ -2,11 +2,23 @@
 
 سجل التغييرات
 
-Tags: `v3.1-shrine`, `v3.2-shrine`, `v3.2.1-shrine`, `v3.2.2-shrine`, `v3.2.3-shrine`, `v3.2.4-shrine`, `v3.2.5-shrine`, `v3.2.6-shrine`, `v3.2.7-shrine`, `v3.2.8-shrine`, `v3.2.9-shrine`, `v3.2.10-shrine`, `v3.5.0-shrine`, `v3.5.1-shrine`, `v3.5.2-shrine`, `v3.5.3-shrine`.  
+Tags: `v3.1-shrine`, `v3.2-shrine`, `v3.2.1-shrine`, `v3.2.2-shrine`, `v3.2.3-shrine`, `v3.2.4-shrine`, `v3.2.5-shrine`, `v3.2.6-shrine`, `v3.2.7-shrine`, `v3.2.8-shrine`, `v3.2.9-shrine`, `v3.2.10-shrine`, `v3.5.0-shrine`, `v3.5.1-shrine`, `v3.5.2-shrine`, `v3.5.3-shrine`, `v3.5.4-shrine`.  
 The release file is always `CleanYourTV-Shrine.apk`.
 
 الوسوم: `v3.1-shrine` حتى `v3.5.0-shrine`.  
 اسم ملف الإصدار دائمًا `CleanYourTV-Shrine.apk`.
+
+## 3.5.4-shrine
+
+versionCode 27. Same package (`com.gathin.tvhome`) and the same release key as 3.5.3-shrine, so it installs over that build.
+
+### English
+
+- Choosing Alkhamis Launcher no longer stops before the Home change when Wi-Fi is on. Saving a network used to end the switch with “nothing changed”, and the Home button stayed on the old app. The Home role is set first. An app that saved the Wi-Fi is left enabled, because turning it off would delete those networks. The check mark appears only after Home actually opens this launcher. If it does not, the message says what is still Home and how to finish it: Developer options, Network debugging or Wireless debugging, or Settings, Apps, Default apps, Home.
+
+### العربية
+
+- اختيار Alkhamis Launcher لم يعد يتوقف قبل تغيير الشاشة الرئيسية عندما تكون الواي فاي مفتوحة. حفظ الشبكة كان يُنهي التبديل بعبارة «لم يتغيّر شيء»، وزر الرئيسية يبقى على التطبيق القديم. يُضبط دور الشاشة الرئيسية أولًا. التطبيق الذي حفظ الواي فاي يبقى مفعّلًا، لأن إيقافه يمسح تلك الشبكات. علامة الاختيار لا تظهر إلا بعد أن تفتح الرئيسية هذه الشاشة فعلًا. إن لم تتبدّل، تقول الرسالة ما الذي ما زال يفتح، وكيف يُكمَل الأمر: خيارات المطوّر، وتصحيح الشبكة أو التصحيح اللاسلكي، أو الإعدادات ثم التطبيقات ثم التطبيقات التلقائية ثم الشاشة الرئيسية.
 
 ## 3.5.3-shrine
 

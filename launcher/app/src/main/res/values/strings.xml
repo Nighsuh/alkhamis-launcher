@@ -56,9 +56,9 @@
     <string name="home_screen_original_sub">The TV\'s factory home screen</string>
     <string name="home_screen_note">Switching takes a few seconds.</string>
     <string name="home_screen_working">Switching…</string>
-    <string name="home_screen_fail">That did not work. Home still opens %1$s.</string>
+    <string name="home_screen_fail">Home did not change. It still opens %1$s.\n\nTurn on Developer options, then Network debugging or Wireless debugging, and try again. On Android 11 and newer the TV may ask for a pairing code. Or set it by hand: Settings, Apps, Default apps, Home.</string>
     <string name="home_screen_fmt">Set Free My TV to Original first.</string>
-    <string name="home_screen_wifi">The Wi-Fi is saved by that app, so nothing changed.</string>
+    <string name="home_screen_wifi">The previous home app was left on because it saved the Wi-Fi. Turning that app off would delete those networks. The Home setting itself does not.</string>
     <string name="launcher_settings">Launcher settings</string>
     <string name="alkhamis_launcher_settings">Alkhamis Launcher settings</string>
     <string name="native_settings">Native settings</string>
