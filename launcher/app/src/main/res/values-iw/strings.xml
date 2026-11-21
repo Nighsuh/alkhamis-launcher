@@ -153,6 +153,8 @@
     <string name="clock_format_12">12 שעות</string>
     <string name="clock_format_24">24 שעות</string>
     <string name="home_screen_label">Home Screen</string>
+    <string name="restore_home">Restore original home</string>
+    <string name="restore_home_done">The TV home apps were turned back on.</string>
     <string name="home_screen_alkhamis">Alkhamis</string>
     <string name="home_screen_original">Original</string>
     <string name="home_screen_alkhamis_title">Alkhamis Launcher</string>

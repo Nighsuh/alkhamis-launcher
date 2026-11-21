@@ -2,11 +2,23 @@
 
 سجل التغييرات
 
-Tags: `v3.1-shrine`, `v3.2-shrine`, `v3.2.1-shrine`, `v3.2.2-shrine`, `v3.2.3-shrine`, `v3.2.4-shrine`, `v3.2.5-shrine`, `v3.2.6-shrine`, `v3.2.7-shrine`, `v3.2.8-shrine`, `v3.2.9-shrine`, `v3.2.10-shrine`, `v3.5.0-shrine`, `v3.5.1-shrine`, `v3.5.2-shrine`, `v3.5.3-shrine`, `v3.5.4-shrine`.  
+Tags: `v3.1-shrine`, `v3.2-shrine`, `v3.2.1-shrine`, `v3.2.2-shrine`, `v3.2.3-shrine`, `v3.2.4-shrine`, `v3.2.5-shrine`, `v3.2.6-shrine`, `v3.2.7-shrine`, `v3.2.8-shrine`, `v3.2.9-shrine`, `v3.2.10-shrine`, `v3.5.0-shrine`, `v3.5.1-shrine`, `v3.5.2-shrine`, `v3.5.3-shrine`, `v3.5.4-shrine`, `v3.5.5-shrine`.  
 The release file is always `CleanYourTV-Shrine.apk`.
 
 الوسوم: `v3.1-shrine` حتى `v3.5.0-shrine`.  
 اسم ملف الإصدار دائمًا `CleanYourTV-Shrine.apk`.
+
+## 3.5.5-shrine
+
+versionCode 28. Same package (`com.gathin.tvhome`) and the same release key as 3.5.4-shrine, so it installs over that build.
+
+### English
+
+- The Home switch no longer disables Google TV setup or the stock launcher. 3.5.4 could turn those apps off before Home had moved, and a TCL set then restarted onto a black screen. On a set with setupwraith or launcherx, the switch only sets the Home role. Nothing is disabled unless this launcher is already the resolved Home, and setup, launcherx, the TV launcher, Assistant, Play, and TCL packages are never on that list. If a later check shows Home did not move, anything disabled in that attempt is turned back on before the failure message. Settings has **Restore original home**, which turns those TV home apps back on.
+
+### العربية
+
+- تبديل الشاشة الرئيسية لم يعد يوقف إعداد Google TV ولا المشغّل الأصلي. الإصدار 3.5.4 كان يمكن أن يوقفهما قبل أن تنتقل الشاشة، فأعاد تلفاز TCL التشغيل على شاشة سوداء. على جهاز فيه setupwraith أو launcherx، التبديل يضبط دور الشاشة الرئيسية فقط. لا يُوقَف أي تطبيق إلا بعد أن تصبح هذه الشاشة هي الرئيسية فعلًا، وإعداد الجهاز وlauncherx ومشغّل التلفاز والمساعد وPlay وحزم TCL ليست في تلك القائمة أبدًا. إذا أظهر الفحص أن الشاشة لم تنتقل، يُعاد تشغيل ما أُوقف في هذه المحاولة قبل رسالة الفشل. في الإعدادات صف **استعادة الشاشة الأصلية** يعيد تشغيل تطبيقات الشاشة تلك.
 
 ## 3.5.4-shrine
 

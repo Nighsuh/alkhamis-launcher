@@ -1076,6 +1076,11 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                 && !openHomeFailPreviewIfAsked(getIntent())) {
             openInputsIfAsked(getIntent());
         }
+        try {
+            HomeDisabled.restoreIfConnected(this);
+        } catch (RuntimeException ignored) {
+            // Restoring a previous home switch must not stop Home from opening.
+        }
     }
 
     /**

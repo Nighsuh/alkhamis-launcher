@@ -29,6 +29,8 @@
     <string name="home_settings">الشاشة الرئيسية الافتراضية</string>
     <string name="home_settings_help">اختر الشاشة الرئيسية الأصلية لإيقاف استخدام Alkhamis Launcher افتراضيًا، أو اختر Alkhamis Launcher للعودة. يجب أن يكون المشغّل الأصلي مفعّلًا وأن يدعم التلفاز اختيار الشاشة الرئيسية. إذا عُطّل، استخدم برنامج الاستعادة أولًا.</string>
     <string name="home_screen_label">الشاشة الرئيسية</string>
+    <string name="restore_home">استعادة الشاشة الأصلية</string>
+    <string name="restore_home_done">أُعيد تشغيل تطبيقات الشاشة الأصلية.</string>
     <string name="home_screen_alkhamis">Alkhamis</string>
     <string name="home_screen_original">الأصلية</string>
     <string name="home_screen_alkhamis_title">Alkhamis Launcher</string>

@@ -49,6 +49,8 @@
     <string name="home_settings">Choose default home</string>
     <string name="home_settings_help">Select your original home to stop using Alkhamis Launcher as Home, or Alkhamis Launcher to switch back. The original launcher must be enabled and your TV must provide a home picker; use the restore script first if it was disabled.</string>
     <string name="home_screen_label">Home Screen</string>
+    <string name="restore_home">Restore original home</string>
+    <string name="restore_home_done">The TV home apps were turned back on.</string>
     <string name="home_screen_alkhamis">Alkhamis</string>
     <string name="home_screen_original">Original</string>
     <string name="home_screen_alkhamis_title">Alkhamis Launcher</string>

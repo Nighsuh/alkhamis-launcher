@@ -49,6 +49,7 @@ Holding OK on an ordinary app tile still offers **Move**. The dock list itself i
 
 The launcher's own page has these rows, top to bottom:
 
+- **Restore original home**, which turns back on the TV home apps a switch had disabled.
 - **Language**, **Featured dock**, **Top bar shortcuts**, **Wallpaper changer**, **Themes**,
   **Screensaver and sleep**, **Prayer times**, **Widgets**, **Date & time**.
 - **Reorder apps**, only with `launcher_settings_button`, the same as the menu's.
