@@ -216,6 +216,9 @@ final class DebugGate {
                 if (activity instanceof DefaultHomeActivity) ((DefaultHomeActivity) activity).runAlkhamis(done);
                 else done.onResult(false, activity.getString(R.string.not_available));
                 break;
+            case "restore-home":
+                HomeDisabled.enableSaved(activity, done);
+                break;
             case "home-original":
             case "stock-on":
                 if (activity instanceof DefaultHomeActivity) ((DefaultHomeActivity) activity).runOriginal(done);

@@ -18,6 +18,10 @@ final class HomeSwitch {
     static final String LAUNCHERX = "com.google.android.apps.tv.launcherx";
     static final String TV_LAUNCHER = "com.google.android.tvlauncher";
     static final String SETUP = "com.google.android.tungsten.setupwraith";
+    static final String SETUP_WIZARD = "com.google.android.setupwizard";
+    static final String TV_SETTINGS = "com.android.tv.settings";
+    static final String GMS = "com.google.android.gms";
+    static final String VENDING = "com.android.vending";
     static final String RECOMMENDATIONS = "com.google.android.tvrecommendations";
     static final String[] ASSISTANT = {
             "com.google.android.katniss",
@@ -54,11 +58,21 @@ final class HomeSwitch {
     }
 
     static String setHome(String self) {
+        return "cmd package set-home-activity --user 0 " + self + "/.MainActivity";
+    }
+
+    /** Older package service builds take the command without --user. */
+    static String setHomeLegacy(String self) {
         return "cmd package set-home-activity " + self + "/.MainActivity";
     }
 
     static String addRole(String self) {
         return "cmd role add-role-holder --user 0 android.app.role.HOME " + self + " 0";
+    }
+
+    /** Android 11–14 builds that reject the flags argument. */
+    static String addRoleShort(String self) {
+        return "cmd role add-role-holder android.app.role.HOME " + self;
     }
 
     static String disable(String pkg) {
@@ -80,7 +94,8 @@ final class HomeSwitch {
                 || command.equals(DISABLED) || command.equals(WIFI) || command.equals(WIFI_ON)) {
             return true;
         }
-        if (self != null && (command.equals(setHome(self)) || command.equals(addRole(self)))) return true;
+        if (self != null && (command.equals(setHome(self)) || command.equals(setHomeLegacy(self))
+                || command.equals(addRole(self)) || command.equals(addRoleShort(self)))) return true;
         String enable = "pm enable ";
         String probe = "pm path ";
         if (command.startsWith(probe)) return PackageGuard.safeName(command.substring(probe.length()));
@@ -89,7 +104,11 @@ final class HomeSwitch {
             return PackageGuard.safeName(name) && !PackageGuard.blocked(self, name);
         }
         String off = "pm disable-user --user 0 ";
-        if (command.startsWith(off)) return known(command.substring(off.length()));
+        if (command.startsWith(off)) {
+            String name = command.substring(off.length());
+            // The denylist is refused here as well as in the plan, so a later caller cannot send it.
+            return known(name) && !denied(name);
+        }
         if (command.equals("settings get secure enabled_accessibility_services")) return true;
         if (command.equals("settings put secure accessibility_enabled 1")) return true;
         String services = "settings put secure enabled_accessibility_services ";
@@ -160,6 +179,43 @@ final class HomeSwitch {
         return query != null && query.contains(SETUP + "/");
     }
 
+    /** Google TV setup, the stock launchers, Play, and anything that looks like first-boot setup. */
+    static boolean denied(String pkg) {
+        if (pkg == null || pkg.isEmpty()) return true;
+        if (SETUP.equals(pkg) || SETUP_WIZARD.equals(pkg) || LAUNCHERX.equals(pkg) || TV_LAUNCHER.equals(pkg)
+                || TV_SETTINGS.equals(pkg) || GMS.equals(pkg) || VENDING.equals(pkg)
+                || RECOMMENDATIONS.equals(pkg)) {
+            return true;
+        }
+        for (String assistant : ASSISTANT) if (assistant.equals(pkg)) return true;
+        String lower = pkg.toLowerCase(java.util.Locale.US);
+        if (lower.startsWith("com.tcl.")) return true;
+        return lower.contains("setup") || lower.contains("provision") || lower.contains("oobe");
+    }
+
+    /** setupwraith or launcherx is installed: Home is the role only. Nothing is disabled. */
+    static boolean googleTv(boolean setupPresent, boolean launcherxPresent) {
+        return setupPresent || launcherxPresent;
+    }
+
+    /**
+     * Packages that may be disabled, and only after Home already resolves to us.
+     * Google TV gets an empty plan: setupwraith and launcherx stay enabled.
+     * A Wi-Fi owner stays enabled. When Wi-Fi is on and the dump named nobody, nobody is disabled.
+     */
+    static java.util.List<String> disablePlan(java.util.List<String> candidates, Set<String> owners,
+            boolean wifiOn, boolean homeVerified, boolean googleTv) {
+        java.util.List<String> plan = new java.util.ArrayList<>();
+        if (!homeVerified || googleTv || candidates == null) return plan;
+        if (wifiOn && owners == null) return plan;
+        for (String pkg : candidates) {
+            if (denied(pkg)) continue;
+            if (owners != null && owners.contains(pkg)) continue;
+            plan.add(pkg);
+        }
+        return plan;
+    }
+
     /** Why a switch stopped before it changed anything, or "" when it ran. */
     static final String STOP_FMT = "fmt";
     static final String STOP_WIFI = "wifi";
@@ -193,7 +249,7 @@ final class HomeSwitch {
 
     static void turnOne(android.content.Context ctx, String pkg, boolean off, Outcome outcome) {
         Runner runner = new Runner(ctx, outcome);
-        if (!PackageGuard.safeName(pkg) || PackageGuard.blocked(ctx.getPackageName(), pkg)) {
+        if (!PackageGuard.safeName(pkg) || PackageGuard.blocked(ctx.getPackageName(), pkg) || (off && denied(pkg))) {
             outcome.finished(false, "", "blocked", "", java.util.Collections.emptyList());
             return;
         }
@@ -258,25 +314,49 @@ final class HomeSwitch {
             }
             Set<String> owners = wifiOwners(outputs.get(WIFI));
             boolean wifiRunning = "1".equals(outputs.get(WIFI_ON) == null ? "" : outputs.get(WIFI_ON).trim());
-            if (owners == null && wifiRunning) {
-                finishStopped(STOP_WIFI, home);
+            boolean googleTv = present(SETUP) || present(LAUNCHERX);
+            java.util.List<String> candidates = new java.util.ArrayList<>();
+            if (setupAnswersHome(outputs.get(QUERY)) && present(SETUP)) candidates.add(SETUP);
+            if (present(LAUNCHERX)) candidates.add(LAUNCHERX);
+            if (present(TV_LAUNCHER)) candidates.add(TV_LAUNCHER);
+            if (TV_LAUNCHER.equals(home) && present(RECOMMENDATIONS)) candidates.add(RECOMMENDATIONS);
+            for (String assistant : ASSISTANT) if (present(assistant)) candidates.add(assistant);
+            // Role first. Nothing is disabled until a later resolve says we are Home, and Google TV
+            // (setupwraith or launcherx) never disables those packages at all.
+            shellOptional(setHomeLegacy(self), () -> shellOptional(setHome(self), () ->
+                    shellOptional(addRole(self), () -> shellOptional(addRoleShort(self), () ->
+                            confirmThenMaybeDisable(self, candidates, owners, wifiRunning, googleTv)))));
+        }
+
+        void confirmThenMaybeDisable(String self, java.util.List<String> candidates, Set<String> owners,
+                boolean wifiRunning, boolean googleTv) {
+            shell(RESOLVE, () -> shell(HOLDERS, () -> {
+                String resolved = packageOfResolve(outputs.get(RESOLVE));
+                boolean ours = self.equals(resolved) || holds(outputs.get(HOLDERS), self);
+                java.util.List<String> plan = disablePlan(candidates, owners, wifiRunning, ours, googleTv);
+                if (plan.isEmpty()) {
+                    finish(resolved);
+                    return;
+                }
+                disableAt(plan, 0, () -> shell(RESOLVE, () -> {
+                    String now = packageOfResolve(last);
+                    if (!self.equals(now)) rollback(0, () -> finish(now));
+                    else {
+                        HomeDisabled.remember(ctx, changed);
+                        finish(now);
+                    }
+                }));
+            }));
+        }
+
+        void rollback(int index, Runnable then) {
+            if (index >= changed.size()) {
+                HomeDisabled.forget(ctx);
+                then.run();
                 return;
             }
-            if (owners != null && owners.contains(SETUP) && setupAnswersHome(outputs.get(QUERY))) {
-                finishStopped(STOP_WIFI, home);
-                return;
-            }
-            if (owners != null && owners.contains(home) && !home.isEmpty() && !self.equals(home)) {
-                finishStopped(STOP_WIFI, home);
-                return;
-            }
-            java.util.List<String> plan = new java.util.ArrayList<>();
-            if (setupAnswersHome(outputs.get(QUERY)) && present(SETUP)) plan.add(SETUP);
-            if (present(LAUNCHERX)) plan.add(LAUNCHERX);
-            if (present(TV_LAUNCHER)) plan.add(TV_LAUNCHER);
-            if (TV_LAUNCHER.equals(home) && present(RECOMMENDATIONS)) plan.add(RECOMMENDATIONS);
-            for (String assistant : ASSISTANT) if (present(assistant)) plan.add(assistant);
-            shell(setHome(self), () -> shell(addRole(self), () -> disableAt(plan, 0, () -> verify(self, true))));
+            String pkg = changed.get(index);
+            shellOptional(enable(pkg), () -> rollback(index + 1, then));
         }
 
         void turnListedOn(String[] names) {
@@ -300,7 +380,7 @@ final class HomeSwitch {
             }
             String pkg = plan.get(index);
             String command = disable(pkg);
-            shell(command, () -> {
+            shellOptional(command, () -> {
                 if (turnedOff(outputs.get(command))) changed.add(pkg);
                 disableAt(plan, index + 1, then);
             });
@@ -331,6 +411,15 @@ final class HomeSwitch {
         }
 
         void shell(String command, Runnable then) {
+            shell(command, then, false);
+        }
+
+        /** Like {@link #shell}, but a refused command does not end the switch. The next command still runs. */
+        void shellOptional(String command, Runnable then) {
+            shell(command, then, true);
+        }
+
+        void shell(String command, Runnable then, boolean optional) {
             if (stopped) return;
             log.append("$ ").append(command).append('\n');
             LocalAdb.get(ctx).runRaw(command, (ok, message) -> {
@@ -338,7 +427,7 @@ final class HomeSwitch {
                 outputs.put(command, text);
                 last = text;
                 log.append(text).append("\n\n");
-                if (!ok) finishStopped("", packageOfResolve(text));
+                if (!ok && !optional) finishStopped("", packageOfResolve(text));
                 else then.run();
             });
         }
@@ -346,7 +435,8 @@ final class HomeSwitch {
         void finish(String resolved) {
             if (stopped) return;
             stopped = true;
-            outcome.finished(ctx.getPackageName().equals(resolved), resolved, log.toString(), "", changed);
+            boolean ours = ctx.getPackageName().equals(resolved);
+            outcome.finished(ours, resolved, log.toString(), "", changed);
         }
 
         void finishStopped(String why, String resolved) {

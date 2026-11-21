@@ -57,6 +57,7 @@ public final class LauncherSettingsActivity extends Activity {
                 startActivity(new Intent(this, AboutActivity.class)));
         findViewById(R.id.homeScreenChoice).setOnClickListener(v ->
                 startActivity(new Intent(this, DefaultHomeActivity.class)));
+        findViewById(R.id.restoreHomeChoice).setOnClickListener(v -> HomeDisabled.restore(this));
         findViewById(R.id.featuredDockChoice).setOnClickListener(v ->
                 startActivity(new Intent(this, DockManagerActivity.class)));
         findViewById(R.id.topBarChoice).setOnClickListener(v ->
@@ -199,6 +200,7 @@ public final class LauncherSettingsActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        DebugGate.onResume(this);
         paintHome();
     }
 
