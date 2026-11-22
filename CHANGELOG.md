@@ -2,11 +2,23 @@
 
 سجل التغييرات
 
-Tags: `v3.1-shrine`, `v3.2-shrine`, `v3.2.1-shrine`, `v3.2.2-shrine`, `v3.2.3-shrine`, `v3.2.4-shrine`, `v3.2.5-shrine`, `v3.2.6-shrine`, `v3.2.7-shrine`, `v3.2.8-shrine`, `v3.2.9-shrine`, `v3.2.10-shrine`, `v3.5.0-shrine`, `v3.5.1-shrine`, `v3.5.2-shrine`, `v3.5.3-shrine`, `v3.5.4-shrine`, `v3.5.5-shrine`, `v3.5.6-shrine`, `v3.5.7-shrine`, `v3.5.8-shrine`.  
+Tags: `v3.1-shrine`, `v3.2-shrine`, `v3.2.1-shrine`, `v3.2.2-shrine`, `v3.2.3-shrine`, `v3.2.4-shrine`, `v3.2.5-shrine`, `v3.2.6-shrine`, `v3.2.7-shrine`, `v3.2.8-shrine`, `v3.2.9-shrine`, `v3.2.10-shrine`, `v3.5.0-shrine`, `v3.5.1-shrine`, `v3.5.2-shrine`, `v3.5.3-shrine`, `v3.5.4-shrine`, `v3.5.5-shrine`, `v3.5.6-shrine`, `v3.5.7-shrine`, `v3.5.8-shrine`, `v3.5.9-shrine`.  
 The release file is always `CleanYourTV-Shrine.apk`.
 
 الوسوم: `v3.1-shrine` حتى `v3.5.0-shrine`.  
 اسم ملف الإصدار دائمًا `CleanYourTV-Shrine.apk`.
+
+## 3.5.9-shrine
+
+versionCode 32. Same package (`com.gathin.tvhome`) and the same release key as 3.5.8-shrine, so it installs over that build. The Home switch is unchanged.
+
+### English
+
+- Themes is a list again. Up and Down move at once, and OK applies the focused theme. Preview opens the real Home for that theme. Back from that Home returns to the list on the same theme.
+
+### العربية
+
+- الثيمات قائمة من جديد. الأعلى والأسفل ينقلان فورًا، وموافق يطبّق الثيم المحدد. معاينة تفتح الشاشة الرئيسية لذلك الثيم. الرجوع من تلك الشاشة يعيد القائمة على الثيم نفسه.
 
 ## 3.5.8-shrine
 

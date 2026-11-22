@@ -1218,6 +1218,11 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     protected void onResume() {
         super.onResume();
         resumed = true;
+        // Back from the theme preview covered Home with the list. Draw the installed theme again.
+        if (!ThemeStage.wants(getIntent()) && ThemeStage.takeHomeDirty()) {
+            recreate();
+            return;
+        }
         // A festival that started or ended while Home was in the background: rebuild with or without it.
         if (festive != festival.active(LocalDate.now())) {
             recreate();

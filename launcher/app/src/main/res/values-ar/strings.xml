@@ -234,7 +234,8 @@
     <string name="themes_refresh">حفظ العنوان وتحديث</string>
     <string name="themes_loading">جارٍ فحص القائمة…</string>
     <string name="themes_none_yet">لا ثيمات إضافية في القائمة بعد.</string>
-    <string name="themes_pick">الثيمات تفتح على الشاشة الرئيسية نفسها. موافق يطبّق الثيم. الرجوع يتركه. يُذكر صاحب الصورة هناك، لا على الشاشة الرئيسية.</string>
+    <string name="themes_pick">موافق يطبّق الثيم. معاينة تفتح الشاشة الرئيسية أولًا.</string>
+    <string name="themes_preview_open">معاينة</string>
     <string name="themes_preview_later">تظهر هذه المعاينة بعد تنزيل الثيم.</string>
     <string name="themes_downloading">جارٍ تنزيل الثيم…</string>
     <string name="themes_applied">طُبّق الثيم.</string>

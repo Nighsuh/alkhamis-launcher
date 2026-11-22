@@ -25,6 +25,8 @@ final class ThemeStage {
 
     private static volatile File root;
     private static String current = "shrine";
+    /** Home was showing a browse copy. Rebuild it with the installed theme once the list covers it. */
+    private static boolean homeDirty;
 
     private ThemeStage() {}
 
@@ -75,7 +77,7 @@ final class ThemeStage {
             return true;
         }
         if (code == KeyEvent.KEYCODE_BACK || code == KeyEvent.KEYCODE_ESCAPE) {
-            leave(activity);
+            returnToList(activity);
             return true;
         }
         return false;
@@ -213,12 +215,31 @@ final class ThemeStage {
         }, "theme-download").start();
     }
 
+    /** True once, after Back from the preview. Home rebuilds with the installed theme. */
+    static boolean takeHomeDirty() {
+        boolean dirty = homeDirty;
+        homeDirty = false;
+        return dirty;
+    }
+
     private static void leave(Activity activity) {
         root = null;
+        homeDirty = false;
         Intent home = new Intent(activity, MainActivity.class);
         home.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         activity.setIntent(home);
         activity.recreate();
+    }
+
+    /** Back from the preview: the list, on the theme that was open. The installed theme is unchanged. */
+    private static void returnToList(Activity activity) {
+        String id = current;
+        root = null;
+        homeDirty = true;
+        activity.setIntent(new Intent(activity, MainActivity.class));
+        Intent list = new Intent(activity, ThemesActivity.class);
+        list.putExtra(EXTRA_ID, id);
+        activity.startActivity(list);
     }
 
     private static boolean stage(Activity activity, String id) {
