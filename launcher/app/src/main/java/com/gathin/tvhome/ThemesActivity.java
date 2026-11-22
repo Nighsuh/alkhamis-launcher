@@ -19,6 +19,7 @@ import java.util.List;
 public final class ThemesActivity extends Activity {
     private LinearLayout rows;
     private TextView status;
+    private ThemePreviewView preview;
     private final List<ThemeCatalog.Item> items = new ArrayList<>();
     private boolean busy;
 
@@ -33,6 +34,7 @@ public final class ThemesActivity extends Activity {
         setContentView(R.layout.activity_themes);
         rows = findViewById(R.id.themeRows);
         status = findViewById(R.id.status);
+        preview = findViewById(R.id.themePreview);
         EditText url = findViewById(R.id.indexUrl);
         url.setText(ThemeCatalog.indexUrl(this));
         findViewById(R.id.saveUrl).setOnClickListener(v -> {
@@ -44,12 +46,16 @@ public final class ThemesActivity extends Activity {
             ThemeCatalog.setIndexUrl(this, text);
             load();
         });
-        findViewById(R.id.useShrine).setOnClickListener(v -> {
+        TextView shrine = findViewById(R.id.useShrine);
+        shrine.setOnClickListener(v -> {
             boolean ok = ThemeInstaller.restoreShrine(this);
             status.setText(ok ? R.string.themes_applied : R.string.themes_failed);
             if (ok) show();
         });
-        findViewById(R.id.useShrine).requestFocus();
+        shrine.setOnFocusChangeListener((v, focused) -> {
+            if (focused && preview != null) preview.preview(null, true);
+        });
+        shrine.requestFocus();
         show();
         load();
     }
@@ -97,6 +103,9 @@ public final class ThemesActivity extends Activity {
             boolean on = item.id.equals(active);
             TextView row = row((on ? "✓ " : "") + item.label(arabic), pad);
             row.setOnClickListener(v -> apply(item));
+            row.setOnFocusChangeListener((v, focused) -> {
+                if (focused && preview != null) preview.preview(item, false);
+            });
             rows.addView(row);
         }
         if (!busy) status.setText(listed.isEmpty() ? R.string.themes_none_yet : R.string.themes_pick);

@@ -2,11 +2,23 @@
 
 سجل التغييرات
 
-Tags: `v3.1-shrine`, `v3.2-shrine`, `v3.2.1-shrine`, `v3.2.2-shrine`, `v3.2.3-shrine`, `v3.2.4-shrine`, `v3.2.5-shrine`, `v3.2.6-shrine`, `v3.2.7-shrine`, `v3.2.8-shrine`, `v3.2.9-shrine`, `v3.2.10-shrine`, `v3.5.0-shrine`, `v3.5.1-shrine`, `v3.5.2-shrine`, `v3.5.3-shrine`, `v3.5.4-shrine`, `v3.5.5-shrine`.  
+Tags: `v3.1-shrine`, `v3.2-shrine`, `v3.2.1-shrine`, `v3.2.2-shrine`, `v3.2.3-shrine`, `v3.2.4-shrine`, `v3.2.5-shrine`, `v3.2.6-shrine`, `v3.2.7-shrine`, `v3.2.8-shrine`, `v3.2.9-shrine`, `v3.2.10-shrine`, `v3.5.0-shrine`, `v3.5.1-shrine`, `v3.5.2-shrine`, `v3.5.3-shrine`, `v3.5.4-shrine`, `v3.5.5-shrine`, `v3.5.6-shrine`.  
 The release file is always `CleanYourTV-Shrine.apk`.
 
 الوسوم: `v3.1-shrine` حتى `v3.5.0-shrine`.  
 اسم ملف الإصدار دائمًا `CleanYourTV-Shrine.apk`.
+
+## 3.5.6-shrine
+
+versionCode 29. Same package (`com.gathin.tvhome`) and the same release key as 3.5.5-shrine, so it installs over that build. The Home switch is unchanged.
+
+### English
+
+- The theme list shows a live preview of the focused theme: wallpaper, clock, pills, tiles and the dock, drawn from that theme's own config. OK still applies it. Back leaves the current theme as it was. A theme that is only in the online list uses its preview picture until it is downloaded.
+
+### العربية
+
+- قائمة الثيمات تعرض معاينة حيّة للثيم المحدد: الخلفية والساعة والأزرار والبطاقات والشريط، مرسومة من إعداد ذلك الثيم نفسه. موافق ما زال يطبّقه. الرجوع يترك الثيم الحالي كما هو. الثيم الموجود في القائمة على الشبكة فقط يستخدم صورة معاينته إلى أن يُنزَّل.
 
 ## 3.5.5-shrine
 
