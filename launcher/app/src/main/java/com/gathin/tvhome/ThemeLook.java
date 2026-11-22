@@ -12,24 +12,29 @@ final class ThemeLook {
     final int wallpaperDim;
     final int dockOpacity;
     final boolean dockGlass;
+    final boolean dockBand;
+    final boolean iconOnly;
     final boolean headerWhite;
     final boolean wallpaper;
     final String glassStyle;
 
     private ThemeLook(int background, int accent, int wallpaperDim, int dockOpacity,
-            boolean dockGlass, boolean headerWhite, boolean wallpaper, String glassStyle) {
+            boolean dockGlass, boolean dockBand, boolean iconOnly, boolean headerWhite,
+            boolean wallpaper, String glassStyle) {
         this.background = background;
         this.accent = accent;
         this.wallpaperDim = wallpaperDim;
         this.dockOpacity = dockOpacity;
         this.dockGlass = dockGlass;
+        this.dockBand = dockBand;
+        this.iconOnly = iconOnly;
         this.headerWhite = headerWhite;
         this.wallpaper = wallpaper;
         this.glassStyle = glassStyle == null ? "" : glassStyle;
     }
 
     static ThemeLook fallback() {
-        return new ThemeLook(0xFF101419, 0xFFFFFFFF, 45, 70, false, false, true, "rim");
+        return new ThemeLook(0xFF101419, 0xFFFFFFFF, 45, 70, false, true, false, false, true, "rim");
     }
 
     /** Parses a theme config. Missing keys keep the shrine-like fallback. */
@@ -44,6 +49,8 @@ final class ThemeLook {
                     integer(o, "wallpaper_dim", base.wallpaperDim, 0, 90),
                     integer(o, "dock_opacity", base.dockOpacity, 30, 100),
                     bool(o, "dock_glass", base.dockGlass),
+                    bool(o, "dock_band", base.dockBand),
+                    bool(o, "icon_only_buttons", base.iconOnly),
                     bool(o, "header_white", base.headerWhite),
                     bool(o, "wallpaper", base.wallpaper),
                     string(o, "glass_style", base.glassStyle));

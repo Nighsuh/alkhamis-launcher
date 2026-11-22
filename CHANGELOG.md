@@ -2,11 +2,23 @@
 
 سجل التغييرات
 
-Tags: `v3.1-shrine`, `v3.2-shrine`, `v3.2.1-shrine`, `v3.2.2-shrine`, `v3.2.3-shrine`, `v3.2.4-shrine`, `v3.2.5-shrine`, `v3.2.6-shrine`, `v3.2.7-shrine`, `v3.2.8-shrine`, `v3.2.9-shrine`, `v3.2.10-shrine`, `v3.5.0-shrine`, `v3.5.1-shrine`, `v3.5.2-shrine`, `v3.5.3-shrine`, `v3.5.4-shrine`, `v3.5.5-shrine`, `v3.5.6-shrine`.  
+Tags: `v3.1-shrine`, `v3.2-shrine`, `v3.2.1-shrine`, `v3.2.2-shrine`, `v3.2.3-shrine`, `v3.2.4-shrine`, `v3.2.5-shrine`, `v3.2.6-shrine`, `v3.2.7-shrine`, `v3.2.8-shrine`, `v3.2.9-shrine`, `v3.2.10-shrine`, `v3.5.0-shrine`, `v3.5.1-shrine`, `v3.5.2-shrine`, `v3.5.3-shrine`, `v3.5.4-shrine`, `v3.5.5-shrine`, `v3.5.6-shrine`, `v3.5.7-shrine`.  
 The release file is always `CleanYourTV-Shrine.apk`.
 
 الوسوم: `v3.1-shrine` حتى `v3.5.0-shrine`.  
 اسم ملف الإصدار دائمًا `CleanYourTV-Shrine.apk`.
+
+## 3.5.7-shrine
+
+versionCode 30. Same package (`com.gathin.tvhome`) and the same release key as 3.5.6-shrine, so it installs over that build. The Home switch is unchanged.
+
+### English
+
+- Themes opens a full-screen Home. Left and Right move through the themes, and the wallpaper, colours and dock are that theme's own files. Istanbul v2, Halloween and Family keep their pictures in a wallpapers folder, which 3.5.6 did not open, so those previews stayed a blank mock. OK applies the theme. Back leaves the current theme unchanged.
+
+### العربية
+
+- الثيمات تفتح الشاشة الرئيسية بحجمها الكامل. اليمين واليسار ينقلان بين الثيمات، والخلفية والألوان والشريط من ملفات ذلك الثيم نفسه. إسطنبول 2 والهالوين والعائلة تحفظ صورها في مجلد خلفيات، والإصدار 3.5.6 لم يفتحه فبقيت المعاينة شاشة فارغة. موافق يطبّق الثيم. الرجوع يترك الثيم الحالي كما هو.
 
 ## 3.5.6-shrine
 

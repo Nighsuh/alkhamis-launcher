@@ -10,13 +10,16 @@ public class ThemeLookTest {
     @Test
     public void readsTheSameColourKeysHomeUses() {
         ThemeLook look = ThemeLook.fromJson("{\"background_color\":\"#070A14\",\"accent_color\":\"#FF7A1A\","
-                + "\"wallpaper_dim\":20,\"dock_opacity\":40,\"dock_glass\":true,\"header_white\":true,"
+                + "\"wallpaper_dim\":20,\"dock_opacity\":40,\"dock_glass\":true,\"dock_band\":false,"
+                + "\"icon_only_buttons\":true,\"header_white\":true,"
                 + "\"wallpaper\":false,\"glass_style\":\"rim\"}");
         assertEquals(0xFF070A14, look.background);
         assertEquals(0xFFFF7A1A, look.accent);
         assertEquals(20, look.wallpaperDim);
         assertEquals(40, look.dockOpacity);
         assertTrue(look.dockGlass);
+        assertFalse(look.dockBand);
+        assertTrue(look.iconOnly);
         assertTrue(look.headerWhite);
         assertFalse(look.wallpaper);
         assertEquals("rim", look.glassStyle);
