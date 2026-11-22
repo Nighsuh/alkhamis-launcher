@@ -51,7 +51,9 @@ The launcher's own page has these rows, top to bottom:
 
 - **Restore original home**, which turns back on the TV home apps a switch had disabled.
 - **Language**, **Featured dock**, **Top bar shortcuts**, **Wallpaper changer**, **Themes**,
-  **Screensaver and sleep**, **Prayer times**, **Widgets**, **Date & time**.
+  **File transfer**, **Screensaver and sleep**, **Prayer times**, **Widgets**, **Date & time**.
+  File transfer opens a page on this TV for a phone or computer on the same network. It stops when
+  you leave the page, unless Keep running in the background is on.
 - **Reorder apps**, only with `launcher_settings_button`, the same as the menu's.
 - **Apps per row** 4, 5, 6 or 7; **Rows below dock** 0 to 3, how many rows of tiles stay visible under the
   dock band; **Dock band opacity** 100%, 70%, 50% or 30%. The last two only do anything while the dock is
