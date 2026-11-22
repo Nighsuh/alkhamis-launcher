@@ -313,7 +313,7 @@
     <string name="themes_refresh">Save address and refresh</string>
     <string name="themes_loading">Checking the catalog…</string>
     <string name="themes_none_yet">No extra themes in the catalog yet.</string>
-    <string name="themes_pick">The panel shows the theme first. OK applies it. Shrine stays at the top.</string>
+    <string name="themes_pick">Themes open on the real Home. OK applies the theme. Back leaves it. A picture credit is shown there, not on Home.</string>
     <string name="themes_preview_later">This preview appears after the theme is downloaded.</string>
     <string name="themes_downloading">Downloading the theme…</string>
     <string name="themes_applied">Theme applied.</string>

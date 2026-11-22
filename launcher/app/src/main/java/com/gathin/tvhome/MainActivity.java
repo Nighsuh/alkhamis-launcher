@@ -468,6 +468,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Before Config.load: a theme browse reads a copy, and Home draws that copy with this same activity.
+        ThemeStage.prepare(this);
         setContentView(R.layout.activity_main);
         if (HomeWidgets.wanted(this)) widgets = HomeWidgets.mount(this);
         density = getResources().getDisplayMetrics().density;
@@ -1081,6 +1083,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         } catch (RuntimeException ignored) {
             // Restoring a previous home switch must not stop Home from opening.
         }
+        if (ThemeStage.active()) ThemeStage.attach(this, root, wallpaperPlayer);
     }
 
     /**
@@ -1171,6 +1174,12 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        if (ThemeStage.wants(intent)) {
+            setIntent(intent);
+            ThemeStage.prepare(this);
+            recreate();
+            return;
+        }
         if (openLauncherSettingsIfAsked(intent)) return;
         if (openHomeFailPreviewIfAsked(intent)) return;
         if (openLibraryIfAsked(intent)) return;
@@ -1569,6 +1578,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
      */
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
+        if (ThemeStage.consume(this, event)) return true;
         if (homeIgnoreChannelKeys && RemoteKeys.isChannelKey(event.getKeyCode())) return true;
         // Vendor keys (TCL Netflix button, 4062) never reach the key services, only the focused window, so their
         // "hold:" entries run here too or nowhere. Only while resumed: onPause releases Home's holds, and a DOWN

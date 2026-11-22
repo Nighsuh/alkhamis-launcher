@@ -392,9 +392,10 @@
     <!-- Wallpapers decode as RGB_565 (2 bytes a pixel, 4 MB at 1080p), which bands dark gradients such as a night
          sky, most of all under wallpaper_dim. true decodes them in 32-bit colour: 8 MB, for TVs with 2 GB or more. -->
     <bool name="wallpaper_true_color">false</bool>
-    <!-- Rotating wallpapers: show each picture's name under the top-right buttons, from a captions.txt next to the
-         pictures in wallpapers/ ("01-dusk.jpg<TAB>Dusk over the peaks", one per line). A picture without a line
-         shows no name. Can also be set with "wallpaper_captions": true in a theme's config.json. -->
+    <!-- Picture credits live in wallpapers/captions.txt ("01-dusk.jpg<TAB>Dusk over the peaks", one per line).
+         Home does not draw that line. The theme browser shows it under the theme name, so a CC BY-SA credit
+         stays available without sitting between the widgets and the tiles. A theme's wallpaper_captions value
+         is kept for the file check and is not drawn on Home. -->
     <bool name="wallpaper_captions">false</bool>
     <!-- Rotating wallpapers grouped by the time of day, as JSON: {"morning": [file names], "evening": [...],
          "night": [...]}. While set, the rotation picks only from the group that fits now: morning from sunrise to

@@ -14,7 +14,12 @@ public final class ThemesActivity extends Activity {
     @Override
     protected void onCreate(Bundle state) {
         super.onCreate(state);
-        startActivity(new Intent(this, ThemeBrowseActivity.class));
+        Intent home = new Intent(this, MainActivity.class);
+        home.putExtra(ThemeStage.EXTRA, true);
+        String id = getIntent().getStringExtra(ThemeStage.EXTRA_ID);
+        if (id != null) home.putExtra(ThemeStage.EXTRA_ID, id);
+        home.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(home);
         finish();
     }
 }
