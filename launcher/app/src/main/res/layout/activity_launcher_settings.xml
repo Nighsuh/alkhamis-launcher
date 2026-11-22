@@ -103,6 +103,12 @@
             android:text="@string/themes" />
 
         <TextView
+            android:id="@+id/transferChoice"
+            style="@style/SettingsRow"
+            android:layout_marginTop="10dp"
+            android:text="@string/file_transfer" />
+
+        <TextView
             android:id="@+id/screensaverChoice"
             style="@style/SettingsRow"
             android:layout_marginTop="10dp"

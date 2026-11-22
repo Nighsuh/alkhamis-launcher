@@ -302,6 +302,17 @@
     <string name="themes_none_yet">No extra themes in the catalog yet.</string>
     <string name="themes_pick">OK applies the theme. Preview opens the real Home first.</string>
     <string name="themes_preview_open">Preview</string>
+    <string name="file_transfer">File transfer</string>
+    <string name="file_transfer_pin">PIN %1$s</string>
+    <string name="file_transfer_background">Keep running in the background</string>
+    <string name="file_transfer_on">On</string>
+    <string name="file_transfer_install">Install</string>
+    <string name="file_transfer_delete">Delete</string>
+    <string name="file_transfer_open">Open</string>
+    <string name="file_transfer_copied">Copied</string>
+    <string name="file_transfer_empty">No files yet</string>
+    <string name="file_transfer_failed">That could not be opened</string>
+    <string name="file_transfer_sources">Allow this launcher to install apps, then try again</string>
     <string name="themes_preview_later">This preview appears after the theme is downloaded.</string>
     <string name="themes_downloading">Downloading the theme…</string>
     <string name="themes_applied">Theme applied.</string>

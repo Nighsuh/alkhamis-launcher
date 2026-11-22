@@ -236,6 +236,17 @@
     <string name="themes_none_yet">لا ثيمات إضافية في القائمة بعد.</string>
     <string name="themes_pick">موافق يطبّق الثيم. معاينة تفتح الشاشة الرئيسية أولًا.</string>
     <string name="themes_preview_open">معاينة</string>
+    <string name="file_transfer">نقل الملفات</string>
+    <string name="file_transfer_pin">رمز الدخول %1$s</string>
+    <string name="file_transfer_background">تشغيل في الخلفية</string>
+    <string name="file_transfer_on">يعمل</string>
+    <string name="file_transfer_install">تثبيت</string>
+    <string name="file_transfer_delete">حذف</string>
+    <string name="file_transfer_open">فتح</string>
+    <string name="file_transfer_copied">تم النسخ</string>
+    <string name="file_transfer_empty">لا ملفات بعد</string>
+    <string name="file_transfer_failed">تعذّر الفتح</string>
+    <string name="file_transfer_sources">اسمح لهذا المشغّل بتثبيت التطبيقات، ثم أعد المحاولة</string>
     <string name="themes_preview_later">تظهر هذه المعاينة بعد تنزيل الثيم.</string>
     <string name="themes_downloading">جارٍ تنزيل الثيم…</string>
     <string name="themes_applied">طُبّق الثيم.</string>

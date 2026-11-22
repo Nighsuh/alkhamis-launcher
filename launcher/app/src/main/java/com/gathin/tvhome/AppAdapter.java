@@ -66,7 +66,7 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     static final class Entry {
-        static final int APP = 0, HOME_SETTINGS = 1, CARD = 2, EMPTY = 3;
+        static final int APP = 0, HOME_SETTINGS = 1, CARD = 2, EMPTY = 3, TRANSFER = 4;
 
         final int kind;
         final String label;
@@ -327,6 +327,11 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return a.label.compareToIgnoreCase(b.label);
         });
         // Retain the optional Default-home tile until dependent tile-ordering work is merged.
+        if (!hidden.contains(TransferHub.TILE)) {
+            fresh.add(new Entry(Entry.TRANSFER, ctx.getString(R.string.file_transfer),
+                    new ComponentName(TransferHub.TILE, TransferActivity.class.getName()), null,
+                    ctx.getDrawable(R.drawable.ic_transfer), null, 0));
+        }
         if (showHomeSettings
                 && pm.resolveActivity(new Intent(Settings.ACTION_HOME_SETTINGS), 0) != null) {
             fresh.add(new Entry(Entry.HOME_SETTINGS, ctx.getString(R.string.home_settings),
@@ -534,6 +539,11 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             return;
         }
+        if (e.kind == Entry.TRANSFER) {
+            ctx.startActivity(new Intent(ctx, TransferActivity.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            return;
+        }
         Intent i = new Intent(Intent.ACTION_MAIN)
                 .setComponent(e.component)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
@@ -612,7 +622,9 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     /** Tiles that can be moved: everything but the "Default home" tile, which always stays last. */
     int movableCount() {
         int n = items.size();
-        return n > 0 && items.get(n - 1).kind == Entry.HOME_SETTINGS ? n - 1 : n;
+        while (n > 0 && (items.get(n - 1).kind == Entry.HOME_SETTINGS
+                || items.get(n - 1).kind == Entry.TRANSFER)) n--;
+        return n;
     }
 
     /** Keys of the movable tiles in their current order, for Order (empty dock slots are not tiles). */
@@ -676,7 +688,7 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         int n = Math.min(Math.max(dockSize, docked), items.size());
         for (int i = 0; i < n; i++) {
             Entry e = items.get(i);
-            if (e.kind == Entry.EMPTY || e.kind == Entry.HOME_SETTINGS) continue;
+            if (e.kind == Entry.EMPTY || e.kind == Entry.HOME_SETTINGS || e.kind == Entry.TRANSFER) continue;
             if (!out.contains(e.pkg)) out.add(e.pkg);
         }
         return out;

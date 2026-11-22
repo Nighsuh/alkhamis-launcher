@@ -66,6 +66,8 @@ public final class LauncherSettingsActivity extends Activity {
                 startActivity(new Intent(this, WallpaperActivity.class)));
         View themesChoice = findViewById(R.id.themesChoice);
         themesChoice.setOnClickListener(v -> startActivity(new Intent(this, ThemesActivity.class)));
+        findViewById(R.id.transferChoice).setOnClickListener(v ->
+                startActivity(new Intent(this, TransferActivity.class)));
         findViewById(R.id.screensaverChoice).setOnClickListener(v ->
                 startActivity(new Intent(this, ScreensaverActivity.class)));
         findViewById(R.id.prayerChoice).setOnClickListener(v ->

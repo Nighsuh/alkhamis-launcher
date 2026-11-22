@@ -160,6 +160,16 @@
         <activity android:name=".WallpaperActivity" android:exported="false" android:excludeFromRecents="true" android:screenOrientation="landscape" />
         <activity android:name=".WallpaperBrowseActivity" android:exported="false" android:excludeFromRecents="true" android:screenOrientation="landscape" />
         <activity android:name=".ThemesActivity" android:exported="false" android:excludeFromRecents="true" android:screenOrientation="landscape" />
+        <activity android:name=".TransferActivity" android:exported="false" android:excludeFromRecents="true" android:screenOrientation="landscape" />
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.transfer"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/transfer_paths" />
+        </provider>
         <activity android:name=".DreamPreviewActivity" android:exported="false" android:excludeFromRecents="true" android:screenOrientation="landscape" />
         <service
             android:name=".ShrineDream"

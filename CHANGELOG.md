@@ -2,11 +2,23 @@
 
 سجل التغييرات
 
-Tags: `v3.1-shrine`, `v3.2-shrine`, `v3.2.1-shrine`, `v3.2.2-shrine`, `v3.2.3-shrine`, `v3.2.4-shrine`, `v3.2.5-shrine`, `v3.2.6-shrine`, `v3.2.7-shrine`, `v3.2.8-shrine`, `v3.2.9-shrine`, `v3.2.10-shrine`, `v3.5.0-shrine`, `v3.5.1-shrine`, `v3.5.2-shrine`, `v3.5.3-shrine`, `v3.5.4-shrine`, `v3.5.5-shrine`, `v3.5.6-shrine`, `v3.5.7-shrine`, `v3.5.8-shrine`, `v3.5.9-shrine`.  
+Tags: `v3.1-shrine`, `v3.2-shrine`, `v3.2.1-shrine`, `v3.2.2-shrine`, `v3.2.3-shrine`, `v3.2.4-shrine`, `v3.2.5-shrine`, `v3.2.6-shrine`, `v3.2.7-shrine`, `v3.2.8-shrine`, `v3.2.9-shrine`, `v3.2.10-shrine`, `v3.5.0-shrine`, `v3.5.1-shrine`, `v3.5.2-shrine`, `v3.5.3-shrine`, `v3.5.4-shrine`, `v3.5.5-shrine`, `v3.5.6-shrine`, `v3.5.7-shrine`, `v3.5.8-shrine`, `v3.5.9-shrine`, `v3.6.0-shrine`.  
 The release file is always `CleanYourTV-Shrine.apk`.
 
 الوسوم: `v3.1-shrine` حتى `v3.5.0-shrine`.  
 اسم ملف الإصدار دائمًا `CleanYourTV-Shrine.apk`.
+
+## 3.6.0-shrine
+
+versionCode 33. Same package (`com.gathin.tvhome`) and the same release key as 3.5.9-shrine, so it installs over that build. The Home switch is unchanged.
+
+### English
+
+- File transfer is in Alkhamis Launcher settings and on the Home grid, and it can be hidden like any other tile. The TV page shows an address, a PIN and a QR code. A phone or a PC on the same network opens that page, sends files or a link, and the TV can open, install or delete what arrived. The page stops when you leave it, unless Keep running in the background is on.
+
+### العربية
+
+- نقل الملفات في إعدادات Alkhamis Launcher وعلى شبكة الشاشة، ويمكن إخفاؤه كأي بطاقة أخرى. صفحة التلفاز تعرض العنوان ورمز الدخول ورمز QR. الهاتف أو الحاسوب على الشبكة نفسها يفتح الصفحة ويرسل ملفات أو رابطًا، والتلفاز يفتح ما وصل أو يثبّته أو يحذفه. تتوقف الصفحة عند مغادرتها، إلا إذا كان تشغيل في الخلفية مفعّلًا.
 
 ## 3.5.9-shrine
 
