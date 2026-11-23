@@ -26,6 +26,9 @@ final class TransferServer {
     private final String pin;
     private final ServerSocket socket;
     private volatile boolean open = true;
+    private final java.util.Set<String> callers = java.util.Collections.synchronizedSet(new java.util.LinkedHashSet<>());
+    volatile String busyName = "";
+    volatile int busyPercent = -1;
 
     private TransferServer(File root, String pin, ServerSocket socket) {
         this.root = root;
@@ -45,6 +48,10 @@ final class TransferServer {
 
     int port() {
         return socket.getLocalPort();
+    }
+
+    int clientCount() {
+        return callers.size();
     }
 
     void stop() {
@@ -70,6 +77,9 @@ final class TransferServer {
 
     private void handle(Socket client) {
         try (Socket socket = client) {
+            if (socket.getInetAddress() != null && callers.size() < 12) {
+                callers.add(socket.getInetAddress().getHostAddress());
+            }
             socket.setSoTimeout(120_000);
             BufferedInputStream in = new BufferedInputStream(socket.getInputStream());
             byte[] header = readHeaders(in);
@@ -235,8 +245,13 @@ final class TransferServer {
                 if (ended(buf, fill, boundary)) return;
                 continue;
             }
-            try (FileOutputStream file = new FileOutputStream(dest)) {
+            busyName = dest.getName();
+            busyPercent = 0;
+            try (OutputStream file = new ProgressOut(new FileOutputStream(dest), length)) {
                 fill = writeUntil(in, buf, fill, left, sep, file);
+            } finally {
+                busyPercent = -1;
+                busyName = "";
             }
             left = 0;
             if (ended(buf, fill, boundary)) return;
@@ -514,5 +529,38 @@ final class TransferServer {
         head.append("\r\n");
         out.write(head.toString().getBytes(StandardCharsets.US_ASCII));
         out.write(body);
+    }
+
+    private final class ProgressOut extends OutputStream {
+        private final OutputStream out;
+        private final long total;
+        private long wrote;
+
+        ProgressOut(OutputStream out, long total) {
+            this.out = out;
+            this.total = total;
+        }
+
+        @Override
+        public void write(int b) throws IOException {
+            out.write(b);
+            tick(1);
+        }
+
+        @Override
+        public void write(byte[] b, int off, int len) throws IOException {
+            out.write(b, off, len);
+            tick(len);
+        }
+
+        private void tick(int n) {
+            wrote += n;
+            if (total > 0) busyPercent = (int) Math.min(99, wrote * 100L / total);
+        }
+
+        @Override
+        public void close() throws IOException {
+            out.close();
+        }
     }
 }

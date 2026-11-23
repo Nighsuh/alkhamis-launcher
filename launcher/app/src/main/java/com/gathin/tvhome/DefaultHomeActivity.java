@@ -177,7 +177,9 @@ public final class DefaultHomeActivity extends Activity {
         if (!ok && !isFinishing() && message != null && !message.isEmpty()) {
             new AlertDialog.Builder(this)
                     .setMessage(message)
-                    .setPositiveButton(android.R.string.ok, null)
+                    .setPositiveButton(R.string.home_button_name, (dialog, which) ->
+                            startActivity(new Intent(this, HomeButtonActivity.class)))
+                    .setNegativeButton(android.R.string.ok, null)
                     .show();
         }
     }

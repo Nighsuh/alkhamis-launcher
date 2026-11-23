@@ -50,6 +50,8 @@ Holding OK on an ordinary app tile still offers **Move**. The dock list itself i
 The launcher's own page has these rows, top to bottom:
 
 - **Restore original home**, which turns back on the TV home apps a switch had disabled.
+- **Home button**, for a Google TV that will not give this launcher the Home role. Turn it on in
+  Accessibility. It brings this launcher forward when the TV home opens, and it does not turn any app off.
 - **Language**, **Featured dock**, **Top bar shortcuts**, **Wallpaper changer**, **Themes**,
   **File transfer**, **Screensaver and sleep**, **Prayer times**, **Widgets**, **Date & time**.
   File transfer opens a page on this TV for a phone or computer on the same network. It stops when

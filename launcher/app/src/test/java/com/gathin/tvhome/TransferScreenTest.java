@@ -18,11 +18,16 @@ import java.io.FileOutputStream;
 
 /** Draws the transfer screen once the address and PIN are on it. */
 @RunWith(RobolectricTestRunner.class)
-@Config(sdk = 30, qualifiers = "ar-w1280dp-h720dp-land")
+@Config(sdk = 30, qualifiers = "ar-w1920dp-h1080dp-land")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 public class TransferScreenTest {
     @Test
     public void showsQrAndPin() throws Exception {
+        File folder = org.robolectric.RuntimeEnvironment.getApplication().getExternalFilesDir("transfer");
+        if (folder != null) {
+            File[] old = folder.listFiles();
+            if (old != null) for (File file : old) file.delete();
+        }
         TransferActivity activity = Robolectric.buildActivity(TransferActivity.class).setup().get();
         TextView pin = activity.findViewById(R.id.transferPin);
         long deadline = System.currentTimeMillis() + 5000;
@@ -36,14 +41,16 @@ public class TransferScreenTest {
             }
         }
         View decor = activity.getWindow().getDecorView();
-        decor.measure(View.MeasureSpec.makeMeasureSpec(1280, View.MeasureSpec.EXACTLY),
-                View.MeasureSpec.makeMeasureSpec(720, View.MeasureSpec.EXACTLY));
-        decor.layout(0, 0, 1280, 720);
-        Bitmap bitmap = Bitmap.createBitmap(1280, 720, Bitmap.Config.ARGB_8888);
+        decor.measure(View.MeasureSpec.makeMeasureSpec(1920, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY));
+        decor.layout(0, 0, 1920, 1080);
+        TextView empty = activity.findViewById(R.id.transferEmpty);
+        if (empty.getVisibility() != View.VISIBLE) throw new AssertionError("empty help hidden");
+        Bitmap bitmap = Bitmap.createBitmap(1920, 1080, Bitmap.Config.ARGB_8888);
         decor.draw(new Canvas(bitmap));
-        File dir = new File("/opt/cursor/artifacts/qa/3.6.0");
+        File dir = new File("/opt/cursor/artifacts/qa/3.6.1");
         dir.mkdirs();
-        try (FileOutputStream out = new FileOutputStream(new File(dir, "tv-transfer.png"))) {
+        try (FileOutputStream out = new FileOutputStream(new File(dir, "after-tv-empty.png"))) {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
         }
         bitmap.recycle();

@@ -58,6 +58,8 @@ public final class LauncherSettingsActivity extends Activity {
         findViewById(R.id.homeScreenChoice).setOnClickListener(v ->
                 startActivity(new Intent(this, DefaultHomeActivity.class)));
         findViewById(R.id.restoreHomeChoice).setOnClickListener(v -> HomeDisabled.restore(this));
+        findViewById(R.id.homeButtonChoice).setOnClickListener(v ->
+                startActivity(new Intent(this, HomeButtonActivity.class)));
         findViewById(R.id.featuredDockChoice).setOnClickListener(v ->
                 startActivity(new Intent(this, DockManagerActivity.class)));
         findViewById(R.id.topBarChoice).setOnClickListener(v ->

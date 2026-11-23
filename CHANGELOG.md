@@ -2,11 +2,25 @@
 
 سجل التغييرات
 
-Tags: `v3.1-shrine`, `v3.2-shrine`, `v3.2.1-shrine`, `v3.2.2-shrine`, `v3.2.3-shrine`, `v3.2.4-shrine`, `v3.2.5-shrine`, `v3.2.6-shrine`, `v3.2.7-shrine`, `v3.2.8-shrine`, `v3.2.9-shrine`, `v3.2.10-shrine`, `v3.5.0-shrine`, `v3.5.1-shrine`, `v3.5.2-shrine`, `v3.5.3-shrine`, `v3.5.4-shrine`, `v3.5.5-shrine`, `v3.5.6-shrine`, `v3.5.7-shrine`, `v3.5.8-shrine`, `v3.5.9-shrine`, `v3.6.0-shrine`.  
+Tags: `v3.1-shrine`, `v3.2-shrine`, `v3.2.1-shrine`, `v3.2.2-shrine`, `v3.2.3-shrine`, `v3.2.4-shrine`, `v3.2.5-shrine`, `v3.2.6-shrine`, `v3.2.7-shrine`, `v3.2.8-shrine`, `v3.2.9-shrine`, `v3.2.10-shrine`, `v3.5.0-shrine`, `v3.5.1-shrine`, `v3.5.2-shrine`, `v3.5.3-shrine`, `v3.5.4-shrine`, `v3.5.5-shrine`, `v3.5.6-shrine`, `v3.5.7-shrine`, `v3.5.8-shrine`, `v3.5.9-shrine`, `v3.6.0-shrine`, `v3.6.1-shrine`.  
 The release file is always `CleanYourTV-Shrine.apk`.
 
 الوسوم: `v3.1-shrine` حتى `v3.5.0-shrine`.  
 اسم ملف الإصدار دائمًا `CleanYourTV-Shrine.apk`.
+
+## 3.6.1-shrine
+
+versionCode 34. Same package (`com.gathin.tvhome`) and the same release key as 3.6.0-shrine, so it installs over that build. The Home switch still does not turn Google TV setup or the stock launcher off.
+
+### English
+
+- If Home stays on the Google TV launcher, the failure message offers Home button first. Turn that on in Accessibility. When the TV home opens, this launcher comes forward. Turn off stops it. It does not turn any app off. Uninstalling this launcher puts the remote's Home button back.
+- File transfer uses two panes. The code and address stay on one side, and the file list scrolls on the other. Down moves through every file instead of jumping back to the top. Each file is one row, with its date written as 2026/11/23 22:16.
+
+### العربية
+
+- إذا بقيت الشاشة الرئيسية على مشغّل Google TV، رسالة الفشل تعرض زر الرئيسية أولًا. فعّله من إمكانية الوصول. عندما تفتح شاشة التلفاز، تتقدم هذه الشاشة. إيقاف يوقفه. لا يُوقف أي تطبيق. حذف هذه الشاشة يعيد زر الريموت كما كان.
+- نقل الملفات صار عمودين. الرمز والعنوان يبقيان في جانب، وقائمة الملفات تتمرّر في الجانب الآخر. النزول ينتقل بين كل الملفات ولا يعود إلى الأعلى. كل ملف صف واحد، وتاريخه يُكتب 2026/11/23 22:16.
 
 ## 3.6.0-shrine
 
