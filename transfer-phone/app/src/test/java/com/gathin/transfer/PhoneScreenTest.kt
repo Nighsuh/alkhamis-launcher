@@ -69,7 +69,44 @@ class PhoneScreenTest {
         val stored = JobStore.load(RuntimeEnvironment.getApplication())
         assertTrue(stored.isEmpty() || stored[0].attempts == 0)
         share.finish()
+        val scan = Robolectric.buildActivity(ScanActivity::class.java).setup().get()
+        assertEquals("Alkhamis TV Transfer", scan.findViewById<TextView>(R.id.title).text.toString())
+        assertTrue(scan.findViewById<TextView>(R.id.hint).text.toString().contains("الكاميرا"))
+        draw(scan.window.decorView, "scan.png")
+        scan.finish()
         Discovery.preview = null
+    }
+
+    @Test
+    fun decodesTheLauncherQr() {
+        val payload = "http://172.30.0.2:8080/?p=775441"
+        val target = QrLink.parse(payload)
+        assertEquals("172.30.0.2", target!!.host)
+        assertEquals(8080, target.port)
+        assertEquals("775441", target.pin)
+        assertEquals(null, QrLink.parse("not-a-tv"))
+        assertEquals(null, QrLink.parse("http://10.0.0.8:8080/?p=12"))
+        assertEquals(payload, QrDecoder.decode(paintQr(payload, false)))
+        assertEquals(payload, QrDecoder.decode(paintQr(payload, true)))
+    }
+
+    private fun paintQr(payload: String, inverted: Boolean): Bitmap {
+        val matrix = com.google.zxing.qrcode.QRCodeWriter().encode(payload, com.google.zxing.BarcodeFormat.QR_CODE, 280, 280)
+        val bitmap = Bitmap.createBitmap(400, 400, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        canvas.drawColor(android.graphics.Color.parseColor("#101419"))
+        val paint = android.graphics.Paint()
+        val ox = 60f
+        val oy = 60f
+        for (y in 0 until matrix.height) {
+            for (x in 0 until matrix.width) {
+                val dark = matrix.get(x, y)
+                val ink = if (inverted) !dark else dark
+                paint.color = if (ink) android.graphics.Color.BLACK else android.graphics.Color.WHITE
+                canvas.drawRect(ox + x, oy + y, ox + x + 1, oy + y + 1, paint)
+            }
+        }
+        return bitmap
     }
 
     private fun draw(view: View, name: String) {
@@ -80,7 +117,7 @@ class PhoneScreenTest {
         view.layout(0, 0, width, height)
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         view.draw(Canvas(bitmap))
-        val dir = File("/opt/cursor/artifacts/qa/transfer-app-1.0")
+        val dir = File("/opt/cursor/artifacts/qa/transfer-app-1.0.1")
         dir.mkdirs()
         FileOutputStream(File(dir, name)).use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
         bitmap.recycle()

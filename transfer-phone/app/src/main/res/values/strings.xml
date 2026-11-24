@@ -21,4 +21,14 @@
     <string name="channel" translatable="false">Alkhamis TV Transfer</string>
     <string name="sending">Sending %1$s</string>
     <string name="failed">Could not reach the TV</string>
+    <string name="scan_hint">Point the camera at the code on the TV</string>
+    <string name="scan_reason">The camera is needed to read the code shown on the TV.</string>
+    <string name="scan_allow">Allow the camera</string>
+    <string name="scan_denied">The camera is off. Open settings to allow it.</string>
+    <string name="scan_settings">Open settings</string>
+    <string name="scan_unknown">That code was not recognized</string>
+    <string name="scan_read">Read: %1$s</string>
+    <string name="torch">Light</string>
+    <string name="close">Close</string>
+    <string name="gallery">From photos</string>
 </resources>

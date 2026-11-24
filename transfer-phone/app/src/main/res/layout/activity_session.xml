@@ -16,16 +16,16 @@
             android:layout_height="wrap_content"
             android:text="@string/app_name"
             android:textColor="#FFE6C57A"
-            android:textSize="24sp"
+            android:textSize="28sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="8dp"
             android:textColor="#FFFFFFFF"
-            android:textSize="18sp" />
+            android:textSize="22sp" />
 
         <TextView
             android:id="@+id/progressLabel"
@@ -33,13 +33,21 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:textColor="#FFACB8C1"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/progressPercent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="#FFE6C57A"
+            android:textSize="28sp" />
 
         <ProgressBar
             android:id="@+id/progress"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
-            android:layout_height="8dp"
+            android:layout_height="14dp"
             android:layout_marginTop="8dp"
             android:max="100"
             android:progress="0" />

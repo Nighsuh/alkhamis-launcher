@@ -20,6 +20,18 @@ versionCode 36. Same package (`com.gathin.tvhome`) and the same release key as 3
 
 - عندما تكون Alkhamis TV Transfer مفتوحة، يعلن التلفاز عن نفسه على الشبكة حتى يجده تطبيق Alkhamis TV Transfer. صفحة المتصفح كما هي. يستطيع الهاتف أن يطلب من التلفاز فتح مثبّت التطبيق لملف APK وصل.
 
+## Alkhamis TV Transfer 1.0.1
+
+Phone app, package `com.gathin.transfer`, versionCode 2. Same name, Alkhamis TV Transfer, in English.
+
+### English
+
+- The QR scanner uses CameraX, so the preview stays upright and in proportion, and it keeps focusing. A frame, a light, a zoom slider, and a photo picker sit on the screen. A code that is not the TV link shows the text that was read.
+
+### العربية
+
+- قارئ الرمز يستخدم CameraX، فتبقى الصورة مستقيمة ومتناسبة، ويستمر التركيز. على الشاشة إطار وضوء ومؤشر تكبير واختيار صورة. إذا لم يكن الرمز رابط التلفاز، يظهر النص الذي قُرئ.
+
 ## Alkhamis TV Transfer 1.0
 
 Phone app, package `com.gathin.transfer`, versionCode 1. It is not the TV launcher. The name Alkhamis TV Transfer stays English in every language.

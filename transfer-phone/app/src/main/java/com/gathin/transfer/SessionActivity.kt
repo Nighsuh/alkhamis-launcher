@@ -32,6 +32,7 @@ class SessionActivity : AppCompatActivity() {
         if (previewPct >= 0) {
             bar.progress = previewPct
             label.text = getString(R.string.sending, intent.getStringExtra("previewFile") ?: "")
+            findViewById<TextView>(R.id.progressPercent).text = "$previewPct%"
         }
         findViewById<Button>(R.id.pick).setOnClickListener {
             startActivityForResult(Intent(Intent.ACTION_OPEN_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("*/*").putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true), 4)

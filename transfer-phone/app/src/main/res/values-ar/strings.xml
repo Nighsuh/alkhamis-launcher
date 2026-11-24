@@ -17,4 +17,14 @@
     <string name="pin_wrong">لم يُقبل رمز الدخول.</string>
     <string name="sending">يرسل %1$s</string>
     <string name="failed">تعذّر الوصول إلى التلفاز</string>
+    <string name="scan_hint">وجّه الكاميرا للرمز الظاهر على التلفاز</string>
+    <string name="scan_reason">نحتاج الكاميرا لقراءة الرمز الظاهر على التلفاز.</string>
+    <string name="scan_allow">السماح بالكاميرا</string>
+    <string name="scan_denied">الكاميرا مرفوضة. افتح الإعدادات للسماح بها.</string>
+    <string name="scan_settings">فتح الإعدادات</string>
+    <string name="scan_unknown">لم نتعرّف على الرمز</string>
+    <string name="scan_read">قُرئ: %1$s</string>
+    <string name="torch">ضوء</string>
+    <string name="close">إغلاق</string>
+    <string name="gallery">من الصور</string>
 </resources>

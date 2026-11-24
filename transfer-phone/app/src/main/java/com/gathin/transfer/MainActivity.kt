@@ -7,6 +7,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -60,20 +61,32 @@ class MainActivity : AppCompatActivity() {
 
     private fun row(title: String, sub: String, click: () -> Unit): View {
         val line = LinearLayout(this)
-        line.orientation = LinearLayout.VERTICAL
+        line.orientation = LinearLayout.HORIZONTAL
+        line.gravity = Gravity.CENTER_VERTICAL
         line.setBackgroundResource(R.drawable.card)
-        val pad = (16 * resources.displayMetrics.density).toInt()
+        val pad = (18 * resources.displayMetrics.density).toInt()
         line.setPadding(pad, pad, pad, pad)
+        val icon = ImageView(this)
+        icon.setImageResource(R.drawable.ic_tv)
+        val box = (40 * resources.displayMetrics.density).toInt()
+        icon.layoutParams = LinearLayout.LayoutParams(box, box)
+        val text = LinearLayout(this)
+        text.orientation = LinearLayout.VERTICAL
+        val textLp = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+        textLp.marginStart = (14 * resources.displayMetrics.density).toInt()
+        text.layoutParams = textLp
         val name = TextView(this)
         name.text = title
-        name.textSize = 18f
+        name.textSize = 20f
         name.setTextColor(0xFFFFFFFF.toInt())
         val meta = TextView(this)
         meta.text = sub
-        meta.textSize = 14f
+        meta.textSize = 16f
         meta.setTextColor(0xFFACB8C1.toInt())
-        line.addView(name)
-        line.addView(meta)
+        text.addView(name)
+        text.addView(meta)
+        line.addView(icon)
+        line.addView(text)
         line.setOnClickListener { click() }
         val lp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         lp.topMargin = (10 * resources.displayMetrics.density).toInt()
