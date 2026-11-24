@@ -1,4 +1,0 @@
-#Tue Nov 24 00:28:42 UTC 2026
-base.0=/agent/repos/alkhamis-launcher/transfer-phone/app/build/intermediates/dex/release/mergeDexRelease/classes.dex
-path.0=classes.dex
-renamed.0=classes.dex
