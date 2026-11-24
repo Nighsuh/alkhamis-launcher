@@ -14,15 +14,15 @@ versionCode 36. Same package (`com.gathin.tvhome`) and the same release key as 3
 
 ### English
 
-- While Alkhamis TV Transfer is open, the TV announces itself on the Wi-Fi (`_alkhamis._tcp`) so the Alkhamis Transfer phone app can find it. The page in a browser is unchanged. The phone can ask the TV to open the installer for an APK that has arrived.
+- While Alkhamis TV Transfer is open, the TV announces itself on the Wi-Fi (`_alkhamis._tcp`) so the Alkhamis TV Transfer phone app can find it. The page in a browser is unchanged. The phone can ask the TV to open the installer for an APK that has arrived.
 
 ### العربية
 
-- عندما تكون Alkhamis TV Transfer مفتوحة، يعلن التلفاز عن نفسه على الشبكة حتى يجده تطبيق Alkhamis Transfer. صفحة المتصفح كما هي. يستطيع الهاتف أن يطلب من التلفاز فتح مثبّت التطبيق لملف APK وصل.
+- عندما تكون Alkhamis TV Transfer مفتوحة، يعلن التلفاز عن نفسه على الشبكة حتى يجده تطبيق Alkhamis TV Transfer. صفحة المتصفح كما هي. يستطيع الهاتف أن يطلب من التلفاز فتح مثبّت التطبيق لملف APK وصل.
 
-## Alkhamis Transfer 1.0
+## Alkhamis TV Transfer 1.0
 
-Phone app, package `com.gathin.transfer`, versionCode 1. It is not the TV launcher. The name Alkhamis Transfer stays English in every language.
+Phone app, package `com.gathin.transfer`, versionCode 1. It is not the TV launcher. The name Alkhamis TV Transfer stays English in every language.
 
 ### English
 

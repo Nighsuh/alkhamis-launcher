@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">Alkhamis Transfer</string>
+    <string name="app_name" translatable="false">Alkhamis TV Transfer</string>
     <string name="manual">Enter address</string>
     <string name="scan">Scan QR</string>
     <string name="pin_hint">PIN</string>
@@ -18,7 +18,7 @@
     <string name="pin_wrong">That PIN was not accepted.</string>
     <string name="host_hint">192.168.1.50</string>
     <string name="port_hint">8080</string>
-    <string name="channel">Transfers</string>
+    <string name="channel" translatable="false">Alkhamis TV Transfer</string>
     <string name="sending">Sending %1$s</string>
     <string name="failed">Could not reach the TV</string>
 </resources>

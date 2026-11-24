@@ -15,7 +15,6 @@
     <string name="found">على الشبكة</string>
     <string name="saved">محفوظ</string>
     <string name="pin_wrong">لم يُقبل رمز الدخول.</string>
-    <string name="channel">عمليات النقل</string>
     <string name="sending">يرسل %1$s</string>
     <string name="failed">تعذّر الوصول إلى التلفاز</string>
 </resources>

@@ -43,7 +43,7 @@ class PhoneScreenTest {
         }
         Discovery.preview = listOf(FoundTv("Alkhamis-1a2b", "192.168.1.21", 8080))
         val home = Robolectric.buildActivity(MainActivity::class.java).setup().get()
-        assertEquals("Alkhamis Transfer", home.findViewById<TextView>(R.id.title).text.toString())
+        assertEquals("Alkhamis TV Transfer", home.findViewById<TextView>(R.id.title).text.toString())
         draw(home.window.decorView, "tvs.png")
         home.finish()
 
