@@ -39,6 +39,35 @@ final class LauncherLocale {
 
     /** "" follows the TV. "en", or Arabic with Western (latn) or Arabic-Indic (arab) digits. */
     static final String DIGITS_EXPLICIT = "digits_explicit";
+    /** Bumped when Language changes, so open screens recreate with the new locale. */
+    static final String GENERATION = "locale_generation";
+
+    /** ar or en for the browser page. An explicit choice wins. Anything else is English unless the TV is Arabic. */
+    static String pageLanguage(Context ctx) {
+        String tag = chosenTag(ctx);
+        if (tag.startsWith("ar")) return "ar";
+        if (tag.startsWith("en")) return "en";
+        Locale system = ctx.getResources().getConfiguration().getLocales().get(0);
+        return system != null && "ar".equals(system.getLanguage()) ? "ar" : "en";
+    }
+
+    /** Android 13 and later also store the choice where the system reads this app's own strings. */
+    @android.annotation.TargetApi(33)
+    static void applySystem(Context ctx, String lang) {
+        if (android.os.Build.VERSION.SDK_INT < 33) return;
+        try {
+            Object service = ctx.getSystemService(android.app.LocaleManager.class);
+            if (!(service instanceof android.app.LocaleManager)) return;
+            android.app.LocaleManager manager = (android.app.LocaleManager) service;
+            if (lang == null || lang.isEmpty()) {
+                manager.setApplicationLocales(android.os.LocaleList.getEmptyLocaleList());
+            } else {
+                manager.setApplicationLocales(android.os.LocaleList.forLanguageTags(lang));
+            }
+        } catch (RuntimeException ignored) {
+            // The in-app wrap still applies on the next screen.
+        }
+    }
 
     static String chosenTag(Context base) {
         android.content.SharedPreferences prefs = base.getSharedPreferences(Config.SETTINGS_NAME, Context.MODE_PRIVATE);

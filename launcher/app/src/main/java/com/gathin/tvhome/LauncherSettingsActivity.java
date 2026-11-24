@@ -206,6 +206,18 @@ public final class LauncherSettingsActivity extends Activity {
         super.onResume();
         DebugGate.onResume(this);
         paintHome();
+        paintLanguage();
+    }
+
+    private void paintLanguage() {
+        TextView language = findViewById(R.id.languageChoice);
+        if (language == null) return;
+        String choice = getSharedPreferences(Config.SETTINGS_NAME, MODE_PRIVATE)
+                .getString(LanguageActivity.LANG_KEY, "");
+        int label = "ar".equals(choice) ? R.string.language_arabic
+                : "en".equals(choice) ? R.string.language_english
+                : R.string.language_system;
+        language.setText(getString(R.string.language) + "  ·  " + getString(label));
     }
 
     private void paintHome() {

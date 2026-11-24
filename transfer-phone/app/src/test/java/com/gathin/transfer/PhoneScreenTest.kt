@@ -44,7 +44,8 @@ class PhoneScreenTest {
         Discovery.preview = listOf(FoundTv("Alkhamis-1a2b", "192.168.1.21", 8080))
         val home = Robolectric.buildActivity(MainActivity::class.java).setup().get()
         assertEquals("Alkhamis TV Transfer", home.findViewById<TextView>(R.id.title).text.toString())
-        draw(home.window.decorView, "tvs.png")
+        draw(home.window.decorView, "tvs-ar.png")
+        assertTrue(home.findViewById<android.widget.Button>(R.id.language).text.toString().contains("اللغة"))
         home.finish()
 
         val session = Robolectric.buildActivity(SessionActivity::class.java, Intent()
@@ -56,8 +57,7 @@ class PhoneScreenTest {
             .putExtra("previewFile", "clip.mp4")
             .putExtra("previewFiles", arrayOf("clip.mp4", "photo.jpg", "app.apk"))).setup().get()
         assertTrue(session.findViewById<TextView>(R.id.progressLabel).text.toString().contains("clip.mp4"))
-        draw(session.window.decorView, "send.png")
-        draw(session.window.decorView, "files.png")
+        draw(session.window.decorView, "send-ar.png")
         session.finish()
 
         val share = Robolectric.buildActivity(ShareActivity::class.java, Intent(Intent.ACTION_SEND)
@@ -65,7 +65,7 @@ class PhoneScreenTest {
             .putExtra(Intent.EXTRA_STREAM, Uri.parse("content://media/external/video/clip.mp4"))
             .putExtra(Intent.EXTRA_TEXT, "https://example.com/a")
             .putExtra("previewTv", "الصالة")).setup().get()
-        draw(share.window.decorView, "share.png")
+        draw(share.window.decorView, "share-ar.png")
         val stored = JobStore.load(RuntimeEnvironment.getApplication())
         assertTrue(stored.isEmpty() || stored[0].attempts == 0)
         share.finish()
@@ -73,7 +73,41 @@ class PhoneScreenTest {
         val scan = Robolectric.buildActivity(ScanActivity::class.java).setup().get()
         assertEquals("Alkhamis TV Transfer", scan.findViewById<TextView>(R.id.title).text.toString())
         assertTrue(scan.findViewById<TextView>(R.id.hint).text.toString().contains("الكاميرا"))
-        draw(scan.window.decorView, "scan.png")
+        draw(scan.window.decorView, "scan-ar.png")
+        scan.finish()
+        Discovery.preview = null
+    }
+
+    @Test
+    @Config(sdk = [30], qualifiers = "en-w360dp-h800dp-xxhdpi")
+    fun drawsTheEnglishScreens() {
+        Books.factory = {
+            MemoryBook().apply { save(SavedTv("1", "Living room", "192.168.1.20", 8080, "123456")) }
+        }
+        Discovery.preview = listOf(FoundTv("Alkhamis-1a2b", "192.168.1.21", 8080))
+        val home = Robolectric.buildActivity(MainActivity::class.java).setup().get()
+        assertEquals("Alkhamis TV Transfer", home.findViewById<TextView>(R.id.title).text.toString())
+        assertTrue(home.findViewById<android.widget.Button>(R.id.language).text.toString().contains("Language"))
+        assertTrue(home.findViewById<TextView>(R.id.lead).text.toString().contains("Wi-Fi"))
+        draw(home.window.decorView, "tvs-en.png")
+        home.finish()
+
+        val session = Robolectric.buildActivity(SessionActivity::class.java, Intent()
+            .putExtra("name", "Living room")
+            .putExtra("host", "192.168.1.20")
+            .putExtra("port", 8080)
+            .putExtra("pin", "123456")
+            .putExtra("previewProgress", 62)
+            .putExtra("previewFile", "clip.mp4")
+            .putExtra("previewFiles", arrayOf("clip.mp4", "photo.jpg", "app.apk"))).setup().get()
+        assertTrue(session.findViewById<TextView>(R.id.progressLabel).text.toString().contains("clip.mp4"))
+        draw(session.window.decorView, "send-en.png")
+        session.finish()
+
+        org.robolectric.Shadows.shadowOf(RuntimeEnvironment.getApplication()).grantPermissions(android.Manifest.permission.CAMERA)
+        val scan = Robolectric.buildActivity(ScanActivity::class.java).setup().get()
+        assertTrue(scan.findViewById<TextView>(R.id.hint).text.toString().contains("camera"))
+        draw(scan.window.decorView, "scan-en.png")
         scan.finish()
         Discovery.preview = null
     }
@@ -118,7 +152,7 @@ class PhoneScreenTest {
         view.layout(0, 0, width, height)
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         view.draw(Canvas(bitmap))
-        val dir = File("/opt/cursor/artifacts/qa/transfer-app-1.0.2")
+        val dir = File("/opt/cursor/artifacts/qa/transfer-app-1.0.3")
         dir.mkdirs()
         FileOutputStream(File(dir, name)).use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
         bitmap.recycle()

@@ -115,14 +115,11 @@ final class TransferServer {
             boolean authed = authorized(headers, target);
             OutputStream out = socket.getOutputStream();
             if ("GET".equals(method) && (target.equals("/") || target.startsWith("/?"))) {
-                String page = authed ? TransferPage.app() : TransferPage.pin();
-                if (queryPin(target) != null && pinOk(queryPin(target))) {
-                    send(out, 200, "text/html; charset=utf-8", TransferPage.app().getBytes(StandardCharsets.UTF_8),
-                            "Set-Cookie: tpin=" + pin + "; Path=/; HttpOnly");
-                } else {
-                    send(out, authed ? 200 : 200, "text/html; charset=utf-8",
-                            page.getBytes(StandardCharsets.UTF_8), null);
-                }
+                String lang = pageLanguage(target);
+                boolean pinMatches = queryPin(target) != null && pinOk(queryPin(target));
+                String page = (authed || pinMatches) ? TransferPage.app(lang) : TransferPage.pin(lang);
+                String cookie = pinMatches ? "Set-Cookie: tpin=" + pin + "; Path=/; HttpOnly" : null;
+                send(out, 200, "text/html; charset=utf-8", page.getBytes(StandardCharsets.UTF_8), cookie);
                 return;
             }
             if (!authed) {
@@ -476,9 +473,20 @@ final class TransferServer {
     }
 
     private static String queryPin(String target) {
+        return queryValue(target, "p");
+    }
+
+    /** ar or en from ?lang=, otherwise the language chosen on the TV. */
+    private static String pageLanguage(String target) {
+        String asked = queryValue(target, "lang");
+        if ("en".equals(asked) || "ar".equals(asked)) return asked;
+        return TransferPage.tvLanguage();
+    }
+
+    private static String queryValue(String target, String key) {
         int q = target.indexOf('?');
         if (q < 0) return null;
-        return formValue(target.substring(q + 1), "p");
+        return formValue(target.substring(q + 1), key);
     }
 
     private static String pathOf(String target) {

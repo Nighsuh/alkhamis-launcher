@@ -28,4 +28,8 @@
     <string name="torch">ضوء</string>
     <string name="close">إغلاق</string>
     <string name="gallery">من الصور</string>
+    <string name="language">اللغة</string>
+    <string name="language_system">لغة النظام</string>
+    <string name="language_arabic">العربية</string>
+    <string name="language_english">English</string>
 </resources>

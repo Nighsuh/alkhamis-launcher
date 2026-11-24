@@ -36,6 +36,7 @@ final class TransferHub {
         if (notes == null) throw new IOException("folder");
         if (pin == null) pin = String.format("%06d", new SecureRandom().nextInt(1_000_000));
         background = ctx.getSharedPreferences(Config.SETTINGS_NAME, Context.MODE_PRIVATE).getBoolean(PREF, false);
+        TransferPage.bind(ctx.getApplicationContext());
         TransferFiles.Dir files = TransferFiles.open(ctx);
         int port = 8080;
         IOException last = null;

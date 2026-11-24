@@ -2,11 +2,35 @@
 
 سجل التغييرات
 
-Tags: `v3.1-shrine`, `v3.2-shrine`, `v3.2.1-shrine`, `v3.2.2-shrine`, `v3.2.3-shrine`, `v3.2.4-shrine`, `v3.2.5-shrine`, `v3.2.6-shrine`, `v3.2.7-shrine`, `v3.2.8-shrine`, `v3.2.9-shrine`, `v3.2.10-shrine`, `v3.5.0-shrine`, `v3.5.1-shrine`, `v3.5.2-shrine`, `v3.5.3-shrine`, `v3.5.4-shrine`, `v3.5.5-shrine`, `v3.5.6-shrine`, `v3.5.7-shrine`, `v3.5.8-shrine`, `v3.5.9-shrine`, `v3.6.0-shrine`, `v3.6.1-shrine`, `v3.6.2-shrine`, `v3.6.3-shrine`.  
+Tags: `v3.1-shrine`, `v3.2-shrine`, `v3.2.1-shrine`, `v3.2.2-shrine`, `v3.2.3-shrine`, `v3.2.4-shrine`, `v3.2.5-shrine`, `v3.2.6-shrine`, `v3.2.7-shrine`, `v3.2.8-shrine`, `v3.2.9-shrine`, `v3.2.10-shrine`, `v3.5.0-shrine`, `v3.5.1-shrine`, `v3.5.2-shrine`, `v3.5.3-shrine`, `v3.5.4-shrine`, `v3.5.5-shrine`, `v3.5.6-shrine`, `v3.5.7-shrine`, `v3.5.8-shrine`, `v3.5.9-shrine`, `v3.6.0-shrine`, `v3.6.1-shrine`, `v3.6.2-shrine`, `v3.6.3-shrine`, `v3.6.4-shrine`.  
 The release file is always `CleanYourTV-Shrine.apk`.
 
 الوسوم: `v3.1-shrine` حتى `v3.5.0-shrine`.  
 اسم ملف الإصدار دائمًا `CleanYourTV-Shrine.apk`.
+
+## 3.6.4-shrine
+
+versionCode 37. Same package (`com.gathin.tvhome`) and the same release key as 3.6.3-shrine, so it installs over that build. The Home switch still does not turn any package off.
+
+### English
+
+- Settings, Language offers System default, العربية, or English. The choice is kept, and open screens switch immediately. Alkhamis TV Transfer in the browser follows that language and has an AR / EN switch. The name stays Alkhamis TV Transfer.
+
+### العربية
+
+- الإعدادات، اللغة: لغة النظام، أو العربية، أو English. يبقى الاختيار، والشاشات المفتوحة تتبدّل فورًا. صفحة Alkhamis TV Transfer في المتصفح تتبع اللغة وفيها تبديل AR / EN. الاسم يبقى Alkhamis TV Transfer.
+
+## Alkhamis TV Transfer 1.0.3
+
+Phone app, package `com.gathin.transfer`, versionCode 4. The name is still Alkhamis TV Transfer.
+
+### English
+
+- The TV list has Language: System default, العربية, or English. It applies at once. Install on TV sits on its own row so the label stays on one line.
+
+### العربية
+
+- قائمة التلفاز فيها اللغة: لغة النظام، أو العربية، أو English. تُطبَّق فورًا. تثبيت على التلفاز في صف وحده حتى يبقى العنوان في سطر واحد.
 
 ## 3.6.3-shrine
 

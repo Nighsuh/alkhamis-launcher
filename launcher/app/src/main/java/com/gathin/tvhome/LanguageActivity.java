@@ -39,10 +39,13 @@ public final class LanguageActivity extends Activity {
     }
 
     private void choose(String lang, String digits, boolean digitsExplicit) {
+        long next = prefs.getLong(LauncherLocale.GENERATION, 0) + 1;
         android.content.SharedPreferences.Editor editor = prefs.edit()
-                .putString(LANG_KEY, lang).putString(DIGITS_KEY, digits);
+                .putString(LANG_KEY, lang).putString(DIGITS_KEY, digits)
+                .putLong(LauncherLocale.GENERATION, next);
         if (digitsExplicit) editor.putBoolean(LauncherLocale.DIGITS_EXPLICIT, true);
         editor.commit();
+        LauncherLocale.applySystem(this, lang);
         HomeEdits.notifyChanged(this);
         recreate();
     }

@@ -146,7 +146,7 @@ final class ThemeStage {
         ThemeCatalog.Item item = themes.get(index);
         boolean arabic = "ar".equals(activity.getResources().getConfiguration().getLocales().get(0).getLanguage());
         title.setText(item.label(arabic) + "\n" + (index + 1) + "/" + themes.size()
-                + "    OK  تطبيق    ·    Back  رجوع");
+                + "    " + activity.getString(R.string.theme_preview_keys));
     }
 
     private static void step(Activity activity, int delta) {

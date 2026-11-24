@@ -121,10 +121,15 @@ class SessionActivity : AppCompatActivity() {
             actions.layoutParams = actionsLp
             actions.addView(chip(R.string.download) { download(host, port, pin, file.name) })
             actions.addView(chip(R.string.delete) { Thread { TvClient(host, port, pin).delete(file.name); runOnUiThread { load(host, port, pin) } }.start() })
-            if (file.name.endsWith(".apk", true)) {
-                actions.addView(chip(R.string.install_tv) { Thread { TvClient(host, port, pin).install(file.name) }.start() })
-            }
             row.addView(actions)
+            if (file.name.endsWith(".apk", true)) {
+                val install = chip(R.string.install_tv) { Thread { TvClient(host, port, pin).install(file.name) }.start() }
+                val wide = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                wide.topMargin = dp(8)
+                install.layoutParams = wide
+                install.maxLines = 1
+                row.addView(install)
+            }
             val lp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
             lp.topMargin = dp(12)
             row.layoutParams = lp
@@ -151,6 +156,7 @@ class SessionActivity : AppCompatActivity() {
     private fun chip(label: Int, click: () -> Unit): Button {
         val button = Button(this)
         button.setText(label)
+        button.setAllCaps(false)
         button.setTextColor(0xFFFFFFFF.toInt())
         button.textSize = 16f
         button.minHeight = dp(48)

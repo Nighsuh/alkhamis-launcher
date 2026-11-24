@@ -32,4 +32,8 @@
     <string name="torch">Light</string>
     <string name="close">Close</string>
     <string name="gallery">From photos</string>
+    <string name="language">Language</string>
+    <string name="language_system">System default</string>
+    <string name="language_arabic">العربية</string>
+    <string name="language_english">English</string>
 </resources>

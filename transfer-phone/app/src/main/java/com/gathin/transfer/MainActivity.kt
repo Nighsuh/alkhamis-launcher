@@ -13,6 +13,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 
 class MainActivity : AppCompatActivity() {
     private val found = ArrayList<FoundTv>()
@@ -20,7 +22,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(saved: Bundle?) {
         super.onCreate(saved)
         setContentView(R.layout.activity_tvs)
+        findViewById<Button>(R.id.language).setOnClickListener { chooseLanguage() }
         findViewById<Button>(R.id.manual).setOnClickListener { askAddress() }
+        paintLanguage()
         findViewById<Button>(R.id.scan).setOnClickListener {
             startActivity(Intent(this, ScanActivity::class.java))
         }
@@ -39,6 +43,33 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         if (isFinishing) Discovery.stop()
         super.onDestroy()
+    }
+
+    private fun paintLanguage() {
+        val current = AppCompatDelegate.getApplicationLocales()
+        val label = when {
+            current.isEmpty -> getString(R.string.language_system)
+            current[0]?.language == "ar" -> getString(R.string.language_arabic)
+            else -> getString(R.string.language_english)
+        }
+        findViewById<Button>(R.id.language).text = getString(R.string.language) + "  ·  " + label
+    }
+
+    private fun chooseLanguage() {
+        val tags = arrayOf("", "ar", "en")
+        val labels = arrayOf(
+            getString(R.string.language_system),
+            getString(R.string.language_arabic),
+            getString(R.string.language_english)
+        )
+        AlertDialog.Builder(this)
+            .setTitle(R.string.language)
+            .setItems(labels) { _, which ->
+                val locales = if (tags[which].isEmpty()) LocaleListCompat.getEmptyLocaleList()
+                else LocaleListCompat.forLanguageTags(tags[which])
+                AppCompatDelegate.setApplicationLocales(locales)
+            }
+            .show()
     }
 
     private fun paint() {

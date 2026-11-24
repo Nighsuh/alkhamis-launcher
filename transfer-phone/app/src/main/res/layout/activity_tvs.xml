@@ -33,6 +33,15 @@
             android:textColor="#FFFFFFFF"
             android:textSize="18sp" />
 
+        <Button
+            android:id="@+id/language"
+            style="@style/GhostButton"
+            android:layout_width="match_parent"
+            android:layout_marginTop="16dp"
+            android:minHeight="56dp"
+            android:text="@string/language"
+            android:textSize="16sp" />
+
         <LinearLayout
             android:id="@+id/empty"
             android:layout_width="match_parent"

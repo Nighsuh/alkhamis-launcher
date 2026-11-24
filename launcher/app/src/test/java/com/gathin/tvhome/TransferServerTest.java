@@ -18,6 +18,20 @@ import static org.junit.Assert.assertTrue;
 /** The transfer server: the PIN, a streamed upload, and paths that try to leave the folder. */
 public class TransferServerTest {
     @Test
+    public void pageFollowsTheChosenLanguage() {
+        String arabic = TransferPage.app("ar");
+        String english = TransferPage.app("en");
+        assertTrue(arabic.contains("dir=\"rtl\""));
+        assertTrue(arabic.contains("أسقط الملفات هنا"));
+        assertTrue(arabic.contains("?lang=en"));
+        assertTrue(english.contains("dir=\"ltr\""));
+        assertTrue(english.contains("Drop files here"));
+        assertTrue(english.contains("?lang=ar"));
+        assertTrue(english.contains("Alkhamis TV Transfer"));
+        assertTrue(english.contains(">EN<"));
+    }
+
+    @Test
     public void pinBlocksOtherCallers() throws Exception {
         File dir = Files.createTempDirectory("transfer").toFile();
         TransferServer server = TransferServer.start(dir, "482913", 0);
