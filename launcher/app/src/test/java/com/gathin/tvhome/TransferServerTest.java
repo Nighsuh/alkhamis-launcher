@@ -40,6 +40,9 @@ public class TransferServerTest {
             byte[] payload = new byte[200_000];
             for (int i = 0; i < payload.length; i++) payload[i] = (byte) (i * 31);
             assertEquals(200, upload(server, "clip.mp4", payload));
+            assertEquals(200, upload(server, "clip.mp4", new byte[] {9, 9, 9}));
+            assertTrue(new File(dir, "clip (1).mp4").isFile());
+            assertNull(new TransferFiles.FileDir(dir).begin("../secret.txt"));
             File saved = new File(dir, "clip.mp4");
             assertTrue(saved.isFile());
             assertEquals(payload.length, saved.length());

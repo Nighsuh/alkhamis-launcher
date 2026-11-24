@@ -23,9 +23,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.core.content.FileProvider;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -78,6 +75,15 @@ public final class TransferActivity extends Activity {
             paintBackground();
         });
         backgroundView.requestFocus();
+        if (!TransferFiles.storageReady(this)) {
+            requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 40);
+            statusView.setText(R.string.file_transfer_storage);
+            return;
+        }
+        startTransfer();
+    }
+
+    private void startTransfer() {
         new Thread(() -> {
             try {
                 TransferServer server = TransferHub.server(this);
@@ -87,6 +93,12 @@ public final class TransferActivity extends Activity {
                 runOnUiThread(() -> statusView.setText(R.string.file_transfer_failed));
             }
         }, "transfer-start").start();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int request, String[] permissions, int[] results) {
+        super.onRequestPermissionsResult(request, permissions, results);
+        if (request == 40 && TransferFiles.storageReady(this)) startTransfer();
     }
 
     private void showAddress(String url) {
@@ -127,18 +139,11 @@ public final class TransferActivity extends Activity {
             for (String note : notes) addNote(note);
             shownNotes = notes.size();
         }
-        File dir = TransferHub.folder(this);
-        File[] listed = dir == null ? null : dir.listFiles();
-        List<File> files = new ArrayList<>();
-        if (listed != null) {
-            for (File file : listed) {
-                if (file.isFile() && !file.getName().startsWith(".")) files.add(file);
-            }
-        }
-        files.sort((a, b) -> Long.compare(b.lastModified(), a.lastModified()));
+        List<TransferFiles.Item> files = new ArrayList<>(TransferFiles.open(this).list());
+        files.sort((a, b) -> Long.compare(b.modified, a.modified));
         StringBuilder sig = new StringBuilder();
-        for (File file : files) sig.append(file.getName()).append(':').append(file.length())
-                .append(':').append(file.lastModified()).append(';');
+        for (TransferFiles.Item file : files) sig.append(file.name).append(':').append(file.size)
+                .append(':').append(file.modified).append(';');
         String next = sig.toString();
         emptyView.setVisibility(files.isEmpty() ? View.VISIBLE : View.GONE);
         if (next.equals(filesSig)) {
@@ -148,7 +153,7 @@ public final class TransferActivity extends Activity {
         String keep = focusedTag();
         filesView.removeAllViews();
         List<List<TextView>> rows = new ArrayList<>();
-        for (File file : files) rows.add(addFile(file));
+        for (TransferFiles.Item file : files) rows.add(addFile(file));
         filesSig = next;
         chain(rows);
         wireUp();
@@ -164,7 +169,7 @@ public final class TransferActivity extends Activity {
         return String.valueOf(focused.getTag());
     }
 
-    private List<TextView> addFile(File file) {
+    private List<TextView> addFile(TransferFiles.Item file) {
         int pad = dp(12);
         LinearLayout row = new LinearLayout(this);
         row.setOrientation(LinearLayout.HORIZONTAL);
@@ -172,50 +177,55 @@ public final class TransferActivity extends Activity {
         row.setPadding(pad, dp(8), pad, dp(8));
         row.setMinimumHeight(dp(68));
 
-        TextView kind = new TextView(this);
-        kind.setText(kindOf(file.getName()));
-        kind.setTextColor(0xFFE6C57A);
-        kind.setTextSize(12);
-        kind.setGravity(Gravity.CENTER);
+        ImageView kind = new ImageView(this);
+        kind.setImageResource(kindIcon(file.name));
+        kind.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         kind.setBackgroundResource(R.drawable.transfer_kind);
-        int box = dp(44);
+        int box = dp(40);
         LinearLayout.LayoutParams kindLp = new LinearLayout.LayoutParams(box, box);
-        kindLp.setMarginEnd(dp(12));
+        kindLp.setMarginEnd(dp(10));
         kind.setLayoutParams(kindLp);
+        kind.setPadding(dp(8), dp(8), dp(8), dp(8));
         row.addView(kind);
 
         LinearLayout text = new LinearLayout(this);
         text.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout.LayoutParams textLp = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+        int cap = dp(280);
+        LinearLayout.LayoutParams textLp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        textLp.setMarginEnd(dp(8));
         text.setLayoutParams(textLp);
         TextView name = new TextView(this);
-        name.setText(file.getName());
+        name.setText(file.name);
         name.setTextColor(0xFFFFFFFF);
         name.setTextSize(16);
         name.setSingleLine(true);
+        name.setMaxWidth(cap);
         name.setEllipsize(android.text.TextUtils.TruncateAt.END);
         text.addView(name);
         TextView meta = new TextView(this);
-        meta.setText(size(file.length()) + "    " + stamp(file.lastModified()));
+        meta.setText(size(file.size) + "    " + stamp(file.modified));
         meta.setTextColor(0xFFACB8C1);
         meta.setTextSize(13);
+        meta.setSingleLine(true);
+        meta.setMaxWidth(cap);
         meta.setTextDirection(View.TEXT_DIRECTION_LTR);
         text.addView(meta);
         row.addView(text);
 
         List<TextView> chips = new ArrayList<>();
-        boolean apk = file.getName().toLowerCase(Locale.US).endsWith(".apk");
-        TextView open = chip(getString(R.string.file_transfer_open), "open:" + file.getName());
+        boolean apk = file.name.toLowerCase(Locale.US).endsWith(".apk");
+        TextView open = chip(getString(R.string.file_transfer_open), "open:" + file.name);
         open.setOnClickListener(v -> open(file));
         chips.add(open);
         if (apk) {
-            TextView install = chip(getString(R.string.file_transfer_install), "install:" + file.getName());
+            TextView install = chip(getString(R.string.file_transfer_install), "install:" + file.name);
             install.setOnClickListener(v -> install(file));
             chips.add(install);
         }
-        TextView delete = chip(getString(R.string.file_transfer_delete), "delete:" + file.getName());
+        TextView delete = chip(getString(R.string.file_transfer_delete), "delete:" + file.name);
         delete.setOnClickListener(v -> {
-            file.delete();
+            TransferFiles.open(this).delete(file.name);
             filesSig = "";
             paintFiles();
         });
@@ -327,14 +337,14 @@ public final class TransferActivity extends Activity {
         return "\u2066" + text + "\u2069";
     }
 
-    private static String kindOf(String name) {
+    private static int kindIcon(String name) {
         String n = name.toLowerCase(Locale.US);
-        if (n.endsWith(".apk")) return "APK";
-        if (n.endsWith(".mp4") || n.endsWith(".mkv") || n.endsWith(".webm")) return "▶";
-        if (n.endsWith(".jpg") || n.endsWith(".jpeg") || n.endsWith(".png") || n.endsWith(".webp")) return "IMG";
-        if (n.endsWith(".mp3") || n.endsWith(".m4a")) return "♪";
-        if (n.endsWith(".txt") || n.endsWith(".pdf")) return "TXT";
-        return "FILE";
+        if (n.endsWith(".apk")) return R.drawable.ic_kind_apk;
+        if (n.endsWith(".mp4") || n.endsWith(".mkv") || n.endsWith(".webm")) return R.drawable.ic_kind_video;
+        if (n.endsWith(".jpg") || n.endsWith(".jpeg") || n.endsWith(".png") || n.endsWith(".webp")) return R.drawable.ic_kind_image;
+        if (n.endsWith(".mp3") || n.endsWith(".m4a")) return R.drawable.ic_kind_audio;
+        if (n.endsWith(".txt") || n.endsWith(".pdf")) return R.drawable.ic_kind_text;
+        return R.drawable.ic_kind_file;
     }
 
     private int dp(int value) {
@@ -385,8 +395,8 @@ public final class TransferActivity extends Activity {
         return view;
     }
 
-    private void open(File file) {
-        String name = file.getName().toLowerCase(java.util.Locale.US);
+    private void open(TransferFiles.Item file) {
+        String name = file.name.toLowerCase(Locale.US);
         String mime = "application/octet-stream";
         if (name.endsWith(".mp4") || name.endsWith(".mkv") || name.endsWith(".webm")) mime = "video/*";
         else if (name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".png") || name.endsWith(".webp")) mime = "image/*";
@@ -394,7 +404,8 @@ public final class TransferActivity extends Activity {
         else if (name.endsWith(".apk")) { install(file); return; }
         else if (name.endsWith(".txt")) mime = "text/plain";
         try {
-            Uri uri = FileProvider.getUriForFile(this, getPackageName() + ".transfer", file);
+            Uri uri = TransferFiles.share(this, file);
+            if (uri == null) throw new IllegalStateException("uri");
             Intent intent = new Intent(Intent.ACTION_VIEW).setDataAndType(uri, mime);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             startActivity(intent);
@@ -403,7 +414,7 @@ public final class TransferActivity extends Activity {
         }
     }
 
-    private void install(File file) {
+    private void install(TransferFiles.Item file) {
         if (android.os.Build.VERSION.SDK_INT >= 26 && !getPackageManager().canRequestPackageInstalls()) {
             try {
                 startActivity(new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
@@ -415,7 +426,8 @@ public final class TransferActivity extends Activity {
             return;
         }
         try {
-            Uri uri = FileProvider.getUriForFile(this, getPackageName() + ".transfer", file);
+            Uri uri = TransferFiles.share(this, file);
+            if (uri == null) throw new IllegalStateException("uri");
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setDataAndType(uri, "application/vnd.android.package-archive");
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_TASK);

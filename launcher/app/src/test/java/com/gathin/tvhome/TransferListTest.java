@@ -50,6 +50,18 @@ public class TransferListTest {
             Thread.sleep(30);
         }
         if (files.getChildCount() < 25) throw new AssertionError("rows " + files.getChildCount());
+        CharSequence title = null;
+        android.view.ViewGroup root = activity.findViewById(R.id.transferRoot);
+        title = findLabel(root, "Alkhamis TV Transfer");
+        if (title == null) throw new AssertionError("title missing");
+        CharSequence where = ((TextView) activity.findViewById(R.id.transferWhere)).getText();
+        if (where == null || !where.toString().contains("Download/AlkhamisTransfer")) {
+            throw new AssertionError("path " + where);
+        }
+        if (!(files.getChildAt(0) instanceof android.view.ViewGroup)
+                || !(((android.view.ViewGroup) files.getChildAt(0)).getChildAt(0) instanceof android.widget.ImageView)) {
+            throw new AssertionError("file icon");
+        }
         TextView found = findDate(files);
         if (found == null) throw new AssertionError("date missing");
         if (!found.getText().toString().contains("\u2066")) throw new AssertionError("date not isolated: " + found.getText());
@@ -84,7 +96,7 @@ public class TransferListTest {
 
         Bitmap bitmap = Bitmap.createBitmap(1920, 1080, Bitmap.Config.ARGB_8888);
         decor.draw(new Canvas(bitmap));
-        File outDir = new File("/opt/cursor/artifacts/qa/3.6.1");
+        File outDir = new File("/opt/cursor/artifacts/qa/3.6.2");
         outDir.mkdirs();
         try (FileOutputStream out = new FileOutputStream(new File(outDir, "after-tv.png"))) {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
@@ -105,6 +117,21 @@ public class TransferListTest {
                 address + "/?p=" + digits).start();
         if (!chrome.waitFor(20, java.util.concurrent.TimeUnit.SECONDS)) chrome.destroyForcibly();
         activity.finish();
+    }
+
+    private static CharSequence findLabel(View view, String text) {
+        if (view instanceof TextView) {
+            CharSequence value = ((TextView) view).getText();
+            if (value != null && value.toString().contains(text)) return value;
+        }
+        if (view instanceof android.view.ViewGroup) {
+            android.view.ViewGroup group = (android.view.ViewGroup) view;
+            for (int i = 0; i < group.getChildCount(); i++) {
+                CharSequence found = findLabel(group.getChildAt(i), text);
+                if (found != null) return found;
+            }
+        }
+        return null;
     }
 
     private static TextView findDate(View view) {

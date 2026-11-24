@@ -85,6 +85,16 @@
             android:textColor="#FFACB8C1"
             android:textSize="14sp" />
 
+        <TextView
+            android:id="@+id/transferWhere"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:text="@string/file_transfer_where"
+            android:textColor="#FF8E9AA3"
+            android:textSize="13sp" />
+
         <LinearLayout
             android:id="@+id/transferBackground"
             android:layout_width="match_parent"

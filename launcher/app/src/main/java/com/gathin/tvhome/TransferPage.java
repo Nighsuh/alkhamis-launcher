@@ -6,7 +6,7 @@ final class TransferPage {
 
     static String pin() {
         return page(""
-                + "<h1>نقل الملفات</h1>"
+                + "<h1>Alkhamis TV Transfer</h1>"
                 + "<section class=\"card\">"
                 + "<p>اكتب رمز الدخول الظاهر على التلفاز.</p>"
                 + "<form method=\"get\">"
@@ -17,7 +17,7 @@ final class TransferPage {
 
     static String app() {
         return page(""
-                + "<h1>نقل الملفات</h1>"
+                + "<h1>Alkhamis TV Transfer</h1>"
                 + "<section class=\"card\">"
                 + "<label class=\"drop\" id=\"drop\">"
                 + "<input id=\"pick\" type=\"file\" multiple hidden>"
@@ -42,7 +42,7 @@ final class TransferPage {
     private static String page(String body) {
         return "<!doctype html><html lang=\"ar\" dir=\"rtl\"><head><meta charset=\"utf-8\">"
                 + "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">"
-                + "<title>نقل الملفات</title>" + style() + "</head><body><main class=\"wrap\">"
+                + "<title>Alkhamis TV Transfer</title>" + style() + "</head><body><main class=\"wrap\">"
                 + body + "</main></body></html>";
     }
 

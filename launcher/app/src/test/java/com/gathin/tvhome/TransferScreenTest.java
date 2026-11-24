@@ -48,7 +48,7 @@ public class TransferScreenTest {
         if (empty.getVisibility() != View.VISIBLE) throw new AssertionError("empty help hidden");
         Bitmap bitmap = Bitmap.createBitmap(1920, 1080, Bitmap.Config.ARGB_8888);
         decor.draw(new Canvas(bitmap));
-        File dir = new File("/opt/cursor/artifacts/qa/3.6.1");
+        File dir = new File("/opt/cursor/artifacts/qa/3.6.2");
         dir.mkdirs();
         try (FileOutputStream out = new FileOutputStream(new File(dir, "after-tv-empty.png"))) {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);

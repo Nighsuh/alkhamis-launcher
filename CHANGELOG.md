@@ -2,11 +2,23 @@
 
 سجل التغييرات
 
-Tags: `v3.1-shrine`, `v3.2-shrine`, `v3.2.1-shrine`, `v3.2.2-shrine`, `v3.2.3-shrine`, `v3.2.4-shrine`, `v3.2.5-shrine`, `v3.2.6-shrine`, `v3.2.7-shrine`, `v3.2.8-shrine`, `v3.2.9-shrine`, `v3.2.10-shrine`, `v3.5.0-shrine`, `v3.5.1-shrine`, `v3.5.2-shrine`, `v3.5.3-shrine`, `v3.5.4-shrine`, `v3.5.5-shrine`, `v3.5.6-shrine`, `v3.5.7-shrine`, `v3.5.8-shrine`, `v3.5.9-shrine`, `v3.6.0-shrine`, `v3.6.1-shrine`.  
+Tags: `v3.1-shrine`, `v3.2-shrine`, `v3.2.1-shrine`, `v3.2.2-shrine`, `v3.2.3-shrine`, `v3.2.4-shrine`, `v3.2.5-shrine`, `v3.2.6-shrine`, `v3.2.7-shrine`, `v3.2.8-shrine`, `v3.2.9-shrine`, `v3.2.10-shrine`, `v3.5.0-shrine`, `v3.5.1-shrine`, `v3.5.2-shrine`, `v3.5.3-shrine`, `v3.5.4-shrine`, `v3.5.5-shrine`, `v3.5.6-shrine`, `v3.5.7-shrine`, `v3.5.8-shrine`, `v3.5.9-shrine`, `v3.6.0-shrine`, `v3.6.1-shrine`, `v3.6.2-shrine`.  
 The release file is always `CleanYourTV-Shrine.apk`.
 
 الوسوم: `v3.1-shrine` حتى `v3.5.0-shrine`.  
 اسم ملف الإصدار دائمًا `CleanYourTV-Shrine.apk`.
+
+## 3.6.2-shrine
+
+versionCode 35. Same package (`com.gathin.tvhome`) and the same release key as 3.6.1-shrine, so it installs over that build. The Home switch still does not turn Google TV setup or the stock launcher off.
+
+### English
+
+- The transfer feature is named Alkhamis TV Transfer in every language: the Home tile, the settings row, the screen title, and the page a phone opens. Files are saved in Download/AlkhamisTransfer, so a file manager can see them and they stay after this launcher is removed. Android 10 and later use the system Downloads collection, with no storage permission. The first open moves files that were kept in the private folder. Each row shows a file icon, and the actions sit next to the name.
+
+### العربية
+
+- اسم الميزة Alkhamis TV Transfer في كل اللغات: بطاقة الشاشة، وصف الإعدادات، وعنوان الشاشة، والصفحة التي يفتحها الهاتف. الملفات تُحفظ في Download/AlkhamisTransfer، فيراها مدير الملفات وتبقى بعد حذف هذا المشغّل. أندرويد 10 وما بعده يستخدم مجلد التنزيلات بلا إذن تخزين. أول فتح ينقل الملفات التي كانت في المجلد الخاص. كل صف يعرض أيقونة الملف، والأزرار بجانب الاسم.
 
 ## 3.6.1-shrine
 

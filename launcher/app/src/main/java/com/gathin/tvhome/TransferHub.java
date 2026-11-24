@@ -30,15 +30,18 @@ final class TransferHub {
 
     static synchronized TransferServer server(Context ctx) throws IOException {
         if (server != null) return server;
-        File dir = folder(ctx);
-        if (dir == null) throw new IOException("folder");
+        if (!TransferFiles.storageReady(ctx)) throw new IOException("storage");
+        TransferFiles.migrate(ctx);
+        File notes = folder(ctx);
+        if (notes == null) throw new IOException("folder");
         if (pin == null) pin = String.format("%06d", new SecureRandom().nextInt(1_000_000));
         background = ctx.getSharedPreferences(Config.SETTINGS_NAME, Context.MODE_PRIVATE).getBoolean(PREF, false);
+        TransferFiles.Dir files = TransferFiles.open(ctx);
         int port = 8080;
         IOException last = null;
         for (int i = 0; i < 6; i++) {
             try {
-                server = TransferServer.start(dir, pin, port + i);
+                server = TransferServer.start(notes, files, pin, port + i);
                 return server;
             } catch (IOException e) {
                 last = e;

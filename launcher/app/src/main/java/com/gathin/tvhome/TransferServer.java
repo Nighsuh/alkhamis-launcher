@@ -23,6 +23,7 @@ final class TransferServer {
     private static final String NOTES = ".notes.txt";
 
     private final File root;
+    private final TransferFiles.Dir files;
     private final String pin;
     private final ServerSocket socket;
     private volatile boolean open = true;
@@ -30,16 +31,21 @@ final class TransferServer {
     volatile String busyName = "";
     volatile int busyPercent = -1;
 
-    private TransferServer(File root, String pin, ServerSocket socket) {
+    private TransferServer(File root, TransferFiles.Dir files, String pin, ServerSocket socket) {
         this.root = root;
+        this.files = files;
         this.pin = pin;
         this.socket = socket;
     }
 
     static TransferServer start(File root, String pin, int port) throws IOException {
-        if (!root.isDirectory() && !root.mkdirs()) throw new IOException("folder");
+        return start(root, new TransferFiles.FileDir(root), pin, port);
+    }
+
+    static TransferServer start(File root, TransferFiles.Dir files, String pin, int port) throws IOException {
+        if (root != null && !root.isDirectory() && !root.mkdirs()) throw new IOException("folder");
         ServerSocket socket = new ServerSocket(port);
-        TransferServer server = new TransferServer(root, pin, socket);
+        TransferServer server = new TransferServer(root, files, pin, socket);
         Thread t = new Thread(server::acceptLoop, "transfer-accept");
         t.setDaemon(true);
         t.start();
@@ -117,12 +123,12 @@ final class TransferServer {
                 return;
             }
             if ("GET".equals(method) && pathOf(target).startsWith("/files/")) {
-                File file = resolve(pathOf(target).substring("/files/".length()));
-                if (file == null || !file.isFile()) {
+                TransferFiles.Item item = files.find(safeName(pathOf(target).substring("/files/".length())));
+                if (item == null) {
                     send(out, 404, "text/plain", "missing".getBytes(StandardCharsets.UTF_8), null);
                     return;
                 }
-                sendFile(out, file);
+                sendItem(out, item);
                 return;
             }
             if ("POST".equals(method) && "/upload".equals(pathOf(target))) {
@@ -138,8 +144,8 @@ final class TransferServer {
             byte[] body = readBody(in, length);
             String form = new String(body, StandardCharsets.UTF_8);
             if ("POST".equals(method) && "/delete".equals(pathOf(target))) {
-                File file = resolve(formValue(form, "name"));
-                if (file != null && file.isFile()) file.delete();
+                String name = safeName(formValue(form, "name"));
+                if (name != null) files.delete(name);
                 send(out, 200, "text/plain", "ok".getBytes(StandardCharsets.UTF_8), null);
                 return;
             }
@@ -239,17 +245,22 @@ final class TransferServer {
                 if (ended(buf, fill, boundary)) return;
                 continue;
             }
-            File dest = unique(resolve(filename));
+            TransferFiles.Out dest = files.begin(filename);
             if (dest == null) {
                 fill = discardUntil(in, buf, fill, left, sep);
                 if (ended(buf, fill, boundary)) return;
                 continue;
             }
-            busyName = dest.getName();
+            busyName = dest.name;
             busyPercent = 0;
-            try (OutputStream file = new ProgressOut(new FileOutputStream(dest), length)) {
+            boolean stored = false;
+            try {
+                OutputStream file = new ProgressOut(dest.stream, length);
                 fill = writeUntil(in, buf, fill, left, sep, file);
+                dest.commit();
+                stored = true;
             } finally {
+                if (!stored) dest.abort();
                 busyPercent = -1;
                 busyName = "";
             }
@@ -304,20 +315,6 @@ final class TransferServer {
         return fill + n;
     }
 
-    private File unique(File file) {
-        if (file == null) return null;
-        if (!file.exists()) return file;
-        String name = file.getName();
-        int dot = name.lastIndexOf('.');
-        String stem = dot > 0 ? name.substring(0, dot) : name;
-        String ext = dot > 0 ? name.substring(dot) : "";
-        for (int i = 2; i < 1000; i++) {
-            File next = new File(file.getParentFile(), stem + "-" + i + ext);
-            if (!next.exists()) return next;
-        }
-        return file;
-    }
-
     private static String filename(String headers) {
         String lower = headers.toLowerCase(Locale.US);
         int star = lower.indexOf("filename*=");
@@ -366,18 +363,15 @@ final class TransferServer {
     private String listJson() {
         StringBuilder json = new StringBuilder();
         json.append("{\"files\":[");
-        File[] files = root.listFiles();
+        List<TransferFiles.Item> listed = files.list();
+        listed.sort((a, b) -> Long.compare(b.modified, a.modified));
         boolean first = true;
-        if (files != null) {
-            java.util.Arrays.sort(files, (a, b) -> Long.compare(b.lastModified(), a.lastModified()));
-            for (File file : files) {
-                if (!file.isFile() || file.getName().startsWith(".")) continue;
-                if (!first) json.append(',');
-                first = false;
-                json.append("{\"name\":\"").append(jsonEscape(file.getName()))
-                        .append("\",\"size\":").append(file.length())
-                        .append(",\"time\":").append(file.lastModified()).append('}');
-            }
+        for (TransferFiles.Item file : listed) {
+            if (!first) json.append(',');
+            first = false;
+            json.append("{\"name\":\"").append(jsonEscape(file.name))
+                    .append("\",\"size\":").append(file.size)
+                    .append(",\"time\":").append(file.modified).append('}');
         }
         json.append("],\"notes\":[");
         List<String> notes = notes();
@@ -506,13 +500,14 @@ final class TransferServer {
         return Math.max(0, keep);
     }
 
-    private void sendFile(OutputStream out, File file) throws IOException {
+    private void sendItem(OutputStream out, TransferFiles.Item item) throws IOException {
         byte[] head = ("HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: "
-                + file.length() + "\r\nContent-Disposition: attachment; filename=\""
-                + file.getName().replace("\"", "") + "\"\r\nConnection: close\r\n\r\n")
+                + item.size + "\r\nContent-Disposition: attachment; filename=\""
+                + item.name.replace("\"", "") + "\"\r\nConnection: close\r\n\r\n")
                 .getBytes(StandardCharsets.US_ASCII);
         out.write(head);
-        try (InputStream in = new java.io.FileInputStream(file)) {
+        try (InputStream in = files.open(item)) {
+            if (in == null) return;
             byte[] buf = new byte[BUFFER];
             int n;
             while ((n = in.read(buf)) > 0) out.write(buf, 0, n);
