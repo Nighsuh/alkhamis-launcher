@@ -24,7 +24,7 @@ class ScanOverlay @JvmOverloads constructor(
     private val hole = RectF()
 
     override fun onDraw(canvas: Canvas) {
-        val side = minOf(width, height) * 0.68f
+        val side = width * 0.75f
         val left = (width - side) / 2f
         val top = (height - side) / 2f - 24f * resources.displayMetrics.density
         hole.set(left, top, left + side, top + side)

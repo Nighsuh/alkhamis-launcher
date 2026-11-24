@@ -20,6 +20,18 @@ versionCode 36. Same package (`com.gathin.tvhome`) and the same release key as 3
 
 - عندما تكون Alkhamis TV Transfer مفتوحة، يعلن التلفاز عن نفسه على الشبكة حتى يجده تطبيق Alkhamis TV Transfer. صفحة المتصفح كما هي. يستطيع الهاتف أن يطلب من التلفاز فتح مثبّت التطبيق لملف APK وصل.
 
+## Alkhamis TV Transfer 1.0.2
+
+Phone app, package `com.gathin.transfer`, versionCode 3. The name is still Alkhamis TV Transfer.
+
+### English
+
+- The phone screens use larger type, taller buttons, and roomier cards. The TV list shows a status chip and an address. The scanner frame is wider, and the zoom controls are easier to tap.
+
+### العربية
+
+- شاشات الهاتف بنص أكبر وأزرار أطول وبطاقات أوسع. قائمة التلفاز تعرض حالة وعنوانًا. إطار الماسح أعرض، وأزرار التكبير أسهل للمس.
+
 ## Alkhamis TV Transfer 1.0.1
 
 Phone app, package `com.gathin.transfer`, versionCode 2. Same name, Alkhamis TV Transfer, in English.

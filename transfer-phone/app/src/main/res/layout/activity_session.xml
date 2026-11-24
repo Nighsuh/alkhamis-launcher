@@ -63,7 +63,7 @@
             android:layout_marginTop="22dp"
             android:text="@string/files_title"
             android:textColor="#FFFFFFFF"
-            android:textSize="18sp" />
+            android:textSize="22sp" />
 
         <LinearLayout
             android:id="@+id/files"

@@ -19,7 +19,7 @@ import java.io.File
 import java.io.FileOutputStream
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [30], qualifiers = "ar-w411dp-h891dp")
+@Config(sdk = [30], qualifiers = "ar-w360dp-h800dp-xxhdpi")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 class PhoneScreenTest {
     @Test
@@ -69,6 +69,7 @@ class PhoneScreenTest {
         val stored = JobStore.load(RuntimeEnvironment.getApplication())
         assertTrue(stored.isEmpty() || stored[0].attempts == 0)
         share.finish()
+        org.robolectric.Shadows.shadowOf(RuntimeEnvironment.getApplication()).grantPermissions(android.Manifest.permission.CAMERA)
         val scan = Robolectric.buildActivity(ScanActivity::class.java).setup().get()
         assertEquals("Alkhamis TV Transfer", scan.findViewById<TextView>(R.id.title).text.toString())
         assertTrue(scan.findViewById<TextView>(R.id.hint).text.toString().contains("الكاميرا"))
@@ -117,7 +118,7 @@ class PhoneScreenTest {
         view.layout(0, 0, width, height)
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         view.draw(Canvas(bitmap))
-        val dir = File("/opt/cursor/artifacts/qa/transfer-app-1.0.1")
+        val dir = File("/opt/cursor/artifacts/qa/transfer-app-1.0.2")
         dir.mkdirs()
         FileOutputStream(File(dir, name)).use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
         bitmap.recycle()

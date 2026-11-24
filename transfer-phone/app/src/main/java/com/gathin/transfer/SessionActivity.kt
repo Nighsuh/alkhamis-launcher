@@ -38,7 +38,10 @@ class SessionActivity : AppCompatActivity() {
             startActivityForResult(Intent(Intent.ACTION_OPEN_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("*/*").putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true), 4)
         }
         val preview = intent.getStringArrayExtra("previewFiles")
-        if (preview != null) show(preview.map { RemoteFile(it, 4, System.currentTimeMillis()) })
+        if (preview != null) {
+            val sizes = mapOf("clip.mp4" to 248_000_000L, "photo.jpg" to 3_400_000L, "app.apk" to 21_000_000L)
+            show(preview.map { RemoteFile(it, sizes[it] ?: 1024L, System.currentTimeMillis()) })
+        }
         else load(host, port, pin)
     }
 
@@ -84,15 +87,38 @@ class SessionActivity : AppCompatActivity() {
             val row = LinearLayout(this)
             row.orientation = LinearLayout.VERTICAL
             row.setBackgroundResource(R.drawable.card)
-            val pad = dp(12)
+            val pad = dp(16)
             row.setPadding(pad, pad, pad, pad)
+            val head = LinearLayout(this)
+            head.orientation = LinearLayout.HORIZONTAL
+            head.gravity = android.view.Gravity.CENTER_VERTICAL
+            val icon = android.widget.ImageView(this)
+            icon.setImageResource(kindIcon(file.name))
+            val boxSize = dp(44)
+            icon.layoutParams = LinearLayout.LayoutParams(boxSize, boxSize)
+            val text = LinearLayout(this)
+            text.orientation = LinearLayout.VERTICAL
+            val textLp = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+            textLp.marginStart = dp(14)
+            text.layoutParams = textLp
             val name = TextView(this)
             name.text = file.name
             name.setTextColor(0xFFFFFFFF.toInt())
-            name.textSize = 16f
-            row.addView(name)
+            name.textSize = 18f
+            val size = TextView(this)
+            size.text = readableSize(file.size)
+            size.setTextColor(0xFFACB8C1.toInt())
+            size.textSize = 16f
+            text.addView(name)
+            text.addView(size)
+            head.addView(icon)
+            head.addView(text)
+            row.addView(head)
             val actions = LinearLayout(this)
             actions.orientation = LinearLayout.HORIZONTAL
+            val actionsLp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            actionsLp.topMargin = dp(12)
+            actions.layoutParams = actionsLp
             actions.addView(chip(R.string.download) { download(host, port, pin, file.name) })
             actions.addView(chip(R.string.delete) { Thread { TvClient(host, port, pin).delete(file.name); runOnUiThread { load(host, port, pin) } }.start() })
             if (file.name.endsWith(".apk", true)) {
@@ -100,19 +126,37 @@ class SessionActivity : AppCompatActivity() {
             }
             row.addView(actions)
             val lp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-            lp.topMargin = dp(8)
+            lp.topMargin = dp(12)
             row.layoutParams = lp
             box.addView(row)
         }
+    }
+
+    private fun kindIcon(name: String): Int {
+        val n = name.lowercase()
+        return when {
+            n.endsWith(".apk") -> R.drawable.ic_kind_apk
+            n.endsWith(".mp4") || n.endsWith(".mkv") -> R.drawable.ic_kind_video
+            n.endsWith(".jpg") || n.endsWith(".png") || n.endsWith(".webp") -> R.drawable.ic_kind_image
+            else -> R.drawable.ic_kind_file
+        }
+    }
+
+    private fun readableSize(bytes: Long): String {
+        if (bytes < 1024) return "$bytes B"
+        if (bytes < 1024 * 1024) return "${bytes / 1024} KB"
+        return String.format(java.util.Locale.US, "%.1f MB", bytes / (1024.0 * 1024))
     }
 
     private fun chip(label: Int, click: () -> Unit): Button {
         val button = Button(this)
         button.setText(label)
         button.setTextColor(0xFFFFFFFF.toInt())
+        button.textSize = 16f
+        button.minHeight = dp(48)
         button.setBackgroundColor(0xFF2C3A34.toInt())
         button.setOnClickListener { click() }
-        val lp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        val lp = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
         lp.marginEnd = dp(8)
         button.layoutParams = lp
         return button

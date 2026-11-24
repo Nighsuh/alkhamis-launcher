@@ -60,7 +60,7 @@ class ShareActivity : AppCompatActivity() {
         val view = TextView(this)
         view.text = text
         view.setTextColor(0xFFFFFFFF.toInt())
-        view.textSize = 16f
+        view.textSize = 18f
         view.setPadding(0, dp(6), 0, dp(6))
         return view
     }

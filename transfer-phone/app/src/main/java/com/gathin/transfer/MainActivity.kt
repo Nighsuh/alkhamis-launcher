@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun paint() {
         val box = findViewById<LinearLayout>(R.id.tvs)
-        val empty = findViewById<TextView>(R.id.empty)
+        val empty = findViewById<View>(R.id.empty)
         box.removeAllViews()
         val saved = try {
             Books.factory(this).list()
@@ -51,39 +51,53 @@ class MainActivity : AppCompatActivity() {
             emptyList()
         }
         empty.visibility = if (found.isEmpty() && saved.isEmpty()) View.VISIBLE else View.GONE
-        for (tv in saved) box.addView(row(tv.name + "  ·  " + getString(R.string.saved), tv.host + ":" + tv.port) {
+        for (tv in saved) box.addView(row(tv.name, getString(R.string.saved), tv.host + ":" + tv.port) {
             open(tv.name, tv.host, tv.port, tv.pin)
         })
-        for (tv in found) box.addView(row(tv.name + "  ·  " + getString(R.string.found), tv.host + ":" + tv.port) {
+        for (tv in found) box.addView(row(tv.name, getString(R.string.found), tv.host + ":" + tv.port) {
             open(tv.name, tv.host, tv.port, saved.firstOrNull { it.host == tv.host && it.port == tv.port }?.pin ?: "")
         })
     }
 
-    private fun row(title: String, sub: String, click: () -> Unit): View {
+    private fun row(title: String, status: String, sub: String, click: () -> Unit): View {
         val line = LinearLayout(this)
         line.orientation = LinearLayout.HORIZONTAL
         line.gravity = Gravity.CENTER_VERTICAL
+        line.minimumHeight = dp(88)
         line.setBackgroundResource(R.drawable.card)
-        val pad = (18 * resources.displayMetrics.density).toInt()
+        val pad = dp(18)
         line.setPadding(pad, pad, pad, pad)
         val icon = ImageView(this)
         icon.setImageResource(R.drawable.ic_tv)
-        val box = (40 * resources.displayMetrics.density).toInt()
+        val box = dp(48)
         icon.layoutParams = LinearLayout.LayoutParams(box, box)
         val text = LinearLayout(this)
         text.orientation = LinearLayout.VERTICAL
         val textLp = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
-        textLp.marginStart = (14 * resources.displayMetrics.density).toInt()
+        textLp.marginStart = dp(16)
         text.layoutParams = textLp
         val name = TextView(this)
         name.text = title
-        name.textSize = 20f
+        name.textSize = 22f
         name.setTextColor(0xFFFFFFFF.toInt())
+        val chip = TextView(this)
+        chip.text = status
+        chip.textSize = 14f
+        chip.setTextColor(0xFFE6C57A.toInt())
+        chip.setBackgroundResource(R.drawable.chip_bg)
+        chip.setPadding(dp(10), dp(4), dp(10), dp(4))
+        val chipLp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        chipLp.topMargin = dp(6)
+        chip.layoutParams = chipLp
         val meta = TextView(this)
         meta.text = sub
         meta.textSize = 16f
         meta.setTextColor(0xFFACB8C1.toInt())
+        val metaLp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        metaLp.topMargin = dp(6)
+        meta.layoutParams = metaLp
         text.addView(name)
+        text.addView(chip)
         text.addView(meta)
         line.addView(icon)
         line.addView(text)

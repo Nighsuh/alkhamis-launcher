@@ -11,7 +11,8 @@
     <string name="install_tv">Install on TV</string>
     <string name="send">Send</string>
     <string name="share_title">Send to the TV</string>
-    <string name="tvs_empty">No TV on this Wi-Fi. Enter an address or scan the code.</string>
+    <string name="tvs_lead">Find the TV on this Wi-Fi, scan the code, or type the address.</string>
+    <string name="tvs_empty">No TV yet. It appears here while Alkhamis TV Transfer is open.</string>
     <string name="files_title">Files on the TV</string>
     <string name="found">On the network</string>
     <string name="saved">Saved</string>

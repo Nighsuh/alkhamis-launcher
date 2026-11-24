@@ -9,7 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:paddingStart="20dp"
+        android:paddingTop="24dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="24dp">
 
         <TextView
             android:id="@+id/title"
@@ -21,29 +24,59 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/lead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:lineSpacingExtra="4dp"
+            android:text="@string/tvs_lead"
+            android:textColor="#FFFFFFFF"
+            android:textSize="18sp" />
+
+        <LinearLayout
             android:id="@+id/empty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:text="@string/tvs_empty"
-            android:textColor="#FFACB8C1"
-            android:textSize="18sp" />
+            android:layout_marginTop="28dp"
+            android:background="@drawable/card"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="28dp">
+
+            <ImageView
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_tv" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="@string/tvs_empty"
+                android:textColor="#FFACB8C1"
+                android:textSize="18sp" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/tvs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             android:orientation="vertical" />
-
-        <Button
-            android:id="@+id/manual"
-            style="@style/GoldButton"
-            android:text="@string/manual" />
 
         <Button
             android:id="@+id/scan"
             style="@style/GoldButton"
+            android:layout_marginTop="20dp"
+            android:minHeight="56dp"
             android:text="@string/scan" />
+
+        <Button
+            android:id="@+id/manual"
+            style="@style/GoldButton"
+            android:minHeight="56dp"
+            android:text="@string/manual" />
     </LinearLayout>
 </ScrollView>
