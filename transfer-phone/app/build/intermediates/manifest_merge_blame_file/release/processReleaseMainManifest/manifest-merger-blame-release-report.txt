@@ -1,0 +1,235 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.gathin.transfer"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="26"
+9        android:targetSdkVersion="34" />
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:4:5-67
+11-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:4:22-64
+12    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+12-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:5:5-79
+12-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:5:22-76
+13    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+13-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:6:5-76
+13-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:6:22-73
+14    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+14-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:7:5-86
+14-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:7:22-83
+15    <uses-permission
+15-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:8:5-125
+16        android:name="android.permission.NEARBY_WIFI_DEVICES"
+16-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:8:22-75
+17        android:usesPermissionFlags="neverForLocation" />
+17-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:8:76-122
+18    <uses-permission
+18-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:9:5-106
+19        android:name="android.permission.ACCESS_FINE_LOCATION"
+19-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:9:22-76
+20        android:maxSdkVersion="32" />
+20-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:9:77-103
+21    <uses-permission android:name="android.permission.CAMERA" />
+21-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:10:5-65
+21-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:10:22-62
+22    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+22-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:11:5-77
+22-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:11:22-74
+23    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+23-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:12:5-77
+23-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:12:22-74
+24    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+24-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:13:5-87
+24-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:13:22-84
+25    <uses-permission
+25-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:14:5-108
+26        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+26-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:14:22-78
+27        android:maxSdkVersion="28" />
+27-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:14:79-105
+28
+29    <uses-feature
+29-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:16:5-85
+30        android:name="android.hardware.camera"
+30-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:16:19-57
+31        android:required="false" />
+31-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:16:58-82
+32
+33    <permission
+33-->[androidx.core:core:1.13.0] /home/ubuntu/.gradle/caches/8.9/transforms/279d3184394244f708f9aef1e57edcf2/transformed/core-1.13.0/AndroidManifest.xml:22:5-24:47
+34        android:name="com.gathin.transfer.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+34-->[androidx.core:core:1.13.0] /home/ubuntu/.gradle/caches/8.9/transforms/279d3184394244f708f9aef1e57edcf2/transformed/core-1.13.0/AndroidManifest.xml:23:9-81
+35        android:protectionLevel="signature" />
+35-->[androidx.core:core:1.13.0] /home/ubuntu/.gradle/caches/8.9/transforms/279d3184394244f708f9aef1e57edcf2/transformed/core-1.13.0/AndroidManifest.xml:24:9-44
+36
+37    <uses-permission android:name="com.gathin.transfer.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+37-->[androidx.core:core:1.13.0] /home/ubuntu/.gradle/caches/8.9/transforms/279d3184394244f708f9aef1e57edcf2/transformed/core-1.13.0/AndroidManifest.xml:26:5-97
+37-->[androidx.core:core:1.13.0] /home/ubuntu/.gradle/caches/8.9/transforms/279d3184394244f708f9aef1e57edcf2/transformed/core-1.13.0/AndroidManifest.xml:26:22-94
+38
+39    <application
+39-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:18:5-59:19
+40        android:allowBackup="false"
+40-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:19:9-36
+41        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+41-->[androidx.core:core:1.13.0] /home/ubuntu/.gradle/caches/8.9/transforms/279d3184394244f708f9aef1e57edcf2/transformed/core-1.13.0/AndroidManifest.xml:28:18-86
+42        android:extractNativeLibs="false"
+43        android:icon="@drawable/ic_stat"
+43-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:20:9-41
+44        android:label="@string/app_name"
+44-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:21:9-41
+45        android:supportsRtl="true"
+45-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:22:9-35
+46        android:theme="@style/AppTheme"
+46-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:23:9-40
+47        android:usesCleartextTraffic="true" >
+47-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:24:9-44
+48        <activity
+48-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:26:9-33:20
+49            android:name="com.gathin.transfer.MainActivity"
+49-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:27:13-41
+50            android:exported="true" >
+50-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:28:13-36
+51            <intent-filter>
+51-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:29:13-32:29
+52                <action android:name="android.intent.action.MAIN" />
+52-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:30:17-69
+52-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:30:25-66
+53
+54                <category android:name="android.intent.category.LAUNCHER" />
+54-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:31:17-77
+54-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:31:27-74
+55            </intent-filter>
+56        </activity>
+57        <activity
+57-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:35:9-78
+58            android:name="com.gathin.transfer.SessionActivity"
+58-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:35:19-50
+59            android:exported="false" />
+59-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:35:51-75
+60        <activity
+60-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:36:9-75
+61            android:name="com.gathin.transfer.ScanActivity"
+61-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:36:19-47
+62            android:exported="false" />
+62-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:36:48-72
+63        <activity
+63-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:38:9-53:20
+64            android:name="com.gathin.transfer.ShareActivity"
+64-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:39:13-42
+65            android:exported="true"
+65-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:40:13-36
+66            android:label="@string/app_name" >
+66-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:41:13-45
+67            <intent-filter>
+67-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:42:13-47:29
+68                <action android:name="android.intent.action.SEND" />
+68-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:43:17-69
+68-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:43:25-66
+69                <action android:name="android.intent.action.SEND_MULTIPLE" />
+69-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:44:17-78
+69-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:44:25-75
+70
+71                <category android:name="android.intent.category.DEFAULT" />
+71-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:45:17-76
+71-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:45:27-73
+72
+73                <data android:mimeType="*/*" />
+73-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:46:17-48
+73-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:46:23-45
+74            </intent-filter>
+75            <intent-filter>
+75-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:48:13-52:29
+76                <action android:name="android.intent.action.SEND" />
+76-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:43:17-69
+76-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:43:25-66
+77
+78                <category android:name="android.intent.category.DEFAULT" />
+78-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:45:17-76
+78-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:45:27-73
+79
+80                <data android:mimeType="text/plain" />
+80-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:46:17-48
+80-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:46:23-45
+81            </intent-filter>
+82        </activity>
+83
+84        <service
+84-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:55:9-58:56
+85            android:name="com.gathin.transfer.UploadService"
+85-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:56:13-42
+86            android:exported="false"
+86-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:57:13-37
+87            android:foregroundServiceType="dataSync" />
+87-->/agent/repos/alkhamis-launcher/transfer-phone/app/src/main/AndroidManifest.xml:58:13-53
+88
+89        <provider
+89-->[androidx.emoji2:emoji2:1.3.0] /home/ubuntu/.gradle/caches/8.9/transforms/0d3a5122fefd548ffbc673092df989b2/transformed/emoji2-1.3.0/AndroidManifest.xml:24:9-32:20
+90            android:name="androidx.startup.InitializationProvider"
+90-->[androidx.emoji2:emoji2:1.3.0] /home/ubuntu/.gradle/caches/8.9/transforms/0d3a5122fefd548ffbc673092df989b2/transformed/emoji2-1.3.0/AndroidManifest.xml:25:13-67
+91            android:authorities="com.gathin.transfer.androidx-startup"
+91-->[androidx.emoji2:emoji2:1.3.0] /home/ubuntu/.gradle/caches/8.9/transforms/0d3a5122fefd548ffbc673092df989b2/transformed/emoji2-1.3.0/AndroidManifest.xml:26:13-68
+92            android:exported="false" >
+92-->[androidx.emoji2:emoji2:1.3.0] /home/ubuntu/.gradle/caches/8.9/transforms/0d3a5122fefd548ffbc673092df989b2/transformed/emoji2-1.3.0/AndroidManifest.xml:27:13-37
+93            <meta-data
+93-->[androidx.emoji2:emoji2:1.3.0] /home/ubuntu/.gradle/caches/8.9/transforms/0d3a5122fefd548ffbc673092df989b2/transformed/emoji2-1.3.0/AndroidManifest.xml:29:13-31:52
+94                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+94-->[androidx.emoji2:emoji2:1.3.0] /home/ubuntu/.gradle/caches/8.9/transforms/0d3a5122fefd548ffbc673092df989b2/transformed/emoji2-1.3.0/AndroidManifest.xml:30:17-75
+95                android:value="androidx.startup" />
+95-->[androidx.emoji2:emoji2:1.3.0] /home/ubuntu/.gradle/caches/8.9/transforms/0d3a5122fefd548ffbc673092df989b2/transformed/emoji2-1.3.0/AndroidManifest.xml:31:17-49
+96            <meta-data
+96-->[androidx.lifecycle:lifecycle-process:2.6.2] /home/ubuntu/.gradle/caches/8.9/transforms/b215b9b854288724885929d029c9142a/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:29:13-31:52
+97                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+97-->[androidx.lifecycle:lifecycle-process:2.6.2] /home/ubuntu/.gradle/caches/8.9/transforms/b215b9b854288724885929d029c9142a/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:30:17-78
+98                android:value="androidx.startup" />
+98-->[androidx.lifecycle:lifecycle-process:2.6.2] /home/ubuntu/.gradle/caches/8.9/transforms/b215b9b854288724885929d029c9142a/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:31:17-49
+99            <meta-data
+99-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ubuntu/.gradle/caches/8.9/transforms/bc4be969076d8dda33216e070d6e03aa/transformed/profileinstaller-1.3.1/AndroidManifest.xml:29:13-31:52
+100                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+100-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ubuntu/.gradle/caches/8.9/transforms/bc4be969076d8dda33216e070d6e03aa/transformed/profileinstaller-1.3.1/AndroidManifest.xml:30:17-85
+101                android:value="androidx.startup" />
+101-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ubuntu/.gradle/caches/8.9/transforms/bc4be969076d8dda33216e070d6e03aa/transformed/profileinstaller-1.3.1/AndroidManifest.xml:31:17-49
+102        </provider>
+103
+104        <receiver
+104-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ubuntu/.gradle/caches/8.9/transforms/bc4be969076d8dda33216e070d6e03aa/transformed/profileinstaller-1.3.1/AndroidManifest.xml:34:9-52:20
+105            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+105-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ubuntu/.gradle/caches/8.9/transforms/bc4be969076d8dda33216e070d6e03aa/transformed/profileinstaller-1.3.1/AndroidManifest.xml:35:13-76
+106            android:directBootAware="false"
+106-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ubuntu/.gradle/caches/8.9/transforms/bc4be969076d8dda33216e070d6e03aa/transformed/profileinstaller-1.3.1/AndroidManifest.xml:36:13-44
+107            android:enabled="true"
+107-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ubuntu/.gradle/caches/8.9/transforms/bc4be969076d8dda33216e070d6e03aa/transformed/profileinstaller-1.3.1/AndroidManifest.xml:37:13-35
+108            android:exported="true"
+108-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ubuntu/.gradle/caches/8.9/transforms/bc4be969076d8dda33216e070d6e03aa/transformed/profileinstaller-1.3.1/AndroidManifest.xml:38:13-36
+109            android:permission="android.permission.DUMP" >
+109-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ubuntu/.gradle/caches/8.9/transforms/bc4be969076d8dda33216e070d6e03aa/transformed/profileinstaller-1.3.1/AndroidManifest.xml:39:13-57
+110            <intent-filter>
+110-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ubuntu/.gradle/caches/8.9/transforms/bc4be969076d8dda33216e070d6e03aa/transformed/profileinstaller-1.3.1/AndroidManifest.xml:40:13-42:29
+111                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+111-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ubuntu/.gradle/caches/8.9/transforms/bc4be969076d8dda33216e070d6e03aa/transformed/profileinstaller-1.3.1/AndroidManifest.xml:41:17-91
+111-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ubuntu/.gradle/caches/8.9/transforms/bc4be969076d8dda33216e070d6e03aa/transformed/profileinstaller-1.3.1/AndroidManifest.xml:41:25-88
+112            </intent-filter>
+113            <intent-filter>
+113-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ubuntu/.gradle/caches/8.9/transforms/bc4be969076d8dda33216e070d6e03aa/transformed/profileinstaller-1.3.1/AndroidManifest.xml:43:13-45:29
+114                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+114-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ubuntu/.gradle/caches/8.9/transforms/bc4be969076d8dda33216e070d6e03aa/transformed/profileinstaller-1.3.1/AndroidManifest.xml:44:17-85
+114-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ubuntu/.gradle/caches/8.9/transforms/bc4be969076d8dda33216e070d6e03aa/transformed/profileinstaller-1.3.1/AndroidManifest.xml:44:25-82
+115            </intent-filter>
+116            <intent-filter>
+116-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ubuntu/.gradle/caches/8.9/transforms/bc4be969076d8dda33216e070d6e03aa/transformed/profileinstaller-1.3.1/AndroidManifest.xml:46:13-48:29
+117                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+117-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ubuntu/.gradle/caches/8.9/transforms/bc4be969076d8dda33216e070d6e03aa/transformed/profileinstaller-1.3.1/AndroidManifest.xml:47:17-88
+117-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ubuntu/.gradle/caches/8.9/transforms/bc4be969076d8dda33216e070d6e03aa/transformed/profileinstaller-1.3.1/AndroidManifest.xml:47:25-85
+118            </intent-filter>
+119            <intent-filter>
+119-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ubuntu/.gradle/caches/8.9/transforms/bc4be969076d8dda33216e070d6e03aa/transformed/profileinstaller-1.3.1/AndroidManifest.xml:49:13-51:29
+120                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+120-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ubuntu/.gradle/caches/8.9/transforms/bc4be969076d8dda33216e070d6e03aa/transformed/profileinstaller-1.3.1/AndroidManifest.xml:50:17-95
+120-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ubuntu/.gradle/caches/8.9/transforms/bc4be969076d8dda33216e070d6e03aa/transformed/profileinstaller-1.3.1/AndroidManifest.xml:50:25-92
+121            </intent-filter>
+122        </receiver>
+123    </application>
+124
+125</manifest>

@@ -1,10 +1,10 @@
 # Alkhamis Launcher
 
-Alkhamis Launcher 3.6.2-shrine is a shrine-themed Android TV home screen. Package `com.gathin.tvhome`. It is CleanYourTV v3.5.0 (MIT, copyright Gathin) with the shrine dock, Arabic and English, the prayer cards, and the Home Screen picker. The shrine theme is the default and is applied on first launch. Version code 35 installs over 3.6.1-shrine with the same signing key. What changed: [CHANGELOG.md](CHANGELOG.md). Sideload notes: [SHRINE.md](SHRINE.md).
+Alkhamis Launcher 3.6.3-shrine is a shrine-themed Android TV home screen. Package `com.gathin.tvhome`. It is CleanYourTV v3.5.0 (MIT, copyright Gathin) with the shrine dock, Arabic and English, the prayer cards, and the Home Screen picker. The shrine theme is the default and is applied on first launch. Version code 36 installs over 3.6.2-shrine with the same signing key. What changed: [CHANGELOG.md](CHANGELOG.md). Sideload notes: [SHRINE.md](SHRINE.md).
 
 ## العربية
 
-Alkhamis Launcher ‏3.6.2-shrine شاشة رئيسية لتلفاز أندرويد بثيم الضريح. الحزمة `com.gathin.tvhome`. مبنية على CleanYourTV الإصدار 3.5.0 (ترخيص MIT، حقوق Gathin)، مع شريط الضريح، والعربية والإنجليزية واتجاه اليمين إلى اليسار، وبطاقات الصلاة، واختيار الشاشة الرئيسية. ثيم الضريح هو الافتراضي ويُطبَّق عند أول تشغيل. رقم الإصدار 35 يُثبَّت فوق 3.6.1-shrine بنفس مفتاح التوقيع. التغييرات في [CHANGELOG.md](CHANGELOG.md). ملاحظات التثبيت في [SHRINE.md](SHRINE.md).
+Alkhamis Launcher ‏3.6.3-shrine شاشة رئيسية لتلفاز أندرويد بثيم الضريح. الحزمة `com.gathin.tvhome`. مبنية على CleanYourTV الإصدار 3.5.0 (ترخيص MIT، حقوق Gathin)، مع شريط الضريح، والعربية والإنجليزية واتجاه اليمين إلى اليسار، وبطاقات الصلاة، واختيار الشاشة الرئيسية. ثيم الضريح هو الافتراضي ويُطبَّق عند أول تشغيل. رقم الإصدار 36 يُثبَّت فوق 3.6.2-shrine بنفس مفتاح التوقيع. التغييرات في [CHANGELOG.md](CHANGELOG.md). ملاحظات التثبيت في [SHRINE.md](SHRINE.md).
 
 The upstream CleanYourTV guide follows. The launcher in this repository is the shrine build described above, not an unsigned upstream debug build. Port notes: [3.5.0](docs/PROGRESS-3.5.0.md), [3.2.10](docs/PROGRESS-3.2.10.md), [3.2.9](docs/PROGRESS-3.2.9.md), and the [theme catalog](docs/THEMES-CATALOG.md).
 

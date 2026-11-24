@@ -30,6 +30,18 @@ final class TransferServer {
     private final java.util.Set<String> callers = java.util.Collections.synchronizedSet(new java.util.LinkedHashSet<>());
     volatile String busyName = "";
     volatile int busyPercent = -1;
+    static final int API = 1;
+
+    /** Shows the system install prompt for an APK that is already in the transfer folder. */
+    interface InstallHook {
+        void install(String safeName);
+    }
+
+    private static volatile InstallHook installHook;
+
+    static void setInstallHook(InstallHook hook) {
+        installHook = hook;
+    }
 
     private TransferServer(File root, TransferFiles.Dir files, String pin, ServerSocket socket) {
         this.root = root;
@@ -122,6 +134,11 @@ final class TransferServer {
                         listJson().getBytes(StandardCharsets.UTF_8), null);
                 return;
             }
+            if ("GET".equals(method) && "/version".equals(pathOf(target))) {
+                byte[] body = ("{\"version\":" + API + "}").getBytes(StandardCharsets.UTF_8);
+                send(out, 200, "application/json; charset=utf-8", body, null);
+                return;
+            }
             if ("GET".equals(method) && pathOf(target).startsWith("/files/")) {
                 TransferFiles.Item item = files.find(safeName(pathOf(target).substring("/files/".length())));
                 if (item == null) {
@@ -146,6 +163,22 @@ final class TransferServer {
             if ("POST".equals(method) && "/delete".equals(pathOf(target))) {
                 String name = safeName(formValue(form, "name"));
                 if (name != null) files.delete(name);
+                send(out, 200, "text/plain", "ok".getBytes(StandardCharsets.UTF_8), null);
+                return;
+            }
+            if ("POST".equals(method) && "/install".equals(pathOf(target))) {
+                String name = safeName(formValue(form, "name"));
+                TransferFiles.Item item = name == null ? null : files.find(name);
+                InstallHook hook = installHook;
+                if (name == null || item == null || !name.toLowerCase(Locale.US).endsWith(".apk")) {
+                    send(out, 404, "text/plain", "install".getBytes(StandardCharsets.UTF_8), null);
+                    return;
+                }
+                if (hook == null) {
+                    send(out, 503, "text/plain", "install".getBytes(StandardCharsets.UTF_8), null);
+                    return;
+                }
+                hook.install(name);
                 send(out, 200, "text/plain", "ok".getBytes(StandardCharsets.UTF_8), null);
                 return;
             }
@@ -362,7 +395,7 @@ final class TransferServer {
 
     private String listJson() {
         StringBuilder json = new StringBuilder();
-        json.append("{\"files\":[");
+        json.append("{\"version\":").append(API).append(",\"files\":[");
         List<TransferFiles.Item> listed = files.list();
         listed.sort((a, b) -> Long.compare(b.modified, a.modified));
         boolean first = true;

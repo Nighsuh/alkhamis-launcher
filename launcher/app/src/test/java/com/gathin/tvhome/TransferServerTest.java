@@ -56,6 +56,38 @@ public class TransferServerTest {
     }
 
     @Test
+    public void installAsksForTheApkInsideTheFolder() throws Exception {
+        File dir = Files.createTempDirectory("transfer").toFile();
+        java.util.concurrent.atomic.AtomicReference<String> asked = new java.util.concurrent.atomic.AtomicReference<>();
+        TransferServer.setInstallHook(asked::set);
+        TransferServer server = TransferServer.start(dir, "123456", 0);
+        try {
+            assertEquals(401, post(server, "/install", "name=app.apk", null));
+            assertEquals(200, upload(server, "app.apk", new byte[] {1, 2, 3}));
+            assertEquals(200, post(server, "/install", "name=app.apk", "123456"));
+            assertEquals("app.apk", asked.get());
+            assertEquals(404, post(server, "/install", "name=..%2Fsecret.txt", "123456"));
+            assertEquals(200, get(server, "/version", "123456"));
+            assertEquals("_alkhamis._tcp.", TransferAnnounce.TYPE);
+            StringBuilder seen = new StringBuilder();
+            TransferAnnounce.use(new TransferAnnounce.Registrar() {
+                @Override public void register(android.content.Context ctx, String instance, int port) {
+                    seen.append(instance).append(':').append(port);
+                }
+                @Override public void unregister() { seen.append(":off"); }
+            });
+            TransferAnnounce.publish(null, server.port());
+            TransferAnnounce.withdraw();
+            TransferAnnounce.use(null);
+            assertTrue(seen.toString().startsWith("Alkhamis-test:" + server.port()));
+            assertTrue(seen.toString().endsWith(":off"));
+        } finally {
+            TransferServer.setInstallHook(null);
+            server.stop();
+        }
+    }
+
+    @Test
     public void pathTraversalIsRejected() throws Exception {
         File dir = Files.createTempDirectory("transfer").toFile();
         File outside = new File(dir.getParentFile(), "secret.txt");
@@ -90,9 +122,13 @@ public class TransferServerTest {
     }
 
     private static int post(TransferServer server, String path, String body) throws Exception {
+        return post(server, path, body, "123456");
+    }
+
+    private static int post(TransferServer server, String path, String body, String pin) throws Exception {
         HttpURLConnection conn = (HttpURLConnection) new URL("http://127.0.0.1:" + server.port() + path).openConnection();
         conn.setRequestMethod("POST");
-        conn.setRequestProperty("Cookie", "tpin=123456");
+        if (pin != null) conn.setRequestProperty("Cookie", "tpin=" + pin);
         conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         conn.setDoOutput(true);
         byte[] bytes = body.getBytes(StandardCharsets.UTF_8);

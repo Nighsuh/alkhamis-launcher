@@ -42,6 +42,8 @@ final class TransferHub {
         for (int i = 0; i < 6; i++) {
             try {
                 server = TransferServer.start(notes, files, pin, port + i);
+                TransferServer.setInstallHook(safe -> TransferInstall.prompt(ctx.getApplicationContext(), safe));
+                TransferAnnounce.publish(ctx.getApplicationContext(), server.port());
                 return server;
             } catch (IOException e) {
                 last = e;
@@ -66,6 +68,8 @@ final class TransferHub {
     /** Stops the server when the screen closes, unless background was turned on. */
     static synchronized void onScreenClosed() {
         if (background) return;
+        TransferAnnounce.withdraw();
+        TransferServer.setInstallHook(null);
         if (server != null) server.stop();
         server = null;
     }

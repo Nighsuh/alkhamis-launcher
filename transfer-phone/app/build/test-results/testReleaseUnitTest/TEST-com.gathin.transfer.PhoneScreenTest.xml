@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.gathin.transfer.PhoneScreenTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-11-24T00:28:32" hostname="cursor" time="8.286">
+  <properties/>
+  <testcase name="qrCarriesThePin" classname="com.gathin.transfer.PhoneScreenTest" time="2.148"/>
+  <testcase name="drawsThePhoneScreens" classname="com.gathin.transfer.PhoneScreenTest" time="6.137"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[Invalid ID 0x00000000.
+Invalid ID 0x00000000.
+Invalid ID 0x00000000.
+Invalid ID 0x00000000.
+Invalid ID 0x00000000.
+Invalid ID 0x00000000.
+]]></system-err>
+</testsuite>

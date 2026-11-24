@@ -54,8 +54,10 @@ The launcher's own page has these rows, top to bottom:
   Accessibility. It brings this launcher forward when the TV home opens, and it does not turn any app off.
 - **Language**, **Featured dock**, **Top bar shortcuts**, **Wallpaper changer**, **Themes**,
   **Alkhamis TV Transfer**, **Screensaver and sleep**, **Prayer times**, **Widgets**, **Date & time**.
-  Alkhamis TV Transfer opens a page on this TV for a phone or computer on the same network. Files are saved
-  in Download/AlkhamisTransfer. It stops when you leave the page, unless Keep running in the background is on.
+  Alkhamis TV Transfer opens a page on this TV for a phone or computer on the same network. While that page
+  is open the TV announces itself on the Wi-Fi as `_alkhamis._tcp`, so the Alkhamis Transfer phone app can
+  list it. Files are saved in Download/AlkhamisTransfer. It stops when you leave the page, unless Keep running
+  in the background is on.
 - **Reorder apps**, only with `launcher_settings_button`, the same as the menu's.
 - **Apps per row** 4, 5, 6 or 7; **Rows below dock** 0 to 3, how many rows of tiles stay visible under the
   dock band; **Dock band opacity** 100%, 70%, 50% or 30%. The last two only do anything while the dock is

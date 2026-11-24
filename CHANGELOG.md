@@ -2,11 +2,35 @@
 
 سجل التغييرات
 
-Tags: `v3.1-shrine`, `v3.2-shrine`, `v3.2.1-shrine`, `v3.2.2-shrine`, `v3.2.3-shrine`, `v3.2.4-shrine`, `v3.2.5-shrine`, `v3.2.6-shrine`, `v3.2.7-shrine`, `v3.2.8-shrine`, `v3.2.9-shrine`, `v3.2.10-shrine`, `v3.5.0-shrine`, `v3.5.1-shrine`, `v3.5.2-shrine`, `v3.5.3-shrine`, `v3.5.4-shrine`, `v3.5.5-shrine`, `v3.5.6-shrine`, `v3.5.7-shrine`, `v3.5.8-shrine`, `v3.5.9-shrine`, `v3.6.0-shrine`, `v3.6.1-shrine`, `v3.6.2-shrine`.  
+Tags: `v3.1-shrine`, `v3.2-shrine`, `v3.2.1-shrine`, `v3.2.2-shrine`, `v3.2.3-shrine`, `v3.2.4-shrine`, `v3.2.5-shrine`, `v3.2.6-shrine`, `v3.2.7-shrine`, `v3.2.8-shrine`, `v3.2.9-shrine`, `v3.2.10-shrine`, `v3.5.0-shrine`, `v3.5.1-shrine`, `v3.5.2-shrine`, `v3.5.3-shrine`, `v3.5.4-shrine`, `v3.5.5-shrine`, `v3.5.6-shrine`, `v3.5.7-shrine`, `v3.5.8-shrine`, `v3.5.9-shrine`, `v3.6.0-shrine`, `v3.6.1-shrine`, `v3.6.2-shrine`, `v3.6.3-shrine`.  
 The release file is always `CleanYourTV-Shrine.apk`.
 
 الوسوم: `v3.1-shrine` حتى `v3.5.0-shrine`.  
 اسم ملف الإصدار دائمًا `CleanYourTV-Shrine.apk`.
+
+## 3.6.3-shrine
+
+versionCode 36. Same package (`com.gathin.tvhome`) and the same release key as 3.6.2-shrine, so it installs over that build. The Home switch still does not turn Google TV setup or the stock launcher off.
+
+### English
+
+- While Alkhamis TV Transfer is open, the TV announces itself on the Wi-Fi (`_alkhamis._tcp`) so the Alkhamis Transfer phone app can find it. The page in a browser is unchanged. The phone can ask the TV to open the installer for an APK that has arrived.
+
+### العربية
+
+- عندما تكون Alkhamis TV Transfer مفتوحة، يعلن التلفاز عن نفسه على الشبكة حتى يجده تطبيق Alkhamis Transfer. صفحة المتصفح كما هي. يستطيع الهاتف أن يطلب من التلفاز فتح مثبّت التطبيق لملف APK وصل.
+
+## Alkhamis Transfer 1.0
+
+Phone app, package `com.gathin.transfer`, versionCode 1. It is not the TV launcher. The name Alkhamis Transfer stays English in every language.
+
+### English
+
+- Lists TVs that announce themselves, and also accepts an address or a QR code. The PIN is saved in encrypted storage and asked again if it no longer matches. Files, photos, videos, and shared text upload in a notification while the screen is off. Large files are streamed, and a failed send is tried again. The phone can list, download, delete, or ask the TV to install what is already there.
+
+### العربية
+
+- يعرض التلفازات التي تعلن عن نفسها، ويقبل عنوانًا أو رمز QR. يُحفظ رمز الدخول مشفّرًا ويُطلب من جديد إذا لم يعد مطابقًا. الملفات والصور والفيديو والنص المشارك تُرفع مع إشعار. الملفات الكبيرة تُرسل تباعًا، وتُعاد المحاولة إذا فشل الإرسال. يستطيع الهاتف عرض ما على التلفاز وتنزيله أو حذفه أو طلب تثبيته.
 
 ## 3.6.2-shrine
 
