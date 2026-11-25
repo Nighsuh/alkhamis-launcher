@@ -3,10 +3,22 @@
 سجل التغييرات
 
 Tags: `v3.1-shrine`, `v3.2-shrine`, `v3.2.1-shrine`, `v3.2.2-shrine`, `v3.2.3-shrine`, `v3.2.4-shrine`, `v3.2.5-shrine`, `v3.2.6-shrine`, `v3.2.7-shrine`, `v3.2.8-shrine`, `v3.2.9-shrine`, `v3.2.10-shrine`, `v3.5.0-shrine`, `v3.5.1-shrine`, `v3.5.2-shrine`, `v3.5.3-shrine`, `v3.5.4-shrine`, `v3.5.5-shrine`, `v3.5.6-shrine`, `v3.5.7-shrine`, `v3.5.8-shrine`, `v3.5.9-shrine`, `v3.6.0-shrine`, `v3.6.1-shrine`, `v3.6.2-shrine`, `v3.6.3-shrine`, `v3.6.4-shrine`.  
-The release file is always `CleanYourTV-Shrine.apk`.
+The release file is `Alkhamis-Launcher.apk`. The same bytes are also attached as `CleanYourTV-Shrine.apk`, so `https://github.com/Nighsuh/cleanyourtv-shrine/releases/latest/download/CleanYourTV-Shrine.apk` keeps resolving.
 
-الوسوم: `v3.1-shrine` حتى `v3.5.0-shrine`.  
-اسم ملف الإصدار دائمًا `CleanYourTV-Shrine.apk`.
+الوسوم: `v3.1-shrine` حتى `v3.6.7`.  
+ملف الإصدار `Alkhamis-Launcher.apk`، ونفس البايتات تُرفق باسم `CleanYourTV-Shrine.apk`.
+
+## 3.6.7
+
+versionCode 40. versionName `3.6.7`. Same package `com.gathin.tvhome` and the same release key as 3.6.6-shrine. The Home switch still does not turn any package off.
+
+### English
+
+- The name everywhere a person sees it is Alkhamis Launcher: the app label in English and Arabic, the leanback banner, Settings, and recents. The transfer page title and footer use that name. The release file is `Alkhamis-Launcher.apk`.
+
+### العربية
+
+- الاسم الذي يراه الشخص هو Alkhamis Launcher: اسم التطبيق بالعربية والإنجليزية، وشريط الشاشة، والإعدادات، والتطبيقات الأخيرة. عنوان صفحة النقل وتذييلها يستخدمان هذا الاسم. ملف الإصدار `Alkhamis-Launcher.apk`.
 
 ## 3.6.6-shrine
 

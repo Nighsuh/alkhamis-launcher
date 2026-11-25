@@ -279,7 +279,7 @@ final class ThemeStage {
 
     private static List<ThemeCatalog.Item> themes(Activity activity) {
         List<ThemeCatalog.Item> out = new ArrayList<>();
-        out.add(new ThemeCatalog.Item("shrine", "Shrine", "الضريح", "", "", true));
+        out.add(new ThemeCatalog.Item("shrine", "Alkhamis", "الخميس", "", "", true));
         for (ThemeCatalog.Item item : ThemeCatalog.bundled(activity)) {
             if (!ThemeCatalog.shrineId(item.id)) out.add(item);
         }

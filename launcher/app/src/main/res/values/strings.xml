@@ -54,7 +54,7 @@
     <string name="home_screen_alkhamis">Alkhamis</string>
     <string name="home_screen_original">Original</string>
     <string name="home_screen_alkhamis_title">Alkhamis Launcher</string>
-    <string name="home_screen_alkhamis_sub">No ads, the shrine home screen</string>
+    <string name="home_screen_alkhamis_sub">No ads, the Alkhamis home screen</string>
     <string name="home_screen_original_sub">The TV\'s factory home screen</string>
     <string name="home_screen_note">Switching takes a few seconds.</string>
     <string name="home_screen_working">Switching…</string>
@@ -195,8 +195,8 @@
     <string name="dock_move_later">Move later</string>
     <string name="dock_remove">Remove from dock</string>
     <string name="dock_full">The dock already has 12 apps.</string>
-    <string name="dock_use_theme">Use the shrine dock again</string>
-    <string name="dock_theme_restored">The shrine dock is back. Your other choices were kept.</string>
+    <string name="dock_use_theme">Use the Alkhamis dock again</string>
+    <string name="dock_theme_restored">The Alkhamis dock is back. Your other choices were kept.</string>
     <string name="hide_app">Hide from launcher</string>
     <string name="hidden_apps">Hidden apps</string>
     <string name="hidden_apps_hint">OK puts the app back on Home. Hiding never uninstalls it.</string>
@@ -254,7 +254,7 @@
     <string name="delete_disabled">Disabled for this user.</string>
 
     <string name="about_updates">About &amp; updates</string>
-    <string name="about_installed">Installed version %1$s. Newer builds are listed from the shrine releases. An older build will not replace this one until you uninstall it.</string>
+    <string name="about_installed">Installed version %1$s. Newer builds are listed from the Alkhamis releases. An older build will not replace this one until you uninstall it.</string>
     <string name="about_checking">Checking for updates…</string>
     <string name="about_error">Could not reach the release list. Check the network and open this screen again.</string>
     <string name="about_none">No releases were published yet.</string>
@@ -297,8 +297,8 @@
 
     <string name="wallpaper_screen_title">Wallpaper changer</string>
     <string name="wallpaper_dim_value">Dim %1$d%%</string>
-    <string name="wallpaper_shrine">Shrine wallpaper</string>
-    <string name="wallpaper_using_shrine">Using the shrine picture.</string>
+    <string name="wallpaper_shrine">Alkhamis wallpaper</string>
+    <string name="wallpaper_using_shrine">Using the Alkhamis picture.</string>
     <string name="wallpaper_pick">Choose a picture</string>
     <string name="wallpaper_browse">Pictures, Downloads and USB</string>
     <string name="wallpaper_browse_hint">OK uses this picture.</string>
@@ -310,13 +310,13 @@
     <string name="wallpaper_saved">Wallpaper saved.</string>
     <string name="wallpaper_failed">That picture could not be used.</string>
     <string name="wallpaper_reset">Reset to default</string>
-    <string name="wallpaper_reset_done">Back to the shrine picture, dim 45%.</string>
+    <string name="wallpaper_reset_done">Back to the Alkhamis picture, dim 45%.</string>
 
     <string name="themes">Themes</string>
     <string name="themes_coming_soon">Themes · Coming soon</string>
     <string name="themes_coming_soon_note">More themes in future updates.</string>
     <string name="themes_ready">Online themes are available.</string>
-    <string name="themes_use_shrine">Use the shrine theme</string>
+    <string name="themes_use_shrine">Use the Alkhamis theme</string>
     <string name="themes_url_hint">https index address</string>
     <string name="themes_url_bad">The index address must start with https.</string>
     <string name="themes_refresh">Save address and refresh</string>
@@ -354,7 +354,7 @@
 
     <string name="chip_settings_locked">Settings stays on the bar. You can still move it.</string>
     <string name="screensaver_title">Screensaver and sleep</string>
-    <string name="screensaver_hint">The shrine dream can show a clock or a slideshow every 5 seconds. Applying the timers needs debugging on this TV if the system does not allow it.</string>
+    <string name="screensaver_hint">The Alkhamis dream can show a clock or a slideshow every 5 seconds. Applying the timers needs debugging on this TV if the system does not allow it.</string>
     <string name="screensaver_clock">Clock</string>
     <string name="screensaver_slides">Slideshow every 5 seconds</string>
     <string name="screensaver_wallpaper">Current wallpaper</string>

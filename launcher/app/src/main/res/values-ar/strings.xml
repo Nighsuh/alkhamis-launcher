@@ -34,7 +34,7 @@
     <string name="home_screen_alkhamis">Alkhamis</string>
     <string name="home_screen_original">الأصلية</string>
     <string name="home_screen_alkhamis_title">Alkhamis Launcher</string>
-    <string name="home_screen_alkhamis_sub">بدون إعلانات، شاشة المزار</string>
+    <string name="home_screen_alkhamis_sub">بدون إعلانات، شاشة الخميس</string>
     <string name="home_screen_original_sub">الشاشة الأصلية للتلفاز</string>
     <string name="home_screen_note">التبديل يستغرق بضع ثوانٍ.</string>
     <string name="home_screen_working">جارٍ التبديل…</string>
@@ -138,8 +138,8 @@
     <string name="dock_move_later">تأخير</string>
     <string name="dock_remove">إزالة من الشريط</string>
     <string name="dock_full">الشريط فيه ١٢ تطبيقًا.</string>
-    <string name="dock_use_theme">إعادة شريط الضريح</string>
-    <string name="dock_theme_restored">عاد شريط الضريح. بقيت خياراتك الأخرى.</string>
+    <string name="dock_use_theme">إعادة شريط الخميس</string>
+    <string name="dock_theme_restored">عاد شريط الخميس. بقيت خياراتك الأخرى.</string>
     <string name="hide_app">إخفاء من الشاشة</string>
     <string name="hidden_apps">التطبيقات المخفية</string>
     <string name="hidden_apps_hint">موافق يعيد التطبيق إلى الشاشة. الإخفاء لا يحذف التطبيق.</string>
@@ -175,7 +175,7 @@
     <string name="adb_done">تم</string>
 
     <string name="about_updates">حول الشاشة والتحديثات</string>
-    <string name="about_installed">الإصدار المثبّت %1$s. الإصدارات الأحدث تظهر من إصدارات المزار. الإصدار الأقدم لا يحل محل هذا حتى تزيل التثبيت.</string>
+    <string name="about_installed">الإصدار المثبّت %1$s. الإصدارات الأحدث تظهر من إصدارات الخميس. الإصدار الأقدم لا يحل محل هذا حتى تزيل التثبيت.</string>
     <string name="about_checking">جارٍ البحث عن تحديثات…</string>
     <string name="about_error">تعذّر الوصول إلى قائمة الإصدارات. تحقق من الشبكة ثم افتح هذه الشاشة مرة أخرى.</string>
     <string name="about_none">لم يُنشر أي إصدار بعد.</string>
@@ -218,8 +218,8 @@
 
     <string name="wallpaper_screen_title">تغيير الخلفية</string>
     <string name="wallpaper_dim_value">التعتيم %1$d%%</string>
-    <string name="wallpaper_shrine">خلفية الضريح</string>
-    <string name="wallpaper_using_shrine">تُستخدم صورة الضريح.</string>
+    <string name="wallpaper_shrine">خلفية الخميس</string>
+    <string name="wallpaper_using_shrine">تُستخدم صورة الخميس.</string>
     <string name="wallpaper_pick">اختيار صورة</string>
     <string name="wallpaper_browse">الصور والتنزيلات وUSB</string>
     <string name="wallpaper_browse_hint">موافق يستخدم هذه الصورة.</string>
@@ -231,13 +231,13 @@
     <string name="wallpaper_saved">حُفظت الخلفية.</string>
     <string name="wallpaper_failed">تعذّر استخدام هذه الصورة.</string>
     <string name="wallpaper_reset">استعادة الافتراضي</string>
-    <string name="wallpaper_reset_done">عُدت إلى صورة الضريح، تعتيم ٤٥٪.</string>
+    <string name="wallpaper_reset_done">عُدت إلى صورة الخميس، تعتيم ٤٥٪.</string>
 
     <string name="themes">الثيمات</string>
     <string name="themes_coming_soon">الثيمات · قريبًا</string>
     <string name="themes_coming_soon_note">ثيمات إضافية في التحديثات القادمة.</string>
     <string name="themes_ready">تتوفّر ثيمات من الشبكة.</string>
-    <string name="themes_use_shrine">استخدام ثيم الضريح</string>
+    <string name="themes_use_shrine">استخدام ثيم الخميس</string>
     <string name="themes_url_hint">عنوان فهرس https</string>
     <string name="themes_url_bad">يجب أن يبدأ عنوان الفهرس بـ https.</string>
     <string name="themes_refresh">حفظ العنوان وتحديث</string>
@@ -274,7 +274,7 @@
 
     <string name="chip_settings_locked">الإعدادات تبقى في الشريط. يمكن نقلها فقط.</string>
     <string name="screensaver_title">حافظة الشاشة والنوم</string>
-    <string name="screensaver_hint">حافظة الضريح تعرض ساعة أو عرض صور كل ٥ ثوانٍ. تطبيق المؤقّتات يحتاج تصحيح هذا التلفاز إن لم يسمح النظام.</string>
+    <string name="screensaver_hint">حافظة الخميس تعرض ساعة أو عرض صور كل ٥ ثوانٍ. تطبيق المؤقّتات يحتاج تصحيح هذا التلفاز إن لم يسمح النظام.</string>
     <string name="screensaver_clock">ساعة</string>
     <string name="screensaver_slides">عرض صور كل ٥ ثوانٍ</string>
     <string name="screensaver_wallpaper">الخلفية الحالية</string>

@@ -28,6 +28,9 @@ public class TransferServerTest {
         assertTrue(english.contains("Drop files here"));
         assertTrue(english.contains("?lang=ar"));
         assertTrue(english.contains("Alkhamis TV Transfer"));
+        assertTrue(english.contains("<title>Alkhamis Launcher</title>"));
+        assertTrue(english.contains("<footer>Alkhamis Launcher</footer>"));
+        assertTrue(arabic.contains("<title>Alkhamis Launcher</title>"));
         assertTrue(english.contains(">EN<"));
     }
 

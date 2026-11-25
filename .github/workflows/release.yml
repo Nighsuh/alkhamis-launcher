@@ -1,0 +1,44 @@
+name: Release files
+
+# When a release is published, both file names must be on it and they must be the same APK.
+# Alkhamis-Launcher.apk is the name people see. CleanYourTV-Shrine.apk is the same bytes, so
+# https://github.com/Nighsuh/cleanyourtv-shrine/releases/latest/download/CleanYourTV-Shrine.apk
+# keeps resolving when that repository publishes this file under the old name.
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  both-names:
+    name: Alkhamis-Launcher.apk and CleanYourTV-Shrine.apk
+    runs-on: ubuntu-latest
+    steps:
+      - name: Attach both file names
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          tag="${{ github.event.release.tag_name }}"
+          repo="${{ github.repository }}"
+          dir=$(mktemp -d)
+          for name in Alkhamis-Launcher.apk CleanYourTV-Shrine.apk; do
+            gh release download "$tag" --repo "$repo" --pattern "$name" --dir "$dir" --clobber || true
+          done
+          src=""
+          for name in Alkhamis-Launcher.apk CleanYourTV-Shrine.apk; do
+            if [ -f "$dir/$name" ]; then src="$dir/$name"; break; fi
+          done
+          if [ -z "$src" ]; then
+            echo "Upload Alkhamis-Launcher.apk or CleanYourTV-Shrine.apk on the release first."
+            exit 1
+          fi
+          for name in Alkhamis-Launcher.apk CleanYourTV-Shrine.apk; do
+            if [ ! -f "$dir/$name" ]; then
+              cp "$src" "$dir/$name"
+              gh release upload "$tag" "$dir/$name" --repo "$repo" --clobber
+            fi
+          done
+          cmp "$dir/Alkhamis-Launcher.apk" "$dir/CleanYourTV-Shrine.apk"

@@ -41,7 +41,7 @@ public final class ThemesActivity extends Activity {
         super.onCreate(state);
         setContentView(R.layout.activity_themes);
         rows = findViewById(R.id.themeRows);
-        themes.add(new ThemeCatalog.Item("shrine", "Shrine", "الضريح", "", "", true));
+        themes.add(new ThemeCatalog.Item("shrine", "Alkhamis", "الخميس", "", "", true));
         for (ThemeCatalog.Item item : ThemeCatalog.bundled(this)) {
             if (!ThemeCatalog.shrineId(item.id)) themes.add(item);
         }

@@ -88,8 +88,8 @@ final class TransferPage {
         String dir = "en".equals(lang) ? "ltr" : "rtl";
         return "<!doctype html><html lang=\"" + lang + "\" dir=\"" + dir + "\"><head><meta charset=\"utf-8\">"
                 + "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">"
-                + "<title>Alkhamis TV Transfer</title>" + style() + "</head><body><main class=\"wrap\">"
-                + body + "</main></body></html>";
+                + "<title>Alkhamis Launcher</title>" + style() + "</head><body><main class=\"wrap\">"
+                + body + "<footer>Alkhamis Launcher</footer></main></body></html>";
     }
 
     private static String style() {
@@ -125,6 +125,7 @@ final class TransferPage {
                 + ".pin{color:#E6C57A;font-size:28px;text-align:center;letter-spacing:6px}"
                 + "button.gold{background:#E6C57A;color:#101419;font-weight:700;width:100%;margin-top:10px;"
                 + "padding:14px;border:0;border-radius:14px;font-size:16px}"
+                + "footer{margin:8px 0 0;color:#ACB8C1;font-size:14px;text-align:center}"
                 + "</style>";
     }
 
