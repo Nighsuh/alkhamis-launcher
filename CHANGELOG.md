@@ -2,11 +2,231 @@
 
 سجل التغييرات
 
-Tags: `v3.1-shrine`, `v3.2-shrine`, `v3.2.1-shrine`, `v3.2.2-shrine`, `v3.2.3-shrine`, `v3.2.4-shrine`, `v3.2.5-shrine`, `v3.2.6-shrine`, `v3.2.7-shrine`, `v3.2.8-shrine`, `v3.2.9-shrine`, `v3.2.10-shrine`, `v3.5.0-shrine`, `v3.5.1-shrine`, `v3.5.2-shrine`, `v3.5.3-shrine`, `v3.5.4-shrine`, `v3.5.5-shrine`.  
-The release file is always `CleanYourTV-Shrine.apk`.
+Tags: `v3.1-shrine`, `v3.2-shrine`, `v3.2.1-shrine`, `v3.2.2-shrine`, `v3.2.3-shrine`, `v3.2.4-shrine`, `v3.2.5-shrine`, `v3.2.6-shrine`, `v3.2.7-shrine`, `v3.2.8-shrine`, `v3.2.9-shrine`, `v3.2.10-shrine`, `v3.5.0-shrine`, `v3.5.1-shrine`, `v3.5.2-shrine`, `v3.5.3-shrine`, `v3.5.4-shrine`, `v3.5.5-shrine`, `v3.5.6-shrine`, `v3.5.7-shrine`, `v3.5.8-shrine`, `v3.5.9-shrine`, `v3.6.0-shrine`, `v3.6.1-shrine`, `v3.6.2-shrine`, `v3.6.3-shrine`, `v3.6.4-shrine`.  
+The release file is `Alkhamis-Launcher.apk`. The same bytes are also attached as `CleanYourTV-Shrine.apk`, so `https://github.com/Nighsuh/cleanyourtv-shrine/releases/latest/download/CleanYourTV-Shrine.apk` keeps resolving.
 
-الوسوم: `v3.1-shrine` حتى `v3.5.0-shrine`.  
-اسم ملف الإصدار دائمًا `CleanYourTV-Shrine.apk`.
+الوسوم: `v3.1-shrine` حتى `v3.6.7`.  
+ملف الإصدار `Alkhamis-Launcher.apk`، ونفس البايتات تُرفق باسم `CleanYourTV-Shrine.apk`.
+
+## 3.6.7
+
+versionCode 40. versionName `3.6.7`. Same package `com.gathin.tvhome` and the same release key as 3.6.6-shrine. The Home switch still does not turn any package off.
+
+### English
+
+- The name everywhere a person sees it is Alkhamis Launcher: the app label in English and Arabic, the leanback banner, Settings, and recents. The transfer page title and footer use that name. The release file is `Alkhamis-Launcher.apk`.
+
+### العربية
+
+- الاسم الذي يراه الشخص هو Alkhamis Launcher: اسم التطبيق بالعربية والإنجليزية، وشريط الشاشة، والإعدادات، والتطبيقات الأخيرة. عنوان صفحة النقل وتذييلها يستخدمان هذا الاسم. ملف الإصدار `Alkhamis-Launcher.apk`.
+
+## 3.6.6-shrine
+
+versionCode 39. Same package and release key as 3.6.5-shrine. The Home switch still does not turn any package off.
+
+### English
+
+- Renaming the TV on the transfer screen uses a field with a gold outline and Save and Cancel buttons the remote can focus. The on-screen keyboard opens on that field. A blank name is refused.
+
+### العربية
+
+- إعادة تسمية التلفاز من شاشة النقل تستخدم حقلاً بإطار ذهبي وزرّي حفظ وإلغاء يمكن للريموت التركيز عليهما. لوحة المفاتيح تظهر على الحقل. الاسم الفارغ يُرفض.
+
+## Alkhamis TV Transfer 1.0.5
+
+Phone app, package `com.gathin.transfer`, versionCode 6. The name is still Alkhamis TV Transfer.
+
+### English
+
+- Rename is a dialog with an outlined field, the current name selected, and Save and Cancel. A name must be 1 to 30 characters. The release APK keeps only the ARM libraries.
+
+### العربية
+
+- إعادة التسمية نافذة بحقل محدد والاسم الحالي مختار، وزرّا حفظ وإلغاء. الاسم من حرف واحد إلى ٣٠. ملف الإصدار يبقي مكتبات ARM فقط.
+
+## 3.6.5-shrine
+
+versionCode 38. Same package (`com.gathin.tvhome`) and the same release key as 3.6.4-shrine. The Home switch still does not turn any package off.
+
+### English
+
+- Alkhamis TV Transfer no longer asks for a PIN. The code on the TV is only the address. The TV can be renamed, a file keeps its type so it can be opened, and deleting the last file clears the list.
+
+### العربية
+
+- Alkhamis TV Transfer لم تعد تطلب رمز دخول. الرمز على التلفاز هو العنوان فقط. يمكن إعادة تسمية التلفاز، والملف يحتفظ بنوعه حتى يُفتح، وحذف آخر ملف يفرّغ القائمة.
+
+## Alkhamis TV Transfer 1.0.4
+
+Phone app, package `com.gathin.transfer`, versionCode 5. The name is still Alkhamis TV Transfer.
+
+### English
+
+- No PIN. The scanner reads a plain address, including a tilted or glared code. Each sent file keeps its name and type. A TV can be renamed, and Test connection says which step failed.
+
+### العربية
+
+- لا رمز دخول. الماسح يقرأ العنوان، حتى لو كان الرمز مائلاً أو لامعاً. كل ملف مُرسَل يحتفظ باسمه ونوعه. يمكن إعادة تسمية التلفاز، واختبار الاتصال يقول أين تعذّر الوصول.
+
+## 3.6.4-shrine
+
+versionCode 37. Same package (`com.gathin.tvhome`) and the same release key as 3.6.3-shrine, so it installs over that build. The Home switch still does not turn any package off.
+
+### English
+
+- Settings, Language offers System default, العربية, or English. The choice is kept, and open screens switch immediately. Alkhamis TV Transfer in the browser follows that language and has an AR / EN switch. The name stays Alkhamis TV Transfer.
+
+### العربية
+
+- الإعدادات، اللغة: لغة النظام، أو العربية، أو English. يبقى الاختيار، والشاشات المفتوحة تتبدّل فورًا. صفحة Alkhamis TV Transfer في المتصفح تتبع اللغة وفيها تبديل AR / EN. الاسم يبقى Alkhamis TV Transfer.
+
+## Alkhamis TV Transfer 1.0.3
+
+Phone app, package `com.gathin.transfer`, versionCode 4. The name is still Alkhamis TV Transfer.
+
+### English
+
+- The TV list has Language: System default, العربية, or English. It applies at once. Install on TV sits on its own row so the label stays on one line.
+
+### العربية
+
+- قائمة التلفاز فيها اللغة: لغة النظام، أو العربية، أو English. تُطبَّق فورًا. تثبيت على التلفاز في صف وحده حتى يبقى العنوان في سطر واحد.
+
+## 3.6.3-shrine
+
+versionCode 36. Same package (`com.gathin.tvhome`) and the same release key as 3.6.2-shrine, so it installs over that build. The Home switch still does not turn Google TV setup or the stock launcher off.
+
+### English
+
+- While Alkhamis TV Transfer is open, the TV announces itself on the Wi-Fi (`_alkhamis._tcp`) so the Alkhamis TV Transfer phone app can find it. The page in a browser is unchanged. The phone can ask the TV to open the installer for an APK that has arrived.
+
+### العربية
+
+- عندما تكون Alkhamis TV Transfer مفتوحة، يعلن التلفاز عن نفسه على الشبكة حتى يجده تطبيق Alkhamis TV Transfer. صفحة المتصفح كما هي. يستطيع الهاتف أن يطلب من التلفاز فتح مثبّت التطبيق لملف APK وصل.
+
+## Alkhamis TV Transfer 1.0.2
+
+Phone app, package `com.gathin.transfer`, versionCode 3. The name is still Alkhamis TV Transfer.
+
+### English
+
+- The phone screens use larger type, taller buttons, and roomier cards. The TV list shows a status chip and an address. The scanner frame is wider, and the zoom controls are easier to tap.
+
+### العربية
+
+- شاشات الهاتف بنص أكبر وأزرار أطول وبطاقات أوسع. قائمة التلفاز تعرض حالة وعنوانًا. إطار الماسح أعرض، وأزرار التكبير أسهل للمس.
+
+## Alkhamis TV Transfer 1.0.1
+
+Phone app, package `com.gathin.transfer`, versionCode 2. Same name, Alkhamis TV Transfer, in English.
+
+### English
+
+- The QR scanner uses CameraX, so the preview stays upright and in proportion, and it keeps focusing. A frame, a light, a zoom slider, and a photo picker sit on the screen. A code that is not the TV link shows the text that was read.
+
+### العربية
+
+- قارئ الرمز يستخدم CameraX، فتبقى الصورة مستقيمة ومتناسبة، ويستمر التركيز. على الشاشة إطار وضوء ومؤشر تكبير واختيار صورة. إذا لم يكن الرمز رابط التلفاز، يظهر النص الذي قُرئ.
+
+## Alkhamis TV Transfer 1.0
+
+Phone app, package `com.gathin.transfer`, versionCode 1. It is not the TV launcher. The name Alkhamis TV Transfer stays English in every language.
+
+### English
+
+- Lists TVs that announce themselves, and also accepts an address or a QR code. The PIN is saved in encrypted storage and asked again if it no longer matches. Files, photos, videos, and shared text upload in a notification while the screen is off. Large files are streamed, and a failed send is tried again. The phone can list, download, delete, or ask the TV to install what is already there.
+
+### العربية
+
+- يعرض التلفازات التي تعلن عن نفسها، ويقبل عنوانًا أو رمز QR. يُحفظ رمز الدخول مشفّرًا ويُطلب من جديد إذا لم يعد مطابقًا. الملفات والصور والفيديو والنص المشارك تُرفع مع إشعار. الملفات الكبيرة تُرسل تباعًا، وتُعاد المحاولة إذا فشل الإرسال. يستطيع الهاتف عرض ما على التلفاز وتنزيله أو حذفه أو طلب تثبيته.
+
+## 3.6.2-shrine
+
+versionCode 35. Same package (`com.gathin.tvhome`) and the same release key as 3.6.1-shrine, so it installs over that build. The Home switch still does not turn Google TV setup or the stock launcher off.
+
+### English
+
+- The transfer feature is named Alkhamis TV Transfer in every language: the Home tile, the settings row, the screen title, and the page a phone opens. Files are saved in Download/AlkhamisTransfer, so a file manager can see them and they stay after this launcher is removed. Android 10 and later use the system Downloads collection, with no storage permission. The first open moves files that were kept in the private folder. Each row shows a file icon, and the actions sit next to the name.
+
+### العربية
+
+- اسم الميزة Alkhamis TV Transfer في كل اللغات: بطاقة الشاشة، وصف الإعدادات، وعنوان الشاشة، والصفحة التي يفتحها الهاتف. الملفات تُحفظ في Download/AlkhamisTransfer، فيراها مدير الملفات وتبقى بعد حذف هذا المشغّل. أندرويد 10 وما بعده يستخدم مجلد التنزيلات بلا إذن تخزين. أول فتح ينقل الملفات التي كانت في المجلد الخاص. كل صف يعرض أيقونة الملف، والأزرار بجانب الاسم.
+
+## 3.6.1-shrine
+
+versionCode 34. Same package (`com.gathin.tvhome`) and the same release key as 3.6.0-shrine, so it installs over that build. The Home switch still does not turn Google TV setup or the stock launcher off.
+
+### English
+
+- If Home stays on the Google TV launcher, the failure message offers Home button first. Turn that on in Accessibility. When the TV home opens, this launcher comes forward. Turn off stops it. It does not turn any app off. Uninstalling this launcher puts the remote's Home button back.
+- File transfer uses two panes. The code and address stay on one side, and the file list scrolls on the other. Down moves through every file instead of jumping back to the top. Each file is one row, with its date written as 2026/11/23 22:16.
+
+### العربية
+
+- إذا بقيت الشاشة الرئيسية على مشغّل Google TV، رسالة الفشل تعرض زر الرئيسية أولًا. فعّله من إمكانية الوصول. عندما تفتح شاشة التلفاز، تتقدم هذه الشاشة. إيقاف يوقفه. لا يُوقف أي تطبيق. حذف هذه الشاشة يعيد زر الريموت كما كان.
+- نقل الملفات صار عمودين. الرمز والعنوان يبقيان في جانب، وقائمة الملفات تتمرّر في الجانب الآخر. النزول ينتقل بين كل الملفات ولا يعود إلى الأعلى. كل ملف صف واحد، وتاريخه يُكتب 2026/11/23 22:16.
+
+## 3.6.0-shrine
+
+versionCode 33. Same package (`com.gathin.tvhome`) and the same release key as 3.5.9-shrine, so it installs over that build. The Home switch is unchanged.
+
+### English
+
+- File transfer is in Alkhamis Launcher settings and on the Home grid, and it can be hidden like any other tile. The TV page shows an address, a PIN and a QR code. A phone or a PC on the same network opens that page, sends files or a link, and the TV can open, install or delete what arrived. The page stops when you leave it, unless Keep running in the background is on.
+
+### العربية
+
+- نقل الملفات في إعدادات Alkhamis Launcher وعلى شبكة الشاشة، ويمكن إخفاؤه كأي بطاقة أخرى. صفحة التلفاز تعرض العنوان ورمز الدخول ورمز QR. الهاتف أو الحاسوب على الشبكة نفسها يفتح الصفحة ويرسل ملفات أو رابطًا، والتلفاز يفتح ما وصل أو يثبّته أو يحذفه. تتوقف الصفحة عند مغادرتها، إلا إذا كان تشغيل في الخلفية مفعّلًا.
+
+## 3.5.9-shrine
+
+versionCode 32. Same package (`com.gathin.tvhome`) and the same release key as 3.5.8-shrine, so it installs over that build. The Home switch is unchanged.
+
+### English
+
+- Themes is a list again. Up and Down move at once, and OK applies the focused theme. Preview opens the real Home for that theme. Back from that Home returns to the list on the same theme.
+
+### العربية
+
+- الثيمات قائمة من جديد. الأعلى والأسفل ينقلان فورًا، وموافق يطبّق الثيم المحدد. معاينة تفتح الشاشة الرئيسية لذلك الثيم. الرجوع من تلك الشاشة يعيد القائمة على الثيم نفسه.
+
+## 3.5.8-shrine
+
+versionCode 31. Same package (`com.gathin.tvhome`) and the same release key as 3.5.7-shrine, so it installs over that build. The Home switch is unchanged.
+
+### English
+
+- Themes opens the real Home with that theme's files, the same tiles, dock, header and wallpaper Home uses after the theme is applied. Left and Right move through the themes. OK applies the theme. Back leaves the installed theme as it was. 3.5.7 drew its own cards, so the preview did not match Home.
+- The picture credit (for example "Aurora over Abisko, Lapland") is no longer drawn on Home, for every theme. The theme browser shows that line under the theme name.
+
+### العربية
+
+- الثيمات تفتح الشاشة الرئيسية نفسها بملفات ذلك الثيم، بنفس البطاقات والشريط والترويسة والخلفية التي تظهر بعد تطبيق الثيم. اليمين واليسار ينقلان بين الثيمات. موافق يطبّق الثيم. الرجوع يترك الثيم المثبّت كما هو. الإصدار 3.5.7 كان يرسم بطاقاته الخاصة، فالمعاينة لم تطابق الشاشة.
+- لم يعد اسم الصورة (مثل «Aurora over Abisko, Lapland») يُرسم على الشاشة الرئيسية، في كل الثيمات. متصفّح الثيمات يعرض ذلك السطر تحت اسم الثيم.
+
+## 3.5.7-shrine
+
+versionCode 30. Same package (`com.gathin.tvhome`) and the same release key as 3.5.6-shrine, so it installs over that build. The Home switch is unchanged.
+
+### English
+
+- Themes opens a full-screen Home. Left and Right move through the themes, and the wallpaper, colours and dock are that theme's own files. Istanbul v2, Halloween and Family keep their pictures in a wallpapers folder, which 3.5.6 did not open, so those previews stayed a blank mock. OK applies the theme. Back leaves the current theme unchanged.
+
+### العربية
+
+- الثيمات تفتح الشاشة الرئيسية بحجمها الكامل. اليمين واليسار ينقلان بين الثيمات، والخلفية والألوان والشريط من ملفات ذلك الثيم نفسه. إسطنبول 2 والهالوين والعائلة تحفظ صورها في مجلد خلفيات، والإصدار 3.5.6 لم يفتحه فبقيت المعاينة شاشة فارغة. موافق يطبّق الثيم. الرجوع يترك الثيم الحالي كما هو.
+
+## 3.5.6-shrine
+
+versionCode 29. Same package (`com.gathin.tvhome`) and the same release key as 3.5.5-shrine, so it installs over that build. The Home switch is unchanged.
+
+### English
+
+- The theme list shows a live preview of the focused theme: wallpaper, clock, pills, tiles and the dock, drawn from that theme's own config. OK still applies it. Back leaves the current theme as it was. A theme that is only in the online list uses its preview picture until it is downloaded.
+
+### العربية
+
+- قائمة الثيمات تعرض معاينة حيّة للثيم المحدد: الخلفية والساعة والأزرار والبطاقات والشريط، مرسومة من إعداد ذلك الثيم نفسه. موافق ما زال يطبّقه. الرجوع يترك الثيم الحالي كما هو. الثيم الموجود في القائمة على الشبكة فقط يستخدم صورة معاينته إلى أن يُنزَّل.
 
 ## 3.5.5-shrine
 

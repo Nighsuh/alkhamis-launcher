@@ -1,10 +1,10 @@
 # Alkhamis Launcher
 
-Alkhamis Launcher 3.5.5-shrine is a shrine-themed Android TV home screen. Package `com.gathin.tvhome`. It is CleanYourTV v3.5.0 (MIT, copyright Gathin) with the shrine dock, Arabic and English, the prayer cards, and the Home Screen picker. The shrine theme is the default and is applied on first launch. Version code 28 installs over 3.5.4-shrine with the same signing key. What changed: [CHANGELOG.md](CHANGELOG.md). Sideload notes: [SHRINE.md](SHRINE.md).
+Alkhamis Launcher 3.6.7 is an Android TV home screen. Package `com.gathin.tvhome`. The release file is `Alkhamis-Launcher.apk`. The same bytes are also published as `CleanYourTV-Shrine.apk`, so the Downloader link `https://github.com/Nighsuh/cleanyourtv-shrine/releases/latest/download/CleanYourTV-Shrine.apk` keeps working. Version code 40 installs over 3.6.6-shrine with the same signing key. It is built on CleanYourTV v3.5.0 (MIT, copyright Gathin), with Arabic and English, the prayer cards, and the Home Screen picker. The Alkhamis theme is the default and is applied on first launch. What changed: [CHANGELOG.md](CHANGELOG.md). Sideload notes: [SHRINE.md](SHRINE.md).
 
 ## العربية
 
-Alkhamis Launcher ‏3.5.5-shrine شاشة رئيسية لتلفاز أندرويد بثيم الضريح. الحزمة `com.gathin.tvhome`. مبنية على CleanYourTV الإصدار 3.5.0 (ترخيص MIT، حقوق Gathin)، مع شريط الضريح، والعربية والإنجليزية واتجاه اليمين إلى اليسار، وبطاقات الصلاة، واختيار الشاشة الرئيسية. ثيم الضريح هو الافتراضي ويُطبَّق عند أول تشغيل. رقم الإصدار 28 يُثبَّت فوق 3.5.4-shrine بنفس مفتاح التوقيع. التغييرات في [CHANGELOG.md](CHANGELOG.md). ملاحظات التثبيت في [SHRINE.md](SHRINE.md).
+Alkhamis Launcher ‏3.6.7 شاشة رئيسية لتلفاز أندرويد. الحزمة `com.gathin.tvhome`. ملف الإصدار `Alkhamis-Launcher.apk`، ونفس البايتات تُنشر أيضًا باسم `CleanYourTV-Shrine.apk` حتى يبقى رابط Downloader يعمل. رقم الإصدار 40 يُثبَّت فوق 3.6.6-shrine بنفس مفتاح التوقيع. مبنية على CleanYourTV الإصدار 3.5.0 (ترخيص MIT، حقوق Gathin)، مع العربية والإنجليزية وبطاقات الصلاة واختيار الشاشة الرئيسية. ثيم الخميس هو الافتراضي ويُطبَّق عند أول تشغيل. التغييرات في [CHANGELOG.md](CHANGELOG.md). ملاحظات التثبيت في [SHRINE.md](SHRINE.md).
 
 The upstream CleanYourTV guide follows. The launcher in this repository is the shrine build described above, not an unsigned upstream debug build. Port notes: [3.5.0](docs/PROGRESS-3.5.0.md), [3.2.10](docs/PROGRESS-3.2.10.md), [3.2.9](docs/PROGRESS-3.2.9.md), and the [theme catalog](docs/THEMES-CATALOG.md).
 

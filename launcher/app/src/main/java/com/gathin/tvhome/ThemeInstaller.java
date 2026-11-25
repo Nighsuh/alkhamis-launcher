@@ -18,7 +18,7 @@ final class ThemeInstaller {
     static final String ACTIVE_KEY = "active_theme";
 
     static boolean restoreShrine(Context ctx) {
-        File dir = Config.dir(ctx);
+        File dir = Config.installedDir(ctx);
         if (dir == null || (!dir.isDirectory() && !dir.mkdirs())) return false;
         try {
             clearPictures(dir);
@@ -37,7 +37,7 @@ final class ThemeInstaller {
     static boolean applyBundled(Context ctx, String id) {
         if (!ThemeCatalog.safeId(id) || ThemeCatalog.shrineId(id)) return false;
         String root = ThemeCatalog.BUNDLED_ROOT + "/" + id;
-        File dir = Config.dir(ctx);
+        File dir = Config.installedDir(ctx);
         if (dir == null || (!dir.isDirectory() && !dir.mkdirs())) return false;
         try {
             String[] top = ctx.getAssets().list(root);
@@ -55,6 +55,38 @@ final class ThemeInstaller {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    /**
+     * Copies one bundled theme into {@code dest} without touching the installed theme or its saved choices.
+     * The browse screen points {@link Config#dir} at that folder, so Home draws it with the normal path.
+     */
+    static boolean stageInto(Context ctx, String id, File dest) {
+        if (dest == null) return false;
+        try {
+            deleteTree(dest);
+            if (!dest.isDirectory() && !dest.mkdirs()) return false;
+            if (ThemeCatalog.shrineId(id)) {
+                copyAsset(ctx, "bundled-theme/config.json", new File(dest, Config.FILE_NAME));
+                copyAsset(ctx, "bundled-theme/wallpaper.jpg", new File(dest, Config.WALLPAPER_NAME));
+                return new File(dest, Config.FILE_NAME).isFile();
+            }
+            if (!ThemeCatalog.safeId(id)) return false;
+            String root = ThemeCatalog.BUNDLED_ROOT + "/" + id;
+            String[] top = ctx.getAssets().list(root);
+            if (top == null || top.length == 0) return false;
+            copyAssetTree(ctx, root, dest);
+            return new File(dest, Config.FILE_NAME).isFile();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private static void deleteTree(File file) {
+        if (file == null || !file.exists()) return;
+        File[] kids = file.listFiles();
+        if (kids != null) for (File kid : kids) deleteTree(kid);
+        file.delete();
     }
 
     static String active(Context ctx) {
@@ -90,14 +122,23 @@ final class ThemeInstaller {
         for (String kid : kids) {
             String child = assetPath + "/" + kid;
             String[] nested = ctx.getAssets().list(child);
-            if (nested != null && nested.length > 0) copyAssetTree(ctx, child, new File(destDir, kid));
-            else copyAsset(ctx, child, new File(destDir, kid));
+            if (nested != null && nested.length > 0 && kid.indexOf('/') < 0) {
+                copyAssetTree(ctx, child, new File(destDir, kid));
+            } else {
+                // AssetManager on some hosts lists "wallpapers/evening.jpg" in one level.
+                File dest = new File(destDir, kid);
+                File parent = dest.getParentFile();
+                if (parent != null && !parent.isDirectory() && !parent.mkdirs()) {
+                    throw new IllegalStateException("dir");
+                }
+                copyAsset(ctx, child, dest);
+            }
         }
     }
 
     /** Accepts a zip whose config.json is at the root or one folder down. Rejects paths that escape the zip. */
     static boolean applyZip(Context ctx, InputStream zip) {
-        File dir = Config.dir(ctx);
+        File dir = Config.installedDir(ctx);
         if (dir == null || (!dir.isDirectory() && !dir.mkdirs())) return false;
         byte[] config = null;
         byte[] wallpaper = null;

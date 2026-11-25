@@ -2,9 +2,9 @@
   "themes": [
     {
       "id": "shrine",
-      "name": "Shrine",
-      "name_en": "Shrine",
-      "name_ar": "الضريح",
+      "name": "Alkhamis",
+      "name_en": "Alkhamis",
+      "name_ar": "الخميس",
       "builtin": true
     },
     {

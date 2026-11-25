@@ -440,6 +440,13 @@ final class Config {
 
     /** The folder the theme tools push into; null when external storage is unavailable. */
     static File dir(Context ctx) {
+        File staged = ThemeStage.folder();
+        if (staged != null) return staged;
+        return installedDir(ctx);
+    }
+
+    /** The theme folder on the TV, never the browse copy. */
+    static File installedDir(Context ctx) {
         return ctx.getExternalFilesDir(null);
     }
 
@@ -677,6 +684,8 @@ final class Config {
             glassStyle = string(json, "glass_style", glassStyle);
         }
         // A top-bar app is moved there, not copied: it leaves the grid.
+        // Home does not draw the picture's name. The theme browser shows that credit instead.
+        wallpaperCaptions = false;
         for (String pkg : topBarApps) if (!hidden.contains(pkg)) hidden.add(pkg);
         // The owner's dock and hides live in private files, not in the theme, so the bundled
         // shrine config is not copied back over them on the next launch.
@@ -692,7 +701,8 @@ final class Config {
         // current theme without clearing choices from an older launcher version.
         SharedPreferences choices = ctx.getSharedPreferences(SETTINGS_NAME, Context.MODE_PRIVATE);
         // Unmounted storage looks like a theme reset; compare only once the file is readable.
-        if (mounted) syncThemeChoices(choices, dir, file);
+        // Browsing a theme must not wipe the choices saved for the theme that is installed.
+        if (mounted && ThemeStage.folder() == null) syncThemeChoices(choices, dir, file);
         int chosenColumns = prefInt(choices, "columns", columns);
         if (chosenColumns >= 4 && chosenColumns <= 7) columns = chosenColumns;
         int chosenRows = prefInt(choices, ROWS_BELOW_DOCK_KEY, rowsBelow);
@@ -707,6 +717,9 @@ final class Config {
         int rotationMinutes = json == null ? 0 : integer(json, "wallpaper_rotation_minutes", 0, 0, 1440);
         int wallpaperDim = json == null ? 0 : integer(json, "wallpaper_dim", 0, 0, 90);
         int chosenDim = prefInt(choices, WALLPAPER_DIM_KEY, -1);
+        // The browser shows the theme OK would install. The picture and dim saved for the
+        // theme already on the TV stay put until OK.
+        if (ThemeStage.folder() != null) chosenDim = -1;
         if (chosenDim >= 0 && chosenDim <= 90) wallpaperDim = chosenDim;
         int dockOpacity = json == null ? 100 : integer(json, "dock_opacity", 100, 30, 100);
         dockOpacity = chosenDockOpacity(prefInt(choices, DOCK_OPACITY_KEY, -1), dockOpacity);
@@ -716,13 +729,16 @@ final class Config {
         // An unknown order must not silently change how an existing collection rotates.
         if (!WallpaperRotation.validOrder(wallpaperOrder)) wallpaperOrder = WallpaperRotation.ORDER_SHUFFLE;
         List<File> wallpapers = new ArrayList<>();
-        if (rotationMinutes > 0 && dir != null && wallpaperEnabled) {
-            wallpapers.addAll(WallpaperRotation.images(new File(dir, "wallpapers")));
-        }
+        List<File> collection = dir != null && wallpaperEnabled
+                ? WallpaperRotation.images(new File(dir, "wallpapers")) : Collections.emptyList();
+        if (rotationMinutes > 0) wallpapers.addAll(collection);
         if (wallpapers.isEmpty() && wallpaper != null) wallpapers.add(wallpaper);
+        // A theme whose pictures live only in wallpapers/, with rotation left at 0, still has a picture.
+        if (wallpapers.isEmpty()) wallpapers.addAll(collection);
         // An on-TV wallpaper pick overrides the theme: a filename from the wallpapers/
         // collection, or "none". Unset means the theme decides (off by default).
         String wallpaperChoice = prefString(choices, WALLPAPER_CHOICE_KEY, null);
+        if (ThemeStage.folder() != null) wallpaperChoice = null;
         List<File> chosen = WallpaperRotation.chosen(dir == null ? Collections.emptyList()
                 : WallpaperRotation.images(new File(dir, "wallpapers")), wallpaper, wallpaperChoice);
         if (chosen != null) {
@@ -836,7 +852,9 @@ final class Config {
         if (!mounted) return read(copy);
         JSONObject json = read(file);
         if (json == null) {
-            copy.delete();
+            if (ThemeStage.folder() == null) copy.delete();
+        } else if (ThemeStage.folder() != null) {
+            // The browse copy must not replace the theme Home uses before the card is mounted.
         } else {
             try (FileOutputStream out = new FileOutputStream(copy)) {
                 out.write(json.toString().getBytes(StandardCharsets.UTF_8));

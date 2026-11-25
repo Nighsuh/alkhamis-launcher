@@ -102,7 +102,7 @@ final class DebugGate {
         TextView steps = dialog.findViewById(R.id.debugSteps);
         TextView honest = dialog.findViewById(R.id.debugHonest);
         title.setText(R.string.debug_title);
-        why.setText(reasonText(reason));
+        why.setText(reasonText(activity, reason));
         steps.setText(R.string.debug_steps_bilingual);
         honest.setText(R.string.adb_allow_hint);
         TextView off = dialog.findViewById(R.id.debugOff);
@@ -287,10 +287,10 @@ final class DebugGate {
         return Reason.READY;
     }
 
-    private static String reasonText(Reason reason) {
-        if (reason == Reason.DEV_OFF) return "Developer options are off.\nخيارات المطوّر غير مفعّلة.";
-        if (reason == Reason.ADB_OFF) return "Network debugging is off.\nتصحيح الشبكة غير مفعّل.";
-        return "Debugging is not connected yet.\nالتصحيح غير متصل بعد.";
+    private static String reasonText(Activity activity, Reason reason) {
+        if (reason == Reason.DEV_OFF) return activity.getString(R.string.debug_dev_off);
+        if (reason == Reason.ADB_OFF) return activity.getString(R.string.debug_adb_off);
+        return activity.getString(R.string.debug_not_connected);
     }
 
     private static boolean portOpen() {

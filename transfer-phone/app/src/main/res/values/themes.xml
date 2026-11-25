@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="android:windowBackground">#FF101419</item>
+        <item name="colorAccent">#FFE6C57A</item>
+        <item name="android:statusBarColor">#FF101419</item>
+        <item name="android:navigationBarColor">#FF101419</item>
+        <item name="android:textColor">#FFFFFFFF</item>
+    </style>
+    <style name="GoldButton" parent="Widget.Material3.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="backgroundTint">#FFE6C57A</item>
+        <item name="android:textColor">#FF101419</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="cornerRadius">14dp</item>
+    </style>
+    <style name="GhostButton" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:layout_height">48dp</item>
+        <item name="android:textColor">#FFFFFFFF</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="strokeColor">#FFE6C57A</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="cornerRadius">14dp</item>
+    </style>
+</resources>

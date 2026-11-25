@@ -5,16 +5,12 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -52,8 +48,7 @@ final class WallpaperPlayer {
     private boolean closed;
     private boolean loading;
     private String displayed = "";
-    /** wallpaper_captions: the shown picture's name from wallpapers/captions.txt; null when off or there are none. */
-    private final TextView caption;
+    /** Picture credits from wallpapers/captions.txt. Home does not draw them; the theme browser does. */
     private final Map<String, String> names;
     /** wallpaper_moods: the collection's groups by time of day; empty rotates through all of it. */
     private final Map<String, Set<String>> moods;
@@ -80,7 +75,7 @@ final class WallpaperPlayer {
         String collection = collectionKey(files);
         if (!collection.equals(preferences.getString("collection", ""))) {
             preferences.edit().putString("collection", collection)
-                    .remove("image").remove("changed").apply();
+                    .remove("image").remove("changed").commit();
         }
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         width = metrics.widthPixels;
@@ -88,9 +83,14 @@ final class WallpaperPlayer {
         image = new ImageView(context);
         image.setScaleType(ImageView.ScaleType.CENTER_CROP);
         image.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
-        names = config.wallpaperCaptions && config.wallpaperEnabled && !files.isEmpty()
-                ? WallpaperCaptions.read(files.get(0).getParentFile()) : Collections.emptyMap();
-        caption = names.isEmpty() ? null : makeCaption(context, root);
+        Map<String, String> credits = Collections.emptyMap();
+        if (config.wallpaperEnabled && !files.isEmpty()) {
+            File folder = files.get(0).getParentFile();
+            File nested = new File(folder, "wallpapers");
+            if (nested.isDirectory()) folder = nested;
+            credits = WallpaperCaptions.read(folder);
+        }
+        names = credits;
         if (config.wallpaperEnabled && !files.isEmpty()) {
             root.addView(image, 0, new FrameLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -109,9 +109,12 @@ final class WallpaperPlayer {
         if (first == null) first = WallpaperRotation.pick(playable, previous, order, random);
         if (first == null) return;
         File chosen = first;
+        // Hold the rotation until this picture is up, so a second pick cannot replace it mid-decode.
+        loading = true;
         decoder.execute(() -> {
             Bitmap bitmap = decode(chosen);
             root.post(() -> {
+                loading = false;
                 if (closed) {
                     if (bitmap != null) bitmap.recycle();
                     return;
@@ -127,7 +130,7 @@ final class WallpaperPlayer {
                 showCaption(false);
                 if (!displayed.equals(previous)) {
                     preferences.edit().putString("image", displayed)
-                            .putLong("changed", System.currentTimeMillis()).apply();
+                            .putLong("changed", System.currentTimeMillis()).commit();
                 }
             });
         });
@@ -202,59 +205,27 @@ final class WallpaperPlayer {
                 showCaption(true);
                 if (!displayed.equals(previous) || changed == 0) {
                     preferences.edit().putString("image", displayed)
-                            .putLong("changed", System.currentTimeMillis()).apply();
+                            .putLong("changed", System.currentTimeMillis()).commit();
                 }
             });
         });
     }
 
-    /**
-     * Small light text under the top-right buttons, above everything else and never focusable. It sits where the
-     * top bar ends in every layout, so it does not cover the clock, the stats line or the tiles.
-     */
-    private static TextView makeCaption(Context context, FrameLayout root) {
-        float dp = context.getResources().getDisplayMetrics().density;
-        TextView text = new TextView(context);
-        text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
-        text.setTextColor(0xD9FFFFFF);
-        text.setShadowLayer(6 * dp, 0, dp, 0xCC000000);
-        text.setSingleLine(true);
-        text.setEllipsize(TextUtils.TruncateAt.END);
-        text.setMaxWidth(Math.round(520 * dp));
-        text.setFocusable(false);
-        text.setAlpha(0f);
-        try {
-            text.setTypeface(UiFont.get(context, R.string.font_regular));
-        } catch (Exception ignored) {
-            // the system font is fine
+    /** The browser overlay, told the current picture's credit. Home itself draws nothing. */
+    void setCreditListener(java.util.function.Consumer<String> listener) {
+        creditListener = listener;
+        if (listener != null && displayed != null) {
+            String name = names.get(displayed);
+            listener.accept(name == null ? "" : name);
         }
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.TOP | Gravity.END);
-        params.topMargin = Math.round(110 * dp);
-        params.setMarginEnd(Math.round(62 * dp));
-        root.addView(text, params);
-        return text;
     }
 
-    /** The displayed picture's name, faded across a change; a picture without a name hides the caption. */
+    private java.util.function.Consumer<String> creditListener;
+
+    /** Tells the browser the current picture's credit. Home keeps no caption row. */
     private void showCaption(boolean fade) {
-        if (caption == null) return;
-        String name = names.get(displayed);
-        caption.animate().cancel();
-        if (name == null) {
-            caption.setAlpha(0f);
-            return;
-        }
-        caption.setContentDescription(name);
-        if (!fade || caption.getAlpha() == 0f) {
-            caption.setText(name);
-            caption.setAlpha(1f);
-            return;
-        }
-        caption.animate().alpha(0f).setDuration(250).withEndAction(() -> {
-            caption.setText(name);
-            caption.animate().alpha(1f).setDuration(350).start();
-        }).start();
+        String name = displayed == null ? null : names.get(displayed);
+        if (creditListener != null) creditListener.accept(name == null ? "" : name);
     }
 
     /** Names plus sizes: enough to notice a different collection without hashing every image. */

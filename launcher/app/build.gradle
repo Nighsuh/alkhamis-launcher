@@ -13,8 +13,8 @@ android {
         applicationId providers.gradleProperty('launcherApplicationId').getOrElse('com.gathin.tvhome')
         minSdk 26
         targetSdk 34
-        versionCode 28
-        versionName '3.5.5-shrine'
+        versionCode 40
+        versionName '3.6.7'
     }
 
     buildTypes {
@@ -41,6 +41,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
+
+    testOptions {
+        unitTests.includeAndroidResources = true
+    }
 }
 
 dependencies {
@@ -50,4 +54,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     // The unit-test android.jar stubs org.json. The catalog parser is plain JSON.
     testImplementation 'org.json:json:20240303'
+    // Test only. The TV emulator on this host does not reach adb, so the full-screen preview
+    // is drawn here instead. Not packaged into the APK.
+    testImplementation 'org.robolectric:robolectric:4.14.1'
 }

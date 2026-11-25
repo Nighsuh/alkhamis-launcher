@@ -58,6 +58,8 @@ public final class LauncherSettingsActivity extends Activity {
         findViewById(R.id.homeScreenChoice).setOnClickListener(v ->
                 startActivity(new Intent(this, DefaultHomeActivity.class)));
         findViewById(R.id.restoreHomeChoice).setOnClickListener(v -> HomeDisabled.restore(this));
+        findViewById(R.id.homeButtonChoice).setOnClickListener(v ->
+                startActivity(new Intent(this, HomeButtonActivity.class)));
         findViewById(R.id.featuredDockChoice).setOnClickListener(v ->
                 startActivity(new Intent(this, DockManagerActivity.class)));
         findViewById(R.id.topBarChoice).setOnClickListener(v ->
@@ -66,6 +68,8 @@ public final class LauncherSettingsActivity extends Activity {
                 startActivity(new Intent(this, WallpaperActivity.class)));
         View themesChoice = findViewById(R.id.themesChoice);
         themesChoice.setOnClickListener(v -> startActivity(new Intent(this, ThemesActivity.class)));
+        findViewById(R.id.transferChoice).setOnClickListener(v ->
+                startActivity(new Intent(this, TransferActivity.class)));
         findViewById(R.id.screensaverChoice).setOnClickListener(v ->
                 startActivity(new Intent(this, ScreensaverActivity.class)));
         findViewById(R.id.prayerChoice).setOnClickListener(v ->
@@ -202,6 +206,18 @@ public final class LauncherSettingsActivity extends Activity {
         super.onResume();
         DebugGate.onResume(this);
         paintHome();
+        paintLanguage();
+    }
+
+    private void paintLanguage() {
+        TextView language = findViewById(R.id.languageChoice);
+        if (language == null) return;
+        String choice = getSharedPreferences(Config.SETTINGS_NAME, MODE_PRIVATE)
+                .getString(LanguageActivity.LANG_KEY, "");
+        int label = "ar".equals(choice) ? R.string.language_arabic
+                : "en".equals(choice) ? R.string.language_english
+                : R.string.language_system;
+        language.setText(getString(R.string.language) + "  ·  " + getString(label));
     }
 
     private void paintHome() {
