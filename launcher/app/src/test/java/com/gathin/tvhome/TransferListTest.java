@@ -45,7 +45,8 @@ public class TransferListTest {
         TextView pin = activity.findViewById(R.id.transferPin);
         android.widget.LinearLayout files = activity.findViewById(R.id.transferFiles);
         long deadline = System.currentTimeMillis() + 6000;
-        while (System.currentTimeMillis() < deadline && (files.getChildCount() < 25 || pin.getText() == null || pin.getText().length() < 6)) {
+        TextView url = activity.findViewById(R.id.transferUrl);
+        while (System.currentTimeMillis() < deadline && (files.getChildCount() < 25 || url.getText() == null || !url.getText().toString().startsWith("http"))) {
             Shadows.shadowOf(android.os.Looper.getMainLooper()).idle();
             Thread.sleep(30);
         }
@@ -104,8 +105,7 @@ public class TransferListTest {
         bitmap.recycle();
 
         String address = ((TextView) activity.findViewById(R.id.transferUrl)).getText().toString();
-        String digits = pin.getText().toString().replaceAll("\\D", "");
-        java.net.HttpURLConnection conn = (java.net.HttpURLConnection) new java.net.URL(address + "/?p=" + digits).openConnection();
+        java.net.HttpURLConnection conn = (java.net.HttpURLConnection) new java.net.URL(address).openConnection();
         try (java.io.InputStream in = conn.getInputStream()) {
             java.nio.file.Files.write(new File(outDir, "after-web.html").toPath(), in.readAllBytes());
         } finally {
@@ -114,7 +114,7 @@ public class TransferListTest {
         Process chrome = new ProcessBuilder("google-chrome", "--headless=new", "--disable-gpu", "--no-sandbox",
                 "--window-size=390,900", "--virtual-time-budget=2500",
                 "--screenshot=" + new File(outDir, "after-web.png").getAbsolutePath(),
-                address + "/?p=" + digits).start();
+                address).start();
         if (!chrome.waitFor(20, java.util.concurrent.TimeUnit.SECONDS)) chrome.destroyForcibly();
         activity.finish();
     }

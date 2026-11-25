@@ -176,7 +176,8 @@ class ScanActivity : AppCompatActivity() {
     private fun readFrame(image: ImageProxy) {
         try {
             if (done || !busy.compareAndSet(false, true)) return
-            val text = QrDecoder.decodeYuv(yPlane(image), image.width, image.height, image.imageInfo.rotationDegrees)
+            val bitmap = image.toBitmap()
+            val text = QrDecoder.decode(bitmap)
             if (text != null) runOnUiThread { onRead(text) }
         } catch (ignored: Exception) {
         } finally {
@@ -220,13 +221,10 @@ class ScanActivity : AppCompatActivity() {
         }
         done = true
         vibrate()
-        val pin = target.pin ?: ""
-        if (pin.length == 6) {
-            try {
-                Books.factory(this).save(SavedTv(target.host + ":" + target.port, target.host, target.host, target.port, pin))
-            } catch (ignored: Exception) { }
-        }
-        startActivity(SessionActivity.intent(this, target.host, target.host, target.port, pin))
+        try {
+            Books.factory(this).save(SavedTv(target.host + ":" + target.port, target.host, target.host, target.port, ""))
+        } catch (ignored: Exception) { }
+        startActivity(SessionActivity.intent(this, target.host, target.host, target.port, ""))
         finish()
     }
 

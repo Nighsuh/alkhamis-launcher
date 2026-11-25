@@ -251,7 +251,9 @@
     <string name="file_transfer_off">متوقف</string>
     <string name="file_transfer_status">%1$s · %2$d متصل</string>
     <string name="file_transfer_uploading">يرفع %1$s · %2$d%%</string>
-    <string name="file_transfer_empty_help">امسح الرمز من الهاتف، أدخل رمز الدخول، ثم ارفع الملف. بعد إعادة التثبيت قد تبقى ملفات قديمة في المجلد دون أن تظهر هنا.</string>
+    <string name="file_transfer_empty_help">امسح الرمز من الهاتف ثم ارفع الملف. لا حاجة لرمز دخول. بعد إعادة التثبيت قد تبقى ملفات قديمة في المجلد دون أن تظهر هنا.</string>
+    <string name="file_transfer_rename">إعادة تسمية هذا التلفاز</string>
+    <string name="file_transfer_no_app">لا تطبيق على هذا التلفاز يستطيع فتح هذا الملف.</string>
     <string name="file_transfer_where">تُحفظ في \u2066Download/AlkhamisTransfer\u2069</string>
     <string name="file_transfer_storage">اسمح بالتخزين حتى تُحفظ الملفات في التنزيلات.</string>
     <string name="file_transfer_install">تثبيت</string>

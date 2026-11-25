@@ -331,7 +331,9 @@
     <string name="file_transfer_off">Off</string>
     <string name="file_transfer_status">%1$s · %2$d connected</string>
     <string name="file_transfer_uploading">Uploading %1$s · %2$d%%</string>
-    <string name="file_transfer_empty_help">Scan the code on a phone, enter the PIN, then upload a file. After this app is reinstalled, older files can stay in that folder without showing here.</string>
+    <string name="file_transfer_empty_help">Scan the code on a phone, then upload a file. No code is required. After this app is reinstalled, older files can stay in that folder without showing here.</string>
+    <string name="file_transfer_rename">Rename this TV</string>
+    <string name="file_transfer_no_app">No app on this TV can open that file.</string>
     <string name="file_transfer_where">Saved in Download/AlkhamisTransfer</string>
     <string name="file_transfer_storage">Allow storage so files can be saved in Downloads.</string>
     <string name="file_transfer_install">Install</string>

@@ -33,10 +33,6 @@ class UploadService : Service() {
                         send(current)
                         JobStore.remove(this, current.id)
                         break
-                    } catch (rejected: PinRejected) {
-                        Books.factory(this).forgetPin(current.host, current.port)
-                        JobStore.remove(this, current.id)
-                        break
                     } catch (failed: Exception) {
                         val next = Queue.nextAttempt(current.attempts)
                         if (next == null) {
@@ -60,7 +56,7 @@ class UploadService : Service() {
     }
 
     private fun send(job: Job) {
-        val client = TvClient(job.host, job.port, job.pin)
+        val client = TvClient(job.host, job.port)
         if (job.text != null) {
             update(job.name, 0, false)
             client.note(job.text)
@@ -69,10 +65,11 @@ class UploadService : Service() {
         }
         val uri = job.uri ?: return
         val parsed = android.net.Uri.parse(uri)
+        val mime = Outgoing.describe(this, parsed).mime
         val known = contentResolver.openAssetFileDescriptor(parsed, "r")?.use { it.length } ?: -1L
         if (known >= 0) {
             contentResolver.openInputStream(parsed)?.use { input ->
-                client.upload(leaf(job.name), known, input) { sent, total ->
+                client.upload(leaf(job.name), mime, known, input) { sent, total ->
                     update(job.name, if (total <= 0) 0 else ((sent * 100) / total).toInt(), false)
                 }
             }
@@ -80,7 +77,7 @@ class UploadService : Service() {
             val tmp = java.io.File.createTempFile("send", ".bin", cacheDir)
             contentResolver.openInputStream(parsed)?.use { input -> tmp.outputStream().use { input.copyTo(it, 8192) } }
             tmp.inputStream().use { input ->
-                client.upload(leaf(job.name), tmp.length(), input) { sent, total ->
+                client.upload(leaf(job.name), mime, tmp.length(), input) { sent, total ->
                     update(job.name, if (total <= 0) 0 else ((sent * 100) / total).toInt(), false)
                 }
             }

@@ -30,13 +30,35 @@ class MainActivity : AppCompatActivity() {
         }
         Discovery.preview?.let { found.addAll(it) }
         paint()
-        if (Discovery.preview == null) {
-            Discovery.start(this) { tv ->
-                runOnUiThread {
-                    if (found.none { it.host == tv.host && it.port == tv.port }) found.add(tv)
-                    paint()
-                }
+        if (Discovery.preview == null) startSearch()
+    }
+
+    private fun startSearch() {
+        if (android.os.Build.VERSION.SDK_INT >= 33 &&
+            checkSelfPermission(android.Manifest.permission.NEARBY_WIFI_DEVICES) != android.content.pm.PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(arrayOf(android.Manifest.permission.NEARBY_WIFI_DEVICES), 41)
+            return
+        }
+        if (android.os.Build.VERSION.SDK_INT < 33 &&
+            checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) != android.content.pm.PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 41)
+            return
+        }
+        Discovery.start(this) { tv ->
+            runOnUiThread {
+                if (found.none { it.host == tv.host && it.port == tv.port }) found.add(tv)
+                paint()
             }
+        }
+    }
+
+    override fun onRequestPermissionsResult(request: Int, permissions: Array<out String>, results: IntArray) {
+        super.onRequestPermissionsResult(request, permissions, results)
+        if (request == 41) {
+            if (results.isNotEmpty() && results[0] == android.content.pm.PackageManager.PERMISSION_GRANTED) startSearch()
+            else Toast.makeText(this, R.string.err_permission, Toast.LENGTH_LONG).show()
         }
     }
 
@@ -82,15 +104,12 @@ class MainActivity : AppCompatActivity() {
             emptyList()
         }
         empty.visibility = if (found.isEmpty() && saved.isEmpty()) View.VISIBLE else View.GONE
-        for (tv in saved) box.addView(row(tv.name, getString(R.string.saved), tv.host + ":" + tv.port) {
-            open(tv.name, tv.host, tv.port, tv.pin)
-        })
-        for (tv in found) box.addView(row(tv.name, getString(R.string.found), tv.host + ":" + tv.port) {
-            open(tv.name, tv.host, tv.port, saved.firstOrNull { it.host == tv.host && it.port == tv.port }?.pin ?: "")
-        })
+        for (tv in saved) box.addView(row(tv.name, getString(R.string.saved), tv.host + ":" + tv.port, tv))
+        for (tv in found) box.addView(row(tv.name, getString(R.string.found), tv.host + ":" + tv.port,
+            SavedTv(tv.host + ":" + tv.port, tv.name, tv.host, tv.port, "")))
     }
 
-    private fun row(title: String, status: String, sub: String, click: () -> Unit): View {
+    private fun row(title: String, status: String, sub: String, saved: SavedTv?): View {
         val line = LinearLayout(this)
         line.orientation = LinearLayout.HORIZONTAL
         line.gravity = Gravity.CENTER_VERTICAL
@@ -132,7 +151,20 @@ class MainActivity : AppCompatActivity() {
         text.addView(meta)
         line.addView(icon)
         line.addView(text)
-        line.setOnClickListener { click() }
+        val host = sub.substringBefore(':')
+        val port = sub.substringAfter(':', "8080").toIntOrNull() ?: 8080
+        line.setOnClickListener { open(title, host, port) }
+        if (saved != null) {
+            val rename = android.widget.Button(this)
+            rename.setText(R.string.rename)
+            rename.setAllCaps(false)
+            rename.textSize = 16f
+            rename.minHeight = dp(48)
+            rename.setTextColor(0xFFE6C57A.toInt())
+            rename.setBackgroundColor(0x00000000)
+            rename.setOnClickListener { rename(saved) }
+            text.addView(rename)
+        }
         val lp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         lp.topMargin = (10 * resources.displayMetrics.density).toInt()
         line.layoutParams = lp
@@ -156,42 +188,55 @@ class MainActivity : AppCompatActivity() {
             .setPositiveButton(R.string.enter) { _, _ ->
                 val address = host.text.toString().trim()
                 val number = port.text.toString().toIntOrNull() ?: 8080
-                if (address.isNotEmpty()) open(address, address, number, "")
+                if (address.isNotEmpty()) open(address, address, number)
             }
             .setNegativeButton(android.R.string.cancel, null)
             .show()
     }
 
-    private fun open(name: String, host: String, port: Int, pin: String) {
-        if (pin.length == 6) {
-            startActivity(SessionActivity.intent(this, name, host, port, pin))
-            return
-        }
+    private fun open(name: String, host: String, port: Int) {
+        try {
+            Books.factory(this).save(SavedTv("$host:$port", name, host, port, ""))
+        } catch (ignored: Exception) { }
+        startActivity(SessionActivity.intent(this, name, host, port, ""))
+    }
+
+    private fun rename(tv: SavedTv) {
         val field = EditText(this)
-        field.hint = getString(R.string.pin_hint)
+        field.setText(tv.name)
+        field.setSingleLine(true)
         AlertDialog.Builder(this)
-            .setTitle(R.string.pin_hint)
+            .setTitle(R.string.rename)
             .setView(field)
             .setPositiveButton(R.string.enter) { _, _ ->
-                val entered = field.text.toString().trim()
+                val next = field.text.toString().trim()
+                if (next.isEmpty()) return@setPositiveButton
                 Thread {
                     try {
-                        TvClient(host, port, entered).list()
+                        TvClient(tv.host, tv.port).rename(next)
+                        Books.factory(this).save(tv.copy(name = next))
                         runOnUiThread {
-                            try {
-                                Books.factory(this).save(SavedTv("$host:$port", name, host, port, entered))
-                            } catch (ignored: Exception) { }
-                            startActivity(SessionActivity.intent(this, name, host, port, entered))
+                            Toast.makeText(this, R.string.renamed, Toast.LENGTH_SHORT).show()
+                            paint()
                         }
-                    } catch (rejected: PinRejected) {
-                        runOnUiThread { Toast.makeText(this, R.string.pin_wrong, Toast.LENGTH_SHORT).show() }
                     } catch (failed: Exception) {
-                        runOnUiThread { Toast.makeText(this, R.string.failed, Toast.LENGTH_SHORT).show() }
+                        runOnUiThread { Toast.makeText(this, explain(failed), Toast.LENGTH_LONG).show() }
                     }
                 }.start()
             }
             .setNegativeButton(android.R.string.cancel, null)
             .show()
+    }
+}
+
+fun explain(failed: Exception): Int {
+    val kind = (failed as? TvFailure)?.kind
+    return when (kind) {
+        TvFailure.Kind.TIMEOUT -> R.string.err_timeout
+        TvFailure.Kind.REFUSED -> R.string.err_refused
+        TvFailure.Kind.UNREACHABLE -> R.string.err_unreachable
+        TvFailure.Kind.HTTP -> R.string.err_http
+        else -> R.string.failed
     }
 }
 

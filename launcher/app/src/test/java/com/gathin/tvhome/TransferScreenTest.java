@@ -29,16 +29,14 @@ public class TransferScreenTest {
             if (old != null) for (File file : old) file.delete();
         }
         TransferActivity activity = Robolectric.buildActivity(TransferActivity.class).setup().get();
-        TextView pin = activity.findViewById(R.id.transferPin);
+        TextView url = activity.findViewById(R.id.transferUrl);
         long deadline = System.currentTimeMillis() + 5000;
-        while (System.currentTimeMillis() < deadline && (pin.getText() == null || pin.getText().length() == 0)) {
+        while (System.currentTimeMillis() < deadline && (url.getText() == null || !url.getText().toString().startsWith("http"))) {
             Shadows.shadowOf(android.os.Looper.getMainLooper()).idle();
             Thread.sleep(40);
         }
-        if (pin.getText() == null || !pin.getText().toString().contains("482") && pin.getText().length() < 6) {
-            if (pin.getText() == null || pin.getText().length() < 8) {
-                throw new AssertionError("pin missing: " + pin.getText());
-            }
+        if (url.getText() == null || !url.getText().toString().startsWith("http")) {
+            throw new AssertionError("address missing: " + url.getText());
         }
         View decor = activity.getWindow().getDecorView();
         decor.measure(View.MeasureSpec.makeMeasureSpec(1920, View.MeasureSpec.EXACTLY),
@@ -54,9 +52,8 @@ public class TransferScreenTest {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
         }
         bitmap.recycle();
-        String address = ((TextView) activity.findViewById(R.id.transferUrl)).getText().toString();
-        String digits = pin.getText().toString().replaceAll("\\D", "");
-        java.net.HttpURLConnection conn = (java.net.HttpURLConnection) new java.net.URL(address + "/?p=" + digits).openConnection();
+        String address = url.getText().toString();
+        java.net.HttpURLConnection conn = (java.net.HttpURLConnection) new java.net.URL(address).openConnection();
         try (java.io.InputStream in = conn.getInputStream()) {
             java.nio.file.Files.write(new File(dir, "web.html").toPath(), in.readAllBytes());
         } finally {

@@ -34,6 +34,9 @@ class SessionActivity : AppCompatActivity() {
             label.text = getString(R.string.sending, intent.getStringExtra("previewFile") ?: "")
             findViewById<TextView>(R.id.progressPercent).text = "$previewPct%"
         }
+        val previewError = intent.getStringExtra("previewError")
+        if (!previewError.isNullOrBlank()) label.text = previewError
+        findViewById<Button>(R.id.testLink).setOnClickListener { test(host, port) }
         findViewById<Button>(R.id.pick).setOnClickListener {
             startActivityForResult(Intent(Intent.ACTION_OPEN_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("*/*").putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true), 4)
         }
@@ -58,21 +61,23 @@ class SessionActivity : AppCompatActivity() {
         } else if (data.data != null) uris.add(data.data!!)
         for (uri in uris) {
             contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            val label = uri.lastPathSegment ?: "file"
-            UploadService.enqueue(this, Job(java.util.UUID.randomUUID().toString(), host, port, pin, label, uri.toString(), null, 0))
+            val staged = try { Outgoing.stage(this, uri) } catch (failed: Exception) { null }
+            if (staged == null) {
+                Toast.makeText(this, R.string.failed, Toast.LENGTH_LONG).show()
+                continue
+            }
+            val named = Outgoing.describe(this, uri)
+            UploadService.enqueue(this, Job(java.util.UUID.randomUUID().toString(), host, port, "", named.name, staged.toString(), null, 0))
         }
     }
 
     private fun load(host: String, port: Int, pin: String) {
         Thread {
             try {
-                val files = TvClient(host, port, pin).list()
+                val files = TvClient(host, port).list()
                 runOnUiThread { show(files) }
-            } catch (rejected: PinRejected) {
-                try { Books.factory(this).forgetPin(host, port) } catch (ignored: Exception) { }
-                runOnUiThread { Toast.makeText(this, R.string.pin_wrong, Toast.LENGTH_LONG).show() }
             } catch (failed: Exception) {
-                runOnUiThread { Toast.makeText(this, R.string.failed, Toast.LENGTH_SHORT).show() }
+                runOnUiThread { Toast.makeText(this, explain(failed), Toast.LENGTH_LONG).show() }
             }
         }.start()
     }
@@ -80,6 +85,7 @@ class SessionActivity : AppCompatActivity() {
     private fun show(files: List<RemoteFile>) {
         val box = findViewById<LinearLayout>(R.id.files)
         box.removeAllViews()
+        findViewById<TextView>(R.id.filesEmpty).visibility = if (files.isEmpty()) View.VISIBLE else View.GONE
         val host = intent.getStringExtra("host") ?: ""
         val port = intent.getIntExtra("port", 8080)
         val pin = intent.getStringExtra("pin") ?: ""
@@ -120,10 +126,10 @@ class SessionActivity : AppCompatActivity() {
             actionsLp.topMargin = dp(12)
             actions.layoutParams = actionsLp
             actions.addView(chip(R.string.download) { download(host, port, pin, file.name) })
-            actions.addView(chip(R.string.delete) { Thread { TvClient(host, port, pin).delete(file.name); runOnUiThread { load(host, port, pin) } }.start() })
+            actions.addView(chip(R.string.delete) { Thread { TvClient(host, port).delete(file.name); runOnUiThread { load(host, port, "") } }.start() })
             row.addView(actions)
             if (file.name.endsWith(".apk", true)) {
-                val install = chip(R.string.install_tv) { Thread { TvClient(host, port, pin).install(file.name) }.start() }
+                val install = chip(R.string.install_tv) { Thread { TvClient(host, port).install(file.name) }.start() }
                 val wide = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
                 wide.topMargin = dp(8)
                 install.layoutParams = wide
@@ -171,7 +177,7 @@ class SessionActivity : AppCompatActivity() {
     private fun download(host: String, port: Int, pin: String, name: String) {
         Thread {
             try {
-                val client = TvClient(host, port, pin)
+                val client = TvClient(host, port)
                 if (Build.VERSION.SDK_INT >= 29) {
                     val values = android.content.ContentValues()
                     values.put(MediaStore.MediaColumns.DISPLAY_NAME, name)
@@ -190,6 +196,17 @@ class SessionActivity : AppCompatActivity() {
                 runOnUiThread { Toast.makeText(this, R.string.download, Toast.LENGTH_SHORT).show() }
             } catch (failed: Exception) {
                 runOnUiThread { Toast.makeText(this, R.string.failed, Toast.LENGTH_SHORT).show() }
+            }
+        }.start()
+    }
+
+    private fun test(host: String, port: Int) {
+        Thread {
+            try {
+                TvClient(host, port).ping()
+                runOnUiThread { Toast.makeText(this, R.string.test_ok, Toast.LENGTH_LONG).show() }
+            } catch (failed: Exception) {
+                runOnUiThread { Toast.makeText(this, explain(failed), Toast.LENGTH_LONG).show() }
             }
         }.start()
     }

@@ -57,10 +57,17 @@ final class TransferAnnounce {
             NsdManager nsd = (NsdManager) ctx.getSystemService(Context.NSD_SERVICE);
             if (nsd == null) return;
             NsdServiceInfo info = new NsdServiceInfo();
-            info.setServiceName(instance);
+            String shown = TransferHub.displayName();
+            info.setServiceName(shown.isEmpty() ? instance : shown);
             info.setServiceType(TYPE);
             info.setPort(port);
             info.setAttribute("v", "1");
+            info.setAttribute("name", shown);
+            if (ctx != null && android.os.Build.VERSION.SDK_INT >= 33) {
+                try {
+                    info.setHost(java.net.InetAddress.getByName(TransferHub.address(ctx)));
+                } catch (Exception ignored) { }
+            }
             NsdManager.RegistrationListener next = new NsdManager.RegistrationListener() {
                 @Override public void onRegistrationFailed(NsdServiceInfo s, int error) { }
                 @Override public void onUnregistrationFailed(NsdServiceInfo s, int error) { }

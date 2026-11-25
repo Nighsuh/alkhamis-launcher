@@ -22,6 +22,16 @@
     <string name="channel" translatable="false">Alkhamis TV Transfer</string>
     <string name="sending">Sending %1$s</string>
     <string name="failed">Could not reach the TV</string>
+    <string name="files_empty">No files on the TV.</string>
+    <string name="test_connection">Test connection</string>
+    <string name="test_ok">The TV answered.</string>
+    <string name="err_timeout">The TV did not answer in time.</string>
+    <string name="err_refused">Nothing is listening at that address. Open Alkhamis TV Transfer on the TV.</string>
+    <string name="err_unreachable">That address is not on this network.</string>
+    <string name="err_http">The TV answered with an error.</string>
+    <string name="err_permission">Allow nearby devices so this phone can find the TV.</string>
+    <string name="rename">Rename</string>
+    <string name="renamed">The TV was renamed.</string>
     <string name="scan_hint">Point the camera at the code on the TV</string>
     <string name="scan_reason">The camera is needed to read the code shown on the TV.</string>
     <string name="scan_allow">Allow the camera</string>

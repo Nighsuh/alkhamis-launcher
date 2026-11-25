@@ -18,7 +18,7 @@ object QrLink {
         if (host.isEmpty()) return null
         val port = if (uri.port in 1..65535) uri.port else 8080
         val pin = uri.getQueryParameter("p")
-        if (pin != null && !pin.matches(Regex("\\d{6}"))) return null
-        return Target(host, port, pin)
+        val kept = if (pin != null && pin.matches(Regex("\\d{6}"))) pin else null
+        return Target(host, port, kept)
     }
 }

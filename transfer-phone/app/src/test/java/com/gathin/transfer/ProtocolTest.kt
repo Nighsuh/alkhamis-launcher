@@ -25,9 +25,9 @@ class ProtocolTest {
             serve(socket)
         }
         thread.start()
-        val client = TvClient("127.0.0.1", server.localPort, "123456")
+        val client = TvClient("127.0.0.1", server.localPort)
         val payload = ByteArray(200_000) { (it * 31).toByte() }
-        client.upload("clip.mp4", payload.size.toLong(), ByteArrayInputStream(payload)) { _, _ -> }
+        client.upload("clip.mp4", "video/mp4", payload.size.toLong(), ByteArrayInputStream(payload)) { _, _ -> }
         thread.join(4000)
         server.close()
         assertTrue(received in 200_000..(200_000 + 400))
@@ -42,12 +42,7 @@ class ProtocolTest {
             val text = String(header, StandardCharsets.ISO_8859_1)
             val first = text.substringBefore("\r\n")
             val path = first.split(" ")[1]
-            val pin = text.contains("tpin=123456")
             val out = client.getOutputStream()
-            if (!pin) {
-                write(out, 401, "pin")
-                return
-            }
             if (path.startsWith("/list")) {
                 write(out, 200, "{\"version\":1,\"files\":[{\"name\":\"clip.mp4\",\"size\":$received,\"time\":1}],\"notes\":[]}")
                 return

@@ -18,6 +18,16 @@
     <string name="pin_wrong">لم يُقبل رمز الدخول.</string>
     <string name="sending">يرسل %1$s</string>
     <string name="failed">تعذّر الوصول إلى التلفاز</string>
+    <string name="files_empty">لا ملفات على التلفاز.</string>
+    <string name="test_connection">اختبار الاتصال</string>
+    <string name="test_ok">التلفاز أجاب.</string>
+    <string name="err_timeout">لم يجب التلفاز في الوقت.</string>
+    <string name="err_refused">لا شيء يستمع على هذا العنوان. افتح \u2066Alkhamis TV Transfer\u2069 على التلفاز.</string>
+    <string name="err_unreachable">هذا العنوان ليس على هذه الشبكة.</string>
+    <string name="err_http">أجاب التلفاز بخطأ.</string>
+    <string name="err_permission">اسمح بالأجهزة القريبة حتى يجد الهاتف التلفاز.</string>
+    <string name="rename">إعادة التسمية</string>
+    <string name="renamed">تمت إعادة التسمية.</string>
     <string name="scan_hint">وجّه الكاميرا للرمز الظاهر على التلفاز</string>
     <string name="scan_reason">نحتاج الكاميرا لقراءة الرمز الظاهر على التلفاز.</string>
     <string name="scan_allow">السماح بالكاميرا</string>

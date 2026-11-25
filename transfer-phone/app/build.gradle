@@ -11,8 +11,8 @@ android {
         applicationId 'com.gathin.transfer'
         minSdk 26
         targetSdk 34
-        versionCode 4
-        versionName '1.0.3'
+        versionCode 5
+        versionName '1.0.4'
     }
 
     buildTypes {
@@ -43,6 +43,7 @@ dependencies {
     implementation 'androidx.camera:camera-lifecycle:1.3.4'
     implementation 'androidx.camera:camera-view:1.3.4'
     implementation 'com.google.zxing:core:3.5.3'
+    implementation 'com.google.mlkit:barcode-scanning:17.3.0'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.robolectric:robolectric:4.14.1'
 }

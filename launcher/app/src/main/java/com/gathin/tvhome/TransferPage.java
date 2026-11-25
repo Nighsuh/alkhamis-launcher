@@ -20,22 +20,11 @@ final class TransferPage {
         return ctx == null ? "ar" : LauncherLocale.pageLanguage(ctx);
     }
 
-    static String pin(String lang) {
-        String code = language(lang);
-        return page(code, ""
-                + "<h1>Alkhamis TV Transfer</h1>"
-                + switcher(code)
-                + "<section class=\"card\">"
-                + "<p>" + text(code, R.string.web_pin_prompt, code.equals("en")
-                ? "Type the code shown on the TV." : "اكتب رمز الدخول الظاهر على التلفاز.") + "</p>"
-                + "<form method=\"get\">"
-                + "<input class=\"pin\" name=\"p\" inputmode=\"numeric\" maxlength=\"6\" placeholder=\"••••••\" autofocus>"
-                + "<button class=\"gold\" type=\"submit\">" + text(code, R.string.web_enter, code.equals("en") ? "Enter" : "دخول")
-                + "</button>"
-                + "</form></section>");
+    static String app(String lang) {
+        return app(lang, "");
     }
 
-    static String app(String lang) {
+    static String app(String lang, String tvName) {
         String code = language(lang);
         String drop = text(code, R.string.web_drop, code.equals("en") ? "Drop files here" : "أسقط الملفات هنا");
         String hint = text(code, R.string.web_drop_hint, code.equals("en") ? "or tap to choose" : "أو اضغط للاختيار");
@@ -45,8 +34,10 @@ final class TransferPage {
         String files = text(code, R.string.web_files, code.equals("en") ? "Files" : "الملفات");
         String download = text(code, R.string.web_download, code.equals("en") ? "Download" : "تنزيل");
         String delete = text(code, R.string.web_delete, code.equals("en") ? "Delete" : "حذف");
+        String who = tvName == null || tvName.isEmpty() ? "" : "<p class=\"who\">" + escape(tvName) + "</p>";
         return page(code, ""
                 + "<h1>Alkhamis TV Transfer</h1>"
+                + who
                 + switcher(code)
                 + "<section class=\"card\">"
                 + "<label class=\"drop\" id=\"drop\">"
@@ -67,6 +58,10 @@ final class TransferPage {
                 + "<div id=\"files\"></div>"
                 + "</section>"
                 + "<script>" + script(download, delete) + "</script>");
+    }
+
+    private static String escape(String value) {
+        return value.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
     }
 
     private static String language(String lang) {
@@ -101,7 +96,8 @@ final class TransferPage {
         return "<style>"
                 + "body{margin:0;background:#101419;color:#fff;font-family:system-ui,sans-serif}"
                 + ".wrap{max-width:520px;margin:0 auto;padding:20px}"
-                + "h1{font-size:24px;margin:0 0 14px;color:#E6C57A}"
+                + "h1{font-size:24px;margin:0 0 8px;color:#E6C57A}"
+                + ".who{margin:0 0 12px;color:#fff;font-size:18px}"
                 + "h2{font-size:18px;margin:0 0 8px;color:#fff}"
                 + "p{color:#ACB8C1;margin:0 0 12px;font-size:16px}"
                 + ".langs{display:flex;gap:8px;margin:0 0 14px}"

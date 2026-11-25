@@ -7,8 +7,17 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 
-/** Speaks the TV page's HTTP API. Bodies are written as they are read, 8 KB at a time. */
-class TvClient(private val host: String, private val port: Int, private val pin: String) {
+/** Speaks the TV page's HTTP API. The TV does not ask for a PIN. */
+class TvClient(private val host: String, private val port: Int) {
+    fun ping() {
+        val text = get("/ping")
+        if (!text.contains("\"ok\":true") && !text.contains("\"ok\": true")) throw TvFailure(TvFailure.Kind.HTTP, null)
+    }
+
+    fun rename(name: String) {
+        form("/name", "name=" + URLEncoder.encode(name, "UTF-8"))
+    }
+
     fun version(): Int {
         val text = get("/version")
         return JSONObject(text).optInt("version", 1)
@@ -25,10 +34,11 @@ class TvClient(private val host: String, private val port: Int, private val pin:
         return out
     }
 
-    fun upload(name: String, length: Long, input: InputStream, progress: (Long, Long) -> Unit) {
+    fun upload(name: String, mime: String, length: Long, input: InputStream, progress: (Long, Long) -> Unit) {
         val boundary = "alkhamisBoundary"
+        val type = if (mime.isBlank()) "application/octet-stream" else mime
         val head = ("--$boundary\r\nContent-Disposition: form-data; name=\"file\"; filename=\"$name\"\r\n" +
-            "Content-Type: application/octet-stream\r\n\r\n").toByteArray()
+            "Content-Type: $type\r\n\r\n").toByteArray()
         val tail = "\r\n--$boundary--\r\n".toByteArray()
         val conn = open("POST", "/upload")
         conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=$boundary")
@@ -94,16 +104,30 @@ class TvClient(private val host: String, private val port: Int, private val pin:
     private fun open(method: String, path: String): HttpURLConnection {
         val conn = URL("http://$host:$port$path").openConnection() as HttpURLConnection
         conn.requestMethod = method
-        conn.setRequestProperty("Cookie", "tpin=$pin")
         conn.connectTimeout = 8000
-        conn.readTimeout = 0
+        conn.readTimeout = 120_000
         conn.instanceFollowRedirects = false
         return conn
     }
 
     private fun expect(conn: HttpURLConnection) {
-        val code = conn.responseCode
-        if (code == 401) throw PinRejected()
-        if (code !in 200..299) throw java.io.IOException("http $code")
+        try {
+            val code = conn.responseCode
+            if (code !in 200..299) throw TvFailure(TvFailure.Kind.HTTP, java.io.IOException("http $code"))
+        } catch (failed: TvFailure) {
+            throw failed
+        } catch (failed: java.net.SocketTimeoutException) {
+            throw TvFailure(TvFailure.Kind.TIMEOUT, failed)
+        } catch (failed: java.net.ConnectException) {
+            throw TvFailure(TvFailure.Kind.REFUSED, failed)
+        } catch (failed: java.net.UnknownHostException) {
+            throw TvFailure(TvFailure.Kind.UNREACHABLE, failed)
+        } catch (failed: Exception) {
+            throw TvFailure(TvFailure.Kind.OTHER, failed)
+        }
     }
+}
+
+class TvFailure(val kind: Kind, cause: Exception?) : Exception(cause) {
+    enum class Kind { TIMEOUT, REFUSED, UNREACHABLE, HTTP, OTHER }
 }

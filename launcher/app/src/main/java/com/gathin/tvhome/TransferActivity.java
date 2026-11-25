@@ -87,7 +87,7 @@ public final class TransferActivity extends Activity {
         new Thread(() -> {
             try {
                 TransferServer server = TransferHub.server(this);
-                String url = "http://" + TransferHub.address() + ":" + server.port();
+                String url = "http://" + TransferHub.address(TransferActivity.this) + ":" + server.port();
                 runOnUiThread(() -> showAddress(url));
             } catch (Exception e) {
                 runOnUiThread(() -> statusView.setText(R.string.file_transfer_failed));
@@ -103,8 +103,10 @@ public final class TransferActivity extends Activity {
 
     private void showAddress(String url) {
         urlView.setText(url);
-        pinView.setText(getString(R.string.file_transfer_pin, TransferHub.pin()));
-        String link = url + "/?p=" + TransferHub.pin();
+        TextView nameView = findViewById(R.id.transferName);
+        nameView.setText(TransferHub.displayName());
+        findViewById(R.id.transferRename).setOnClickListener(v -> rename());
+        String link = url.endsWith("/") ? url : url + "/";
         qrView.setImageBitmap(drawQr(link));
         paintBackground();
         paintFiles();
@@ -146,7 +148,8 @@ public final class TransferActivity extends Activity {
                 .append(':').append(file.modified).append(';');
         String next = sig.toString();
         emptyView.setVisibility(files.isEmpty() ? View.VISIBLE : View.GONE);
-        if (next.equals(filesSig)) {
+        // An empty list used to match the signature cleared just before this call, so the last row stayed.
+        if (next.equals(filesSig) && !(files.isEmpty() && filesView.getChildCount() > 0)) {
             wireUp();
             return;
         }
@@ -226,7 +229,6 @@ public final class TransferActivity extends Activity {
         TextView delete = chip(getString(R.string.file_transfer_delete), "delete:" + file.name);
         delete.setOnClickListener(v -> {
             TransferFiles.open(this).delete(file.name);
-            filesSig = "";
             paintFiles();
         });
         chips.add(delete);
@@ -344,6 +346,7 @@ public final class TransferActivity extends Activity {
         if (n.endsWith(".jpg") || n.endsWith(".jpeg") || n.endsWith(".png") || n.endsWith(".webp")) return R.drawable.ic_kind_image;
         if (n.endsWith(".mp3") || n.endsWith(".m4a")) return R.drawable.ic_kind_audio;
         if (n.endsWith(".txt") || n.endsWith(".pdf")) return R.drawable.ic_kind_text;
+        if (n.endsWith(".gif")) return R.drawable.ic_kind_image;
         return R.drawable.ic_kind_file;
     }
 
@@ -396,22 +399,37 @@ public final class TransferActivity extends Activity {
     }
 
     private void open(TransferFiles.Item file) {
-        String name = file.name.toLowerCase(Locale.US);
-        String mime = "application/octet-stream";
-        if (name.endsWith(".mp4") || name.endsWith(".mkv") || name.endsWith(".webm")) mime = "video/*";
-        else if (name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".png") || name.endsWith(".webp")) mime = "image/*";
-        else if (name.endsWith(".mp3") || name.endsWith(".m4a")) mime = "audio/*";
-        else if (name.endsWith(".apk")) { install(file); return; }
-        else if (name.endsWith(".txt")) mime = "text/plain";
-        try {
-            Uri uri = TransferFiles.share(this, file);
-            if (uri == null) throw new IllegalStateException("uri");
-            Intent intent = new Intent(Intent.ACTION_VIEW).setDataAndType(uri, mime);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            startActivity(intent);
-        } catch (Exception e) {
-            Toast.makeText(this, R.string.file_transfer_failed, Toast.LENGTH_SHORT).show();
+        if (file.name.toLowerCase(Locale.US).endsWith(".apk")) {
+            install(file);
+            return;
         }
+        try {
+            Intent intent = TransferFiles.viewIntent(this, file);
+            if (intent.getData() == null || getPackageManager().resolveActivity(intent, 0) == null) {
+                Toast.makeText(this, R.string.file_transfer_no_app, Toast.LENGTH_LONG).show();
+                return;
+            }
+            Intent chooser = Intent.createChooser(intent, getString(R.string.file_transfer_open));
+            chooser.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivity(chooser);
+        } catch (Exception e) {
+            Toast.makeText(this, R.string.file_transfer_no_app, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void rename() {
+        android.widget.EditText field = new android.widget.EditText(this);
+        field.setText(TransferHub.displayName());
+        field.setSingleLine(true);
+        new android.app.AlertDialog.Builder(this)
+                .setTitle(R.string.file_transfer_rename)
+                .setView(field)
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    String name = TransferHub.rename(field.getText().toString());
+                    ((TextView) findViewById(R.id.transferName)).setText(name);
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
     }
 
     private void install(TransferFiles.Item file) {
@@ -430,6 +448,7 @@ public final class TransferActivity extends Activity {
             if (uri == null) throw new IllegalStateException("uri");
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setDataAndType(uri, "application/vnd.android.package-archive");
+            intent.setClipData(ClipData.newRawUri(file.name, uri));
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } catch (Exception e) {

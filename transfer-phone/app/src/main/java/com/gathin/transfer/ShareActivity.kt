@@ -67,14 +67,13 @@ class ShareActivity : AppCompatActivity() {
 
     private fun send(tv: SavedTv, uris: List<Uri>, text: String?) {
         for (uri in uris) {
-            try {
-                contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            } catch (ignored: Exception) { }
-            UploadService.enqueue(this, Job(java.util.UUID.randomUUID().toString(), tv.host, tv.port, tv.pin,
-                uri.lastPathSegment ?: "file", uri.toString(), null, 0))
+            val named = Outgoing.describe(this, uri)
+            val staged = try { Outgoing.stage(this, uri) } catch (failed: Exception) { null } ?: continue
+            UploadService.enqueue(this, Job(java.util.UUID.randomUUID().toString(), tv.host, tv.port, "",
+                named.name, staged.toString(), null, 0))
         }
         if (!text.isNullOrBlank()) {
-            UploadService.enqueue(this, Job(java.util.UUID.randomUUID().toString(), tv.host, tv.port, tv.pin,
+            UploadService.enqueue(this, Job(java.util.UUID.randomUUID().toString(), tv.host, tv.port, "",
                 text.take(40), null, text, 0))
         }
         finish()

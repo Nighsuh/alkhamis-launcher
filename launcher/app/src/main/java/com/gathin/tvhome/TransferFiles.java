@@ -95,9 +95,17 @@ final class TransferFiles {
 
         Out begin(String safeName) throws IOException;
 
+        /** Writes under a name that has an extension when the type is known. */
+        default Out begin(String safeName, String mime) throws IOException {
+            return begin(TransferKind.ensureExtension(safeName, mime));
+        }
+
         InputStream open(Item item) throws IOException;
 
         boolean delete(String safeName);
+
+        /** Renames a stored file and records its type. Used when the upload had no extension. */
+        default void retitle(String from, String to, String mime) { }
 
         void touch(Out out, long modified);
     }
@@ -199,7 +207,23 @@ final class TransferFiles {
         if (n.endsWith(".mp3")) return "audio/mpeg";
         if (n.endsWith(".m4a")) return "audio/mp4";
         if (n.endsWith(".txt")) return "text/plain";
+        if (n.endsWith(".pdf")) return "application/pdf";
+        if (n.endsWith(".gif")) return "image/gif";
+        if (n.endsWith(".zip")) return "application/zip";
         return "application/octet-stream";
+    }
+
+    /** The intent another app uses to open this file. The read grant travels with the clip. */
+    static android.content.Intent viewIntent(Context ctx, Item item) {
+        android.net.Uri uri = share(ctx, item);
+        String type = mime(item == null ? "" : item.name);
+        android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
+        if (uri != null) {
+            intent.setDataAndType(uri, type);
+            intent.setClipData(android.content.ClipData.newRawUri(item == null ? "" : item.name, uri));
+        }
+        intent.addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        return intent;
     }
 
     static final class FileDir implements Dir {
@@ -262,6 +286,13 @@ final class TransferFiles {
         public boolean delete(String safeName) {
             Item item = find(safeName);
             return item != null && item.file != null && item.file.delete();
+        }
+
+        @Override
+        public void retitle(String from, String to, String mime) {
+            Item item = find(from);
+            if (item == null || item.file == null || to == null || to.equals(from)) return;
+            item.file.renameTo(new File(root, to));
         }
 
         @Override
@@ -447,35 +478,7 @@ final class TransferFiles {
 
         @Override
         public Out begin(String safeName) throws IOException {
-            if (safeName == null) return null;
-            Set<String> taken = new HashSet<>();
-            for (Item item : list()) taken.add(item.name);
-            String name = uniqueName(safeName, taken);
-            ContentValues values = new ContentValues();
-            values.put(MediaStore.MediaColumns.DISPLAY_NAME, name);
-            values.put(MediaStore.MediaColumns.MIME_TYPE, mime(name));
-            values.put(MediaStore.MediaColumns.RELATIVE_PATH, RELATIVE_PATH);
-            values.put(MediaStore.MediaColumns.IS_PENDING, 1);
-            Uri uri = resolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
-            if (uri == null) throw new IOException("store");
-            OutputStream stream = resolver().openOutputStream(uri);
-            if (stream == null) {
-                resolver().delete(uri, null, null);
-                throw new IOException("store");
-            }
-            String read = readName(uri);
-            final String actual = (read == null || read.isEmpty()) ? name : read;
-            Counted counted = new Counted(stream);
-            ContentResolver resolver = resolver();
-            return new Out(actual, counted, uri, null, () -> {
-                ContentValues done = new ContentValues();
-                done.put(MediaStore.MediaColumns.IS_PENDING, 0);
-                resolver.update(uri, done, null, null);
-                remember(actual, uri, counted.n, System.currentTimeMillis());
-            }, () -> {
-                resolver.delete(uri, null, null);
-                forget(actual);
-            });
+            return begin(safeName, safeName == null ? null : mime(safeName));
         }
 
         private String readName(Uri uri) {
@@ -495,14 +498,84 @@ final class TransferFiles {
         }
 
         @Override
+        public Out begin(String safeName, String mime) throws IOException {
+            String named = TransferKind.ensureExtension(safeName, mime);
+            String type = mime == null || mime.isEmpty() ? mime(named) : mime;
+            return beginTyped(named, type);
+        }
+
+        private Out beginTyped(String name, String type) throws IOException {
+            if (name == null) return null;
+            Set<String> taken = new HashSet<>();
+            for (Item item : list()) taken.add(item.name);
+            String unique = uniqueName(name, taken);
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.MediaColumns.DISPLAY_NAME, unique);
+            values.put(MediaStore.MediaColumns.MIME_TYPE, type);
+            values.put(MediaStore.MediaColumns.RELATIVE_PATH, RELATIVE_PATH);
+            values.put(MediaStore.MediaColumns.IS_PENDING, 1);
+            Uri uri = resolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
+            if (uri == null) throw new IOException("store");
+            OutputStream stream = resolver().openOutputStream(uri);
+            if (stream == null) {
+                resolver().delete(uri, null, null);
+                throw new IOException("store");
+            }
+            String read = readName(uri);
+            final String actual = (read == null || read.isEmpty()) ? unique : read;
+            Counted counted = new Counted(stream);
+            ContentResolver resolver = resolver();
+            return new Out(actual, counted, uri, null, () -> {
+                ContentValues done = new ContentValues();
+                done.put(MediaStore.MediaColumns.IS_PENDING, 0);
+                done.put(MediaStore.MediaColumns.MIME_TYPE, type);
+                resolver.update(uri, done, null, null);
+                remember(actual, uri, counted.n, System.currentTimeMillis());
+            }, () -> {
+                resolver.delete(uri, null, null);
+                forget(actual);
+            });
+        }
+
         public boolean delete(String safeName) {
-            Item item = find(safeName);
-            if (item == null) return false;
+            if (safeName == null) return false;
             boolean removed = false;
-            if (item.uri != null) removed = resolver().delete(item.uri, null, null) > 0;
-            if (item.file != null) removed = item.file.delete() || removed;
+            try {
+                int n = resolver().delete(MediaStore.Downloads.EXTERNAL_CONTENT_URI,
+                        MediaStore.MediaColumns.DISPLAY_NAME + "=? AND " + MediaStore.MediaColumns.RELATIVE_PATH + " LIKE ?",
+                        new String[]{safeName, RELATIVE_PATH + "%"});
+                removed = n > 0;
+            } catch (Exception ignored) { }
+            Item item = find(safeName);
+            if (item != null && item.uri != null) {
+                try {
+                    removed = resolver().delete(item.uri, null, null) > 0 || removed;
+                } catch (Exception ignored) { }
+            }
+            if (item != null && item.file != null) removed = item.file.delete() || removed;
+            File legacy = new File(legacyFolder(), safeName);
+            if (legacy.isFile()) removed = legacy.delete() || removed;
             forget(safeName);
-            return removed || item.uri != null;
+            return removed;
+        }
+
+        @Override
+        public void retitle(String from, String to, String mime) {
+            if (from == null || to == null || to.equals(from)) return;
+            Item item = find(from);
+            if (item == null) return;
+            if (item.uri != null) {
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.MediaColumns.DISPLAY_NAME, to);
+                if (mime != null) values.put(MediaStore.MediaColumns.MIME_TYPE, mime);
+                values.put(MediaStore.MediaColumns.IS_PENDING, 0);
+                resolver().update(item.uri, values, null, null);
+                forget(from);
+                remember(to, item.uri, item.size, item.modified);
+            }
+            if (item.file != null && item.file.getParentFile() != null) {
+                item.file.renameTo(new File(item.file.getParentFile(), to));
+            }
         }
 
         @Override

@@ -8,6 +8,30 @@ The release file is always `CleanYourTV-Shrine.apk`.
 الوسوم: `v3.1-shrine` حتى `v3.5.0-shrine`.  
 اسم ملف الإصدار دائمًا `CleanYourTV-Shrine.apk`.
 
+## 3.6.5-shrine
+
+versionCode 38. Same package (`com.gathin.tvhome`) and the same release key as 3.6.4-shrine. The Home switch still does not turn any package off.
+
+### English
+
+- Alkhamis TV Transfer no longer asks for a PIN. The code on the TV is only the address. The TV can be renamed, a file keeps its type so it can be opened, and deleting the last file clears the list.
+
+### العربية
+
+- Alkhamis TV Transfer لم تعد تطلب رمز دخول. الرمز على التلفاز هو العنوان فقط. يمكن إعادة تسمية التلفاز، والملف يحتفظ بنوعه حتى يُفتح، وحذف آخر ملف يفرّغ القائمة.
+
+## Alkhamis TV Transfer 1.0.4
+
+Phone app, package `com.gathin.transfer`, versionCode 5. The name is still Alkhamis TV Transfer.
+
+### English
+
+- No PIN. The scanner reads a plain address, including a tilted or glared code. Each sent file keeps its name and type. A TV can be renamed, and Test connection says which step failed.
+
+### العربية
+
+- لا رمز دخول. الماسح يقرأ العنوان، حتى لو كان الرمز مائلاً أو لامعاً. كل ملف مُرسَل يحتفظ باسمه ونوعه. يمكن إعادة تسمية التلفاز، واختبار الاتصال يقول أين تعذّر الوصول.
+
 ## 3.6.4-shrine
 
 versionCode 37. Same package (`com.gathin.tvhome`) and the same release key as 3.6.3-shrine, so it installs over that build. The Home switch still does not turn any package off.

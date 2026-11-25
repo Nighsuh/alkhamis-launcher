@@ -49,8 +49,8 @@
 
             <ImageView
                 android:id="@+id/transferQr"
-                android:layout_width="148dp"
-                android:layout_height="148dp"
+                android:layout_width="260dp"
+                android:layout_height="260dp"
                 android:contentDescription="@string/file_transfer" />
         </FrameLayout>
 
@@ -66,14 +66,33 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/transferPin"
+            android:id="@+id/transferName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
             android:fontFamily="@string/font_medium"
             android:gravity="center"
             android:textColor="#FFE6C57A"
-            android:textDirection="ltr"
-            android:textSize="28sp" />
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/transferRename"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/settings_choice_bg"
+            android:fontFamily="@string/font_medium"
+            android:gravity="center"
+            android:minHeight="48dp"
+            android:text="@string/file_transfer_rename"
+            android:textColor="#FFFFFFFF"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/transferPin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/transferStatus"

@@ -34,13 +34,11 @@ public class TransferServerTest {
     @Test
     public void pinBlocksOtherCallers() throws Exception {
         File dir = Files.createTempDirectory("transfer").toFile();
-        TransferServer server = TransferServer.start(dir, "482913", 0);
+        TransferServer server = TransferServer.start(dir, 0);
         try {
-            assertEquals(401, get(server, "/list", null));
-            assertEquals(401, get(server, "/list", "000000"));
-            assertEquals(200, get(server, "/list", "482913"));
-            assertTrue(TransferServer.pinsEqual("482913", "482913"));
-            assertFalse(TransferServer.pinsEqual("482913", "482914"));
+            assertEquals(200, get(server, "/list", null));
+            assertEquals(200, get(server, "/ping", null));
+            assertEquals(200, post(server, "/name", "name=Living%20room", null));
         } finally {
             server.stop();
         }
@@ -49,7 +47,7 @@ public class TransferServerTest {
     @Test
     public void uploadStreamsAndDownloadMatches() throws Exception {
         File dir = Files.createTempDirectory("transfer").toFile();
-        TransferServer server = TransferServer.start(dir, "123456", 0);
+        TransferServer server = TransferServer.start(dir, 0);
         try {
             byte[] payload = new byte[200_000];
             for (int i = 0; i < payload.length; i++) payload[i] = (byte) (i * 31);
@@ -74,9 +72,9 @@ public class TransferServerTest {
         File dir = Files.createTempDirectory("transfer").toFile();
         java.util.concurrent.atomic.AtomicReference<String> asked = new java.util.concurrent.atomic.AtomicReference<>();
         TransferServer.setInstallHook(asked::set);
-        TransferServer server = TransferServer.start(dir, "123456", 0);
+        TransferServer server = TransferServer.start(dir, 0);
         try {
-            assertEquals(401, post(server, "/install", "name=app.apk", null));
+            assertEquals(404, post(server, "/install", "name=app.apk", null));
             assertEquals(200, upload(server, "app.apk", new byte[] {1, 2, 3}));
             assertEquals(200, post(server, "/install", "name=app.apk", "123456"));
             assertEquals("app.apk", asked.get());
@@ -102,11 +100,45 @@ public class TransferServerTest {
     }
 
     @Test
+    public void severalTypesKeepTheirBytesAndGainExtensions() throws Exception {
+        File dir = Files.createTempDirectory("types").toFile();
+        TransferServer server = TransferServer.start(dir, 0);
+        try {
+            checkUpload(server, dir, "image1000424971", "image/jpeg", "image1000424971.jpg", jpeg());
+            checkUpload(server, dir, "clip", "video/mp4", "clip.mp4", mp4());
+            checkUpload(server, dir, "page", "application/pdf", "page.pdf", pdf());
+            checkUpload(server, dir, "icon", "image/png", "icon.png", png());
+            byte[] apk = apk();
+            checkUpload(server, dir, "app", "application/vnd.android.package-archive", "app.apk", apk);
+            for (String name : new String[]{"image1000424971.jpg", "clip.mp4", "page.pdf", "icon.png", "app.apk"}) {
+                assertEquals(200, post(server, "/delete", "name=" + name, null));
+            }
+            String list = body(server, "/list");
+            assertFalse(list.contains("image1000424971"));
+            assertFalse(list.contains("clip.mp4"));
+            assertTrue(list.contains("\"files\":[]") || !list.contains("\"name\""));
+        } finally {
+            server.stop();
+        }
+    }
+
+    @Test
+    public void aVirtualAddressDoesNotWin() {
+        java.util.List<TransferHub.Nic> faces = java.util.Arrays.asList(
+                new TransferHub.Nic("docker0", "172.17.0.1"),
+                new TransferHub.Nic("wlan0", "192.168.1.20"),
+                new TransferHub.Nic("eth0", "10.0.0.4"));
+        assertEquals("192.168.1.20", TransferHub.choose(null, faces));
+        assertEquals("10.0.0.4", TransferHub.choose("10.0.0.4", faces));
+        assertTrue(TransferHub.rank("docker0", "172.17.0.1") < 0);
+    }
+
+    @Test
     public void pathTraversalIsRejected() throws Exception {
         File dir = Files.createTempDirectory("transfer").toFile();
         File outside = new File(dir.getParentFile(), "secret.txt");
         Files.write(outside.toPath(), "no".getBytes(StandardCharsets.UTF_8));
-        TransferServer server = TransferServer.start(dir, "123456", 0);
+        TransferServer server = TransferServer.start(dir, 0);
         try {
             assertNull(server.resolve(".."));
             assertNull(server.resolve("."));
@@ -120,6 +152,59 @@ public class TransferServerTest {
         } finally {
             server.stop();
             outside.delete();
+        }
+    }
+
+    private static void checkUpload(TransferServer server, File dir, String sent, String mime, String stored, byte[] payload)
+            throws Exception {
+        assertEquals(200, uploadTyped(server, sent, mime, payload));
+        File file = new File(dir, stored);
+        assertTrue(stored + " missing", file.isFile());
+        byte[] back = Files.readAllBytes(file.toPath());
+        assertEquals(payload.length, back.length);
+        assertEquals(sha(payload), sha(back));
+    }
+
+    private static String sha(byte[] bytes) throws Exception {
+        return java.util.HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(bytes));
+    }
+
+    private static byte[] jpeg() {
+        byte[] bytes = new byte[64];
+        bytes[0] = (byte) 0xff; bytes[1] = (byte) 0xd8; bytes[2] = (byte) 0xff; bytes[3] = (byte) 0xd9;
+        for (int i = 4; i < bytes.length - 1; i++) bytes[i] = (byte) i;
+        return bytes;
+    }
+
+    private static byte[] png() {
+        byte[] bytes = new byte[32];
+        bytes[0] = (byte) 0x89; bytes[1] = 'P'; bytes[2] = 'N'; bytes[3] = 'G';
+        return bytes;
+    }
+
+    private static byte[] pdf() {
+        return "%PDF-1.4\nhello\n".getBytes(StandardCharsets.US_ASCII);
+    }
+
+    private static byte[] mp4() {
+        byte[] bytes = new byte[32];
+        bytes[4] = 'f'; bytes[5] = 't'; bytes[6] = 'y'; bytes[7] = 'p';
+        return bytes;
+    }
+
+    private static byte[] apk() {
+        byte[] text = "PK\u0003\u0004AndroidManifest.xml".getBytes(StandardCharsets.ISO_8859_1);
+        byte[] bytes = new byte[64];
+        System.arraycopy(text, 0, bytes, 0, text.length);
+        return bytes;
+    }
+
+    private static String body(TransferServer server, String path) throws Exception {
+        HttpURLConnection conn = (HttpURLConnection) new URL("http://127.0.0.1:" + server.port() + path).openConnection();
+        try (InputStream in = conn.getInputStream()) {
+            return new String(in.readAllBytes(), StandardCharsets.UTF_8);
+        } finally {
+            conn.disconnect();
         }
     }
 
@@ -158,9 +243,13 @@ public class TransferServerTest {
     }
 
     private static int upload(TransferServer server, String name, byte[] payload) throws Exception {
+        return uploadTyped(server, name, "application/octet-stream", payload);
+    }
+
+    private static int uploadTyped(TransferServer server, String name, String mime, byte[] payload) throws Exception {
         String boundary = "tvhomeBoundary";
         byte[] head = ("--" + boundary + "\r\nContent-Disposition: form-data; name=\"file\"; filename=\""
-                + name + "\"\r\nContent-Type: application/octet-stream\r\n\r\n").getBytes(StandardCharsets.US_ASCII);
+                + name + "\"\r\nContent-Type: " + mime + "\r\n\r\n").getBytes(StandardCharsets.US_ASCII);
         byte[] tail = ("\r\n--" + boundary + "--\r\n").getBytes(StandardCharsets.US_ASCII);
         HttpURLConnection conn = (HttpURLConnection) new URL("http://127.0.0.1:" + server.port() + "/upload").openConnection();
         conn.setRequestMethod("POST");

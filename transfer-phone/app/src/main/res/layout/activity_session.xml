@@ -57,6 +57,15 @@
             style="@style/GoldButton"
             android:text="@string/pick" />
 
+        <Button
+            android:id="@+id/testLink"
+            style="@style/GhostButton"
+            android:layout_width="match_parent"
+            android:layout_marginTop="8dp"
+            android:minHeight="56dp"
+            android:text="@string/test_connection"
+            android:textSize="16sp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -64,6 +73,16 @@
             android:text="@string/files_title"
             android:textColor="#FFFFFFFF"
             android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/filesEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/files_empty"
+            android:textColor="#FFACB8C1"
+            android:textSize="16sp"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/files"

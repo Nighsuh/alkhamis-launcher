@@ -3,12 +3,14 @@ package com.gathin.transfer
 import android.content.Context
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
+import android.net.wifi.WifiManager
 
 /** Finds TVs advertising `_alkhamis._tcp`. Tests can supply [preview] instead. */
 object Discovery {
     var preview: List<FoundTv>? = null
     private var manager: NsdManager? = null
     private var listener: NsdManager.DiscoveryListener? = null
+    private var multicast: WifiManager.MulticastLock? = null
 
     fun known(): List<FoundTv> = preview ?: emptyList()
 
@@ -16,6 +18,11 @@ object Discovery {
         if (preview != null) return
         val nsd = ctx.getSystemService(Context.NSD_SERVICE) as? NsdManager ?: return
         stop()
+        val wifi = ctx.applicationContext.getSystemService(Context.WIFI_SERVICE) as? WifiManager
+        multicast = wifi?.createMulticastLock("alkhamis-discovery")?.also {
+            it.setReferenceCounted(false)
+            try { it.acquire() } catch (ignored: Exception) { }
+        }
         val next = object : NsdManager.DiscoveryListener {
             override fun onStartDiscoveryFailed(type: String?, error: Int) {}
             override fun onStopDiscoveryFailed(type: String?, error: Int) {}
@@ -27,7 +34,9 @@ object Discovery {
                     override fun onResolveFailed(s: NsdServiceInfo?, error: Int) {}
                     override fun onServiceResolved(resolved: NsdServiceInfo) {
                         val host = resolved.host?.hostAddress ?: return
-                        onFound(FoundTv(resolved.serviceName ?: host, host, resolved.port))
+                        val named = resolved.attributes?.get("name")?.let { String(it, Charsets.UTF_8) }
+                        val label = named?.ifBlank { null } ?: resolved.serviceName ?: host
+                        onFound(FoundTv(label, host, resolved.port))
                     }
                 })
             }
@@ -47,5 +56,7 @@ object Discovery {
         }
         manager = null
         listener = null
+        try { if (multicast?.isHeld == true) multicast?.release() } catch (ignored: Exception) { }
+        multicast = null
     }
 }

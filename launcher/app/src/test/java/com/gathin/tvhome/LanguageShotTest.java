@@ -55,7 +55,7 @@ public class LanguageShotTest {
                 .putString(LanguageActivity.LANG_KEY, lang)
                 .putLong(LauncherLocale.GENERATION, 1)
                 .commit();
-        File dir = new File("/opt/cursor/artifacts/qa/3.6.4");
+        File dir = new File("/opt/cursor/artifacts/qa/3.6.5");
         dir.mkdirs();
         LauncherSettingsActivity settings = Robolectric.buildActivity(LauncherSettingsActivity.class).setup().get();
         TextView language = settings.findViewById(R.id.languageChoice);
@@ -81,19 +81,47 @@ public class LanguageShotTest {
         home.finish();
 
         TransferActivity transfer = Robolectric.buildActivity(TransferActivity.class).setup().get();
-        TextView pin = transfer.findViewById(R.id.transferPin);
+        TextView url = transfer.findViewById(R.id.transferUrl);
         deadline = System.currentTimeMillis() + 5000;
-        while (System.currentTimeMillis() < deadline && (pin.getText() == null || pin.getText().length() < 6)) {
+        while (System.currentTimeMillis() < deadline && (url.getText() == null || !url.getText().toString().startsWith("http"))) {
             Shadows.shadowOf(android.os.Looper.getMainLooper()).idle();
             Thread.sleep(40);
         }
-        if (pin.getText() == null || pin.getText().length() < 6) throw new AssertionError("pin missing");
+        if (url.getText() == null || !url.getText().toString().startsWith("http")) throw new AssertionError("address missing");
+        String tvName = ((TextView) transfer.findViewById(R.id.transferName)).getText().toString();
+        if (tvName.toLowerCase().contains("pin")) throw new AssertionError(tvName);
         draw(transfer.getWindow().getDecorView(), new File(dir, "transfer-" + lang + ".png"));
-        String address = ((TextView) transfer.findViewById(R.id.transferUrl)).getText().toString();
-        String digits = pin.getText().toString().replaceAll("\\D", "");
-        savePage(address + "/?p=" + digits + "&lang=ar", new File(dir, "web-ar.html"));
-        savePage(address + "/?p=" + digits + "&lang=en", new File(dir, "web-en.html"));
+        String address = url.getText().toString();
+        savePage(address + (address.contains("?") ? "&" : "?") + "lang=ar", new File(dir, "web-ar.html"));
+        savePage(address + (address.contains("?") ? "&" : "?") + "lang=en", new File(dir, "web-en.html"));
+        if ("en".equals(lang)) {
+            byte[] jpeg = new byte[] {(byte) 0xff, (byte) 0xd8, (byte) 0xff, 0, 1, 2, 3, (byte) 0xd9};
+            uploadJpeg(address, jpeg);
+            Shadows.shadowOf(android.os.Looper.getMainLooper()).idle();
+            try { Thread.sleep(1100); } catch (InterruptedException ignored) { }
+            Shadows.shadowOf(android.os.Looper.getMainLooper()).idle();
+            draw(transfer.getWindow().getDecorView(), new File(dir, "transfer-file-en.png"));
+        }
         transfer.finish();
+    }
+
+    private static void uploadJpeg(String address, byte[] jpeg) throws Exception {
+        String boundary = "shotBoundary";
+        byte[] head = ("--" + boundary + "\r\nContent-Disposition: form-data; name=\"file\"; filename=\"image1000424971\"\r\n"
+                + "Content-Type: image/jpeg\r\n\r\n").getBytes(java.nio.charset.StandardCharsets.US_ASCII);
+        byte[] tail = ("\r\n--" + boundary + "--\r\n").getBytes(java.nio.charset.StandardCharsets.US_ASCII);
+        java.net.HttpURLConnection conn = (java.net.HttpURLConnection) new java.net.URL(address + "/upload").openConnection();
+        conn.setRequestMethod("POST");
+        conn.setDoOutput(true);
+        conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+        conn.setFixedLengthStreamingMode(head.length + jpeg.length + tail.length);
+        try (java.io.OutputStream out = conn.getOutputStream()) {
+            out.write(head);
+            out.write(jpeg);
+            out.write(tail);
+        }
+        conn.getResponseCode();
+        conn.disconnect();
     }
 
     private static void savePage(String url, File file) throws Exception {

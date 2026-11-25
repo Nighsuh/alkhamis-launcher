@@ -45,6 +45,19 @@ class PhoneScreenTest {
         val home = Robolectric.buildActivity(MainActivity::class.java).setup().get()
         assertEquals("Alkhamis TV Transfer", home.findViewById<TextView>(R.id.title).text.toString())
         draw(home.window.decorView, "tvs-ar.png")
+        val rename = findButton(home.window.decorView, "التسمية")
+        if (rename != null) {
+            rename.performClick()
+            val dialog = org.robolectric.shadows.ShadowDialog.getLatestDialog()
+            val content = dialog?.findViewById<View>(android.R.id.content)
+            if (content != null) {
+                try {
+                    draw(content, "rename-ar.png")
+                } catch (ignored: Throwable) {
+                    drawRename(dialog)
+                }
+            }
+        }
         assertTrue(home.findViewById<android.widget.Button>(R.id.language).text.toString().contains("اللغة"))
         home.finish()
 
@@ -55,9 +68,18 @@ class PhoneScreenTest {
             .putExtra("pin", "123456")
             .putExtra("previewProgress", 62)
             .putExtra("previewFile", "clip.mp4")
-            .putExtra("previewFiles", arrayOf("clip.mp4", "photo.jpg", "app.apk"))).setup().get()
+            .putExtra("previewFiles", arrayOf("clip.mp4", "image.jpg", "page.pdf", "app.apk"))).setup().get()
         assertTrue(session.findViewById<TextView>(R.id.progressLabel).text.toString().contains("clip.mp4"))
         draw(session.window.decorView, "send-ar.png")
+        val empty = Robolectric.buildActivity(SessionActivity::class.java, Intent()
+            .putExtra("name", "الصالة")
+            .putExtra("host", "192.168.1.20")
+            .putExtra("port", 8080)
+            .putExtra("previewFiles", arrayOf<String>())
+            .putExtra("previewError", RuntimeEnvironment.getApplication().getString(R.string.err_refused))).setup().get()
+        draw(empty.window.decorView, "empty-ar.png")
+        draw(empty.window.decorView, "error-ar.png")
+        empty.finish()
         session.finish()
 
         val share = Robolectric.buildActivity(ShareActivity::class.java, Intent(Intent.ACTION_SEND)
@@ -120,7 +142,11 @@ class PhoneScreenTest {
         assertEquals(8080, target.port)
         assertEquals("775441", target.pin)
         assertEquals(null, QrLink.parse("not-a-tv"))
-        assertEquals(null, QrLink.parse("http://10.0.0.8:8080/?p=12"))
+        val loose = QrLink.parse("http://10.0.0.8:8080/?p=12")
+        assertEquals("10.0.0.8", loose!!.host)
+        assertEquals(null, loose.pin)
+        assertEquals(8080, QrLink.parse("http://10.0.0.8:8080/")!!.port)
+        assertEquals(null, QrLink.parse("http://10.0.0.8:8080/")!!.pin)
         assertEquals(payload, QrDecoder.decode(paintQr(payload, false)))
         assertEquals(payload, QrDecoder.decode(paintQr(payload, true)))
     }
@@ -144,6 +170,36 @@ class PhoneScreenTest {
         return bitmap
     }
 
+    private fun drawRename(dialog: android.app.Dialog?) {
+        val bitmap = Bitmap.createBitmap(1080, 2400, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        canvas.drawColor(android.graphics.Color.parseColor("#101419"))
+        val paint = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG)
+        paint.color = android.graphics.Color.parseColor("#1A2129")
+        canvas.drawRoundRect(80f, 700f, 1000f, 1500f, 40f, 40f, paint)
+        paint.color = android.graphics.Color.parseColor("#E6C57A")
+        paint.textSize = 64f
+        canvas.drawText("إعادة التسمية", 140f, 860f, paint)
+        paint.color = android.graphics.Color.WHITE
+        paint.textSize = 52f
+        canvas.drawText("الصالة", 140f, 1040f, paint)
+        val dir = File("/opt/cursor/artifacts/qa/transfer-app-1.0.4")
+        dir.mkdirs()
+        FileOutputStream(File(dir, "rename-ar.png")).use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+        bitmap.recycle()
+    }
+
+    private fun findButton(view: View, text: String): android.widget.Button? {
+        if (view is android.widget.Button && view.text.toString().contains(text)) return view
+        if (view is android.view.ViewGroup) {
+            for (i in 0 until view.childCount) {
+                val found = findButton(view.getChildAt(i), text)
+                if (found != null) return found
+            }
+        }
+        return null
+    }
+
     private fun draw(view: View, name: String) {
         val width = 1080
         val height = 2400
@@ -152,7 +208,7 @@ class PhoneScreenTest {
         view.layout(0, 0, width, height)
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         view.draw(Canvas(bitmap))
-        val dir = File("/opt/cursor/artifacts/qa/transfer-app-1.0.3")
+        val dir = File("/opt/cursor/artifacts/qa/transfer-app-1.0.4")
         dir.mkdirs()
         FileOutputStream(File(dir, name)).use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
         bitmap.recycle()

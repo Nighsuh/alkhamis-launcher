@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * A small HTTP server for the transfer folder. It speaks only to callers that know the PIN,
+ * A small HTTP server for the transfer folder. It accepts callers on this LAN,
  * writes uploads straight to disk, and refuses paths that leave the folder.
  */
 final class TransferServer {
@@ -24,7 +24,6 @@ final class TransferServer {
 
     private final File root;
     private final TransferFiles.Dir files;
-    private final String pin;
     private final ServerSocket socket;
     private volatile boolean open = true;
     private final java.util.Set<String> callers = java.util.Collections.synchronizedSet(new java.util.LinkedHashSet<>());
@@ -43,21 +42,22 @@ final class TransferServer {
         installHook = hook;
     }
 
-    private TransferServer(File root, TransferFiles.Dir files, String pin, ServerSocket socket) {
+    private TransferServer(File root, TransferFiles.Dir files, ServerSocket socket) {
         this.root = root;
         this.files = files;
-        this.pin = pin;
         this.socket = socket;
     }
 
-    static TransferServer start(File root, String pin, int port) throws IOException {
-        return start(root, new TransferFiles.FileDir(root), pin, port);
+    static TransferServer start(File root, int port) throws IOException {
+        return start(root, new TransferFiles.FileDir(root), port);
     }
 
-    static TransferServer start(File root, TransferFiles.Dir files, String pin, int port) throws IOException {
+    static TransferServer start(File root, TransferFiles.Dir files, int port) throws IOException {
         if (root != null && !root.isDirectory() && !root.mkdirs()) throw new IOException("folder");
-        ServerSocket socket = new ServerSocket(port);
-        TransferServer server = new TransferServer(root, files, pin, socket);
+        ServerSocket socket = new ServerSocket();
+        socket.setReuseAddress(true);
+        socket.bind(new java.net.InetSocketAddress(port));
+        TransferServer server = new TransferServer(root, files, socket);
         Thread t = new Thread(server::acceptLoop, "transfer-accept");
         t.setDaemon(true);
         t.start();
@@ -98,7 +98,12 @@ final class TransferServer {
             if (socket.getInetAddress() != null && callers.size() < 12) {
                 callers.add(socket.getInetAddress().getHostAddress());
             }
-            socket.setSoTimeout(120_000);
+            if (!local(socket)) {
+                send(socket.getOutputStream(), 403, "text/plain; charset=utf-8",
+                        "lan".getBytes(StandardCharsets.UTF_8), null);
+                return;
+            }
+            socket.setSoTimeout(300_000);
             BufferedInputStream in = new BufferedInputStream(socket.getInputStream());
             byte[] header = readHeaders(in);
             if (header == null) return;
@@ -112,18 +117,21 @@ final class TransferServer {
             String headers = text.substring(split + 2);
             long length = contentLength(headers);
             String type = headerValue(headers, "content-type");
-            boolean authed = authorized(headers, target);
             OutputStream out = socket.getOutputStream();
-            if ("GET".equals(method) && (target.equals("/") || target.startsWith("/?"))) {
-                String lang = pageLanguage(target);
-                boolean pinMatches = queryPin(target) != null && pinOk(queryPin(target));
-                String page = (authed || pinMatches) ? TransferPage.app(lang) : TransferPage.pin(lang);
-                String cookie = pinMatches ? "Set-Cookie: tpin=" + pin + "; Path=/; HttpOnly" : null;
-                send(out, 200, "text/html; charset=utf-8", page.getBytes(StandardCharsets.UTF_8), cookie);
+            if ("GET".equals(method) && "/ping".equals(pathOf(target))) {
+                byte[] body = "{\"ok\":true}".getBytes(StandardCharsets.UTF_8);
+                send(out, 200, "application/json; charset=utf-8", body, null);
                 return;
             }
-            if (!authed) {
-                send(out, 401, "text/plain; charset=utf-8", "pin".getBytes(StandardCharsets.UTF_8), null);
+            if ("GET".equals(method) && "/name".equals(pathOf(target))) {
+                byte[] body = ("{\"name\":\"" + jsonEscape(TransferHub.displayName()) + "\"}").getBytes(StandardCharsets.UTF_8);
+                send(out, 200, "application/json; charset=utf-8", body, null);
+                return;
+            }
+            if ("GET".equals(method) && (target.equals("/") || target.startsWith("/?"))) {
+                String lang = pageLanguage(target);
+                String page = TransferPage.app(lang, TransferHub.displayName());
+                send(out, 200, "text/html; charset=utf-8", page.getBytes(StandardCharsets.UTF_8), null);
                 return;
             }
             if ("GET".equals(method) && "/list".equals(pathOf(target))) {
@@ -179,6 +187,16 @@ final class TransferServer {
                 send(out, 200, "text/plain", "ok".getBytes(StandardCharsets.UTF_8), null);
                 return;
             }
+            if ("POST".equals(method) && "/name".equals(pathOf(target))) {
+                String name = formValue(form, "name");
+                if (name == null || name.trim().isEmpty()) {
+                    send(out, 400, "text/plain", "name".getBytes(StandardCharsets.UTF_8), null);
+                    return;
+                }
+                TransferHub.rename(name.trim());
+                send(out, 200, "text/plain", "ok".getBytes(StandardCharsets.UTF_8), null);
+                return;
+            }
             if ("POST".equals(method) && "/note".equals(pathOf(target))) {
                 String note = formValue(form, "text");
                 if (note != null && !note.trim().isEmpty()) appendNote(note.trim());
@@ -189,21 +207,28 @@ final class TransferServer {
         } catch (Exception ignored) { }
     }
 
-    private boolean authorized(String headers, String target) {
-        if (pinOk(cookiePin(headers))) return true;
-        return pinOk(queryPin(target));
+    private static boolean local(Socket socket) {
+        java.net.InetAddress addr = socket.getInetAddress();
+        if (addr == null) return false;
+        return addr.isLoopbackAddress() || addr.isSiteLocalAddress() || addr.isLinkLocalAddress();
     }
 
-    /** Same answer time for a wrong PIN and a missing one. */
-    static boolean pinsEqual(String expected, String given) {
-        if (expected == null || given == null || expected.length() != given.length()) return false;
-        int diff = 0;
-        for (int i = 0; i < expected.length(); i++) diff |= expected.charAt(i) ^ given.charAt(i);
-        return diff == 0;
-    }
-
-    private boolean pinOk(String given) {
-        return pinsEqual(pin, given);
+    private String sniffStored(String name) {
+        TransferFiles.Item item = files.find(name);
+        if (item == null) return null;
+        byte[] head = new byte[512];
+        int n = 0;
+        try (InputStream in = files.open(item)) {
+            if (in == null) return null;
+            while (n < head.length) {
+                int got = in.read(head, n, head.length - n);
+                if (got < 0) break;
+                n += got;
+            }
+        } catch (IOException e) {
+            return null;
+        }
+        return TransferKind.sniff(n == head.length ? head : java.util.Arrays.copyOf(head, n));
     }
 
     /** A file inside the transfer folder, or null when the name tries to leave it. */
@@ -268,14 +293,16 @@ final class TransferServer {
             String headers = new String(buf, 0, headerEnd, StandardCharsets.ISO_8859_1);
             fill = shift(buf, fill, headerEnd + 4);
             if (headers.contains("--") && headers.trim().isEmpty()) return;
+            String partType = partMime(headers);
             String filename = filename(headers);
+            if (filename != null) filename = TransferKind.ensureExtension(filename, partType);
             if (filename == null) {
                 fill = discardUntil(in, buf, fill, left, sep);
                 left = 0;
                 if (ended(buf, fill, boundary)) return;
                 continue;
             }
-            TransferFiles.Out dest = files.begin(filename);
+            TransferFiles.Out dest = files.begin(filename, partType);
             if (dest == null) {
                 fill = discardUntil(in, buf, fill, left, sep);
                 if (ended(buf, fill, boundary)) return;
@@ -289,6 +316,13 @@ final class TransferServer {
                 fill = writeUntil(in, buf, fill, left, sep, file);
                 dest.commit();
                 stored = true;
+                if (!TransferKind.hasExtension(dest.name)) {
+                    String sniffed = sniffStored(dest.name);
+                    if (sniffed != null) {
+                        String titled = TransferKind.ensureExtension(dest.name, sniffed);
+                        if (!titled.equals(dest.name)) files.retitle(dest.name, titled, sniffed);
+                    }
+                }
             } finally {
                 if (!stored) dest.abort();
                 busyPercent = -1;
@@ -343,6 +377,15 @@ final class TransferServer {
         int n = in.read(buf, fill, (int) Math.min(buf.length - fill, left));
         if (n < 0) return fill;
         return fill + n;
+    }
+
+    private static String partMime(String headers) {
+        String value = headerValue(headers, "content-type");
+        if (value == null || value.isEmpty()) return "application/octet-stream";
+        int semi = value.indexOf(';');
+        if (semi >= 0) value = value.substring(0, semi);
+        value = value.trim().toLowerCase(Locale.US);
+        return value.isEmpty() ? "application/octet-stream" : value;
     }
 
     private static String filename(String headers) {
