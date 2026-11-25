@@ -105,7 +105,7 @@ final class TransferHub {
     static String sanitize(String raw) {
         if (raw == null) return "";
         String trimmed = raw.trim().replace('\n', ' ').replace('\r', ' ');
-        if (trimmed.length() > 40) trimmed = trimmed.substring(0, 40).trim();
+        if (trimmed.length() > 30) trimmed = trimmed.substring(0, 30).trim();
         return trimmed;
     }
 

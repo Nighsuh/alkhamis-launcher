@@ -8,6 +8,30 @@ The release file is always `CleanYourTV-Shrine.apk`.
 الوسوم: `v3.1-shrine` حتى `v3.5.0-shrine`.  
 اسم ملف الإصدار دائمًا `CleanYourTV-Shrine.apk`.
 
+## 3.6.6-shrine
+
+versionCode 39. Same package and release key as 3.6.5-shrine. The Home switch still does not turn any package off.
+
+### English
+
+- Renaming the TV on the transfer screen uses a field with a gold outline and Save and Cancel buttons the remote can focus. The on-screen keyboard opens on that field. A blank name is refused.
+
+### العربية
+
+- إعادة تسمية التلفاز من شاشة النقل تستخدم حقلاً بإطار ذهبي وزرّي حفظ وإلغاء يمكن للريموت التركيز عليهما. لوحة المفاتيح تظهر على الحقل. الاسم الفارغ يُرفض.
+
+## Alkhamis TV Transfer 1.0.5
+
+Phone app, package `com.gathin.transfer`, versionCode 6. The name is still Alkhamis TV Transfer.
+
+### English
+
+- Rename is a dialog with an outlined field, the current name selected, and Save and Cancel. A name must be 1 to 30 characters. The release APK keeps only the ARM libraries.
+
+### العربية
+
+- إعادة التسمية نافذة بحقل محدد والاسم الحالي مختار، وزرّا حفظ وإلغاء. الاسم من حرف واحد إلى ٣٠. ملف الإصدار يبقي مكتبات ARM فقط.
+
 ## 3.6.5-shrine
 
 versionCode 38. Same package (`com.gathin.tvhome`) and the same release key as 3.6.4-shrine. The Home switch still does not turn any package off.

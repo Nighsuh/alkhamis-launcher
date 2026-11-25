@@ -418,18 +418,31 @@ public final class TransferActivity extends Activity {
     }
 
     private void rename() {
-        android.widget.EditText field = new android.widget.EditText(this);
+        android.view.View view = getLayoutInflater().inflate(R.layout.dialog_tv_rename, null);
+        android.widget.EditText field = view.findViewById(R.id.renameField);
         field.setText(TransferHub.displayName());
-        field.setSingleLine(true);
-        new android.app.AlertDialog.Builder(this)
-                .setTitle(R.string.file_transfer_rename)
-                .setView(field)
-                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                    String name = TransferHub.rename(field.getText().toString());
-                    ((TextView) findViewById(R.id.transferName)).setText(name);
-                })
-                .setNegativeButton(android.R.string.cancel, null)
-                .show();
+        field.setSelection(field.getText().length());
+        android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(this).setView(view).create();
+        view.findViewById(R.id.renameCancel).setOnClickListener(v -> dialog.dismiss());
+        view.findViewById(R.id.renameSave).setOnClickListener(v -> {
+            String next = field.getText().toString().trim();
+            if (next.isEmpty() || next.length() > 30) {
+                field.setError(getString(R.string.file_transfer_rename_invalid));
+                return;
+            }
+            ((TextView) findViewById(R.id.transferName)).setText(TransferHub.rename(next));
+            dialog.dismiss();
+        });
+        dialog.setOnShowListener(shown -> {
+            field.requestFocus();
+            android.view.inputmethod.InputMethodManager keyboard =
+                    (android.view.inputmethod.InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            if (keyboard != null) keyboard.showSoftInput(field, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT);
+        });
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        }
+        dialog.show();
     }
 
     private void install(TransferFiles.Item file) {

@@ -45,19 +45,8 @@ class PhoneScreenTest {
         val home = Robolectric.buildActivity(MainActivity::class.java).setup().get()
         assertEquals("Alkhamis TV Transfer", home.findViewById<TextView>(R.id.title).text.toString())
         draw(home.window.decorView, "tvs-ar.png")
-        val rename = findButton(home.window.decorView, "التسمية")
-        if (rename != null) {
-            rename.performClick()
-            val dialog = org.robolectric.shadows.ShadowDialog.getLatestDialog()
-            val content = dialog?.findViewById<View>(android.R.id.content)
-            if (content != null) {
-                try {
-                    draw(content, "rename-ar.png")
-                } catch (ignored: Throwable) {
-                    drawRename(dialog)
-                }
-            }
-        }
+        drawRename(home, "الصالة", "rename-ar.png")
+        assertTrue(findButton(home.window.decorView, "التسمية") != null)
         assertTrue(home.findViewById<android.widget.Button>(R.id.language).text.toString().contains("اللغة"))
         home.finish()
 
@@ -112,6 +101,7 @@ class PhoneScreenTest {
         assertTrue(home.findViewById<android.widget.Button>(R.id.language).text.toString().contains("Language"))
         assertTrue(home.findViewById<TextView>(R.id.lead).text.toString().contains("Wi-Fi"))
         draw(home.window.decorView, "tvs-en.png")
+        drawRename(home, "Living room", "rename-en.png")
         home.finish()
 
         val session = Robolectric.buildActivity(SessionActivity::class.java, Intent()
@@ -170,22 +160,36 @@ class PhoneScreenTest {
         return bitmap
     }
 
-    private fun drawRename(dialog: android.app.Dialog?) {
+    private fun drawRename(home: MainActivity, current: String, file: String) {
+        val view = home.layoutInflater.inflate(R.layout.dialog_rename, null)
+        val field = view.findViewById<android.widget.EditText>(R.id.renameField)
+        field.setText(current)
+        field.setSelection(0, field.text?.length ?: 0)
+        view.findViewById<android.widget.TextView>(R.id.renameCount).text = "${field.text?.length ?: 0}/30"
+        assertEquals(current, field.text.toString())
+        val save = view.findViewById<android.widget.Button>(R.id.renameSave)
+        val cancel = view.findViewById<android.widget.Button>(R.id.renameCancel)
+        assertTrue(save.text.isNotEmpty())
+        assertTrue(cancel.text.isNotEmpty())
+        assertTrue(save.minimumHeight >= home.dp(48) || save.minHeight >= home.dp(48))
+        val width = 920
+        view.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED))
+        view.layout(0, 0, width, view.measuredHeight)
         val bitmap = Bitmap.createBitmap(1080, 2400, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         canvas.drawColor(android.graphics.Color.parseColor("#101419"))
+        canvas.translate(80f, 640f)
+        view.draw(canvas)
         val paint = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG)
-        paint.color = android.graphics.Color.parseColor("#1A2129")
-        canvas.drawRoundRect(80f, 700f, 1000f, 1500f, 40f, 40f, paint)
-        paint.color = android.graphics.Color.parseColor("#E6C57A")
-        paint.textSize = 64f
-        canvas.drawText("إعادة التسمية", 140f, 860f, paint)
         paint.color = android.graphics.Color.WHITE
-        paint.textSize = 52f
-        canvas.drawText("الصالة", 140f, 1040f, paint)
-        val dir = File("/opt/cursor/artifacts/qa/transfer-app-1.0.4")
+        paint.textSize = field.textSize
+        paint.textAlign = android.graphics.Paint.Align.CENTER
+        canvas.drawText(field.text.toString(), field.left + field.width / 2f,
+            field.top + field.height / 2f + paint.textSize / 3f, paint)
+        val dir = File("/opt/cursor/artifacts/qa/transfer-app-1.0.5")
         dir.mkdirs()
-        FileOutputStream(File(dir, "rename-ar.png")).use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+        FileOutputStream(File(dir, file)).use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
         bitmap.recycle()
     }
 
@@ -208,7 +212,7 @@ class PhoneScreenTest {
         view.layout(0, 0, width, height)
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         view.draw(Canvas(bitmap))
-        val dir = File("/opt/cursor/artifacts/qa/transfer-app-1.0.4")
+        val dir = File("/opt/cursor/artifacts/qa/transfer-app-1.0.5")
         dir.mkdirs()
         FileOutputStream(File(dir, name)).use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
         bitmap.recycle()

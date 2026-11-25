@@ -27,6 +27,10 @@
     <string name="err_http">أجاب التلفاز بخطأ.</string>
     <string name="err_permission">اسمح بالأجهزة القريبة حتى يجد الهاتف التلفاز.</string>
     <string name="rename">إعادة التسمية</string>
+    <string name="rename_hint">اسم التلفاز</string>
+    <string name="rename_invalid">اكتب اسمًا من حرف واحد إلى ٣٠.</string>
+    <string name="save">حفظ</string>
+    <string name="cancel">إلغاء</string>
     <string name="renamed">تمت إعادة التسمية.</string>
     <string name="scan_hint">وجّه الكاميرا للرمز الظاهر على التلفاز</string>
     <string name="scan_reason">نحتاج الكاميرا لقراءة الرمز الظاهر على التلفاز.</string>

@@ -319,6 +319,10 @@
     <string name="file_transfer_uploading">Uploading %1$s · %2$d%%</string>
     <string name="file_transfer_empty_help">Scan the code on a phone, then upload a file. No code is required. After this app is reinstalled, older files can stay in that folder without showing here.</string>
     <string name="file_transfer_rename">שנה שם לטלוויזיה</string>
+    <string name="file_transfer_rename_hint">שם</string>
+    <string name="file_transfer_rename_save">שמור</string>
+    <string name="file_transfer_rename_cancel">ביטול</string>
+    <string name="file_transfer_rename_invalid">הזן שם באורך 1 עד 30 תווים.</string>
     <string name="file_transfer_no_app">אין אפליקציה בטלוויזיה שיכולה לפתוח את הקובץ.</string>
     <string name="file_transfer_where">Saved in Download/AlkhamisTransfer</string>
     <string name="file_transfer_storage">Allow storage so files can be saved in Downloads.</string>

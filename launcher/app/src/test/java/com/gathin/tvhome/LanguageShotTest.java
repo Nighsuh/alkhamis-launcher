@@ -55,13 +55,14 @@ public class LanguageShotTest {
                 .putString(LanguageActivity.LANG_KEY, lang)
                 .putLong(LauncherLocale.GENERATION, 1)
                 .commit();
-        File dir = new File("/opt/cursor/artifacts/qa/3.6.5");
+        File dir = new File("/opt/cursor/artifacts/qa/3.6.6");
         dir.mkdirs();
         LauncherSettingsActivity settings = Robolectric.buildActivity(LauncherSettingsActivity.class).setup().get();
         TextView language = settings.findViewById(R.id.languageChoice);
         String shown = language.getText().toString();
         if ("ar".equals(lang) && !shown.contains("العربية")) throw new AssertionError(shown);
         if ("en".equals(lang) && !shown.contains("English")) throw new AssertionError(shown);
+        if ("en".equals(lang)) drawTvRename(new File(dir, "tv-rename.png"));
         draw(settings.getWindow().getDecorView(), new File(dir, "settings-" + lang + ".png"));
         settings.finish();
 
@@ -131,6 +132,31 @@ public class LanguageShotTest {
         } finally {
             conn.disconnect();
         }
+    }
+
+    private static void drawTvRename(File file) throws Exception {
+        android.content.Context ctx = org.robolectric.RuntimeEnvironment.getApplication();
+        android.view.View view = android.view.LayoutInflater.from(ctx).inflate(R.layout.dialog_tv_rename, null);
+        android.widget.EditText field = view.findViewById(R.id.renameField);
+        field.setText("Living room");
+        field.setSelection(field.getText().length());
+        int width = 960;
+        view.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        view.layout(0, 0, width, view.getMeasuredHeight());
+        android.widget.TextView save = view.findViewById(R.id.renameSave);
+        android.widget.TextView cancel = view.findViewById(R.id.renameCancel);
+        if (!save.isFocusable() || !cancel.isFocusable()) throw new AssertionError("rename buttons are not focusable");
+        if (save.getText().length() == 0 || cancel.getText().length() == 0) throw new AssertionError("rename buttons are blank");
+        Bitmap bitmap = Bitmap.createBitmap(1920, 1080, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawColor(0xFF101419);
+        canvas.translate(480, 280);
+        view.draw(canvas);
+        try (FileOutputStream out = new FileOutputStream(file)) {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+        }
+        bitmap.recycle();
     }
 
     private static void draw(View decor, File file) throws Exception {

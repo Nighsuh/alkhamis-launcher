@@ -31,6 +31,10 @@
     <string name="err_http">The TV answered with an error.</string>
     <string name="err_permission">Allow nearby devices so this phone can find the TV.</string>
     <string name="rename">Rename</string>
+    <string name="rename_hint">TV name</string>
+    <string name="rename_invalid">Enter a name of 1 to 30 characters.</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
     <string name="renamed">The TV was renamed.</string>
     <string name="scan_hint">Point the camera at the code on the TV</string>
     <string name="scan_reason">The camera is needed to read the code shown on the TV.</string>

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -202,30 +203,51 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun rename(tv: SavedTv) {
-        val field = EditText(this)
+        val view = layoutInflater.inflate(R.layout.dialog_rename, null)
+        val field = view.findViewById<EditText>(R.id.renameField)
+        val error = view.findViewById<TextView>(R.id.renameError)
+        val count = view.findViewById<TextView>(R.id.renameCount)
         field.setText(tv.name)
-        field.setSingleLine(true)
-        AlertDialog.Builder(this)
-            .setTitle(R.string.rename)
-            .setView(field)
-            .setPositiveButton(R.string.enter) { _, _ ->
-                val next = field.text.toString().trim()
-                if (next.isEmpty()) return@setPositiveButton
-                Thread {
-                    try {
-                        TvClient(tv.host, tv.port).rename(next)
-                        Books.factory(this).save(tv.copy(name = next))
-                        runOnUiThread {
-                            Toast.makeText(this, R.string.renamed, Toast.LENGTH_SHORT).show()
-                            paint()
-                        }
-                    } catch (failed: Exception) {
-                        runOnUiThread { Toast.makeText(this, explain(failed), Toast.LENGTH_LONG).show() }
-                    }
-                }.start()
+        field.setSelection(0, field.text?.length ?: 0)
+        count.text = "${field.text?.length ?: 0}/30"
+        field.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, after: Int) {}
+            override fun afterTextChanged(s: android.text.Editable?) {
+                count.text = "${s?.length ?: 0}/30"
+                error.visibility = View.GONE
             }
-            .setNegativeButton(android.R.string.cancel, null)
-            .show()
+        })
+        val dialog = AlertDialog.Builder(this).setView(view).create()
+        view.findViewById<android.widget.Button>(R.id.renameCancel).setOnClickListener { dialog.dismiss() }
+        view.findViewById<android.widget.Button>(R.id.renameSave).setOnClickListener {
+            val next = field.text?.toString()?.trim().orEmpty()
+            if (next.isEmpty() || next.length > 30) {
+                error.visibility = View.VISIBLE
+                field.requestFocus()
+                return@setOnClickListener
+            }
+            dialog.dismiss()
+            Thread {
+                try {
+                    TvClient(tv.host, tv.port).rename(next)
+                    Books.factory(this).save(tv.copy(name = next))
+                    runOnUiThread {
+                        Toast.makeText(this, R.string.renamed, Toast.LENGTH_SHORT).show()
+                        paint()
+                    }
+                } catch (failed: Exception) {
+                    runOnUiThread { Toast.makeText(this, explain(failed), Toast.LENGTH_LONG).show() }
+                }
+            }.start()
+        }
+        dialog.setOnShowListener {
+            field.requestFocus()
+            val keyboard = getSystemService(InputMethodManager::class.java)
+            keyboard?.showSoftInput(field, InputMethodManager.SHOW_IMPLICIT)
+        }
+        dialog.window?.setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        dialog.show()
     }
 }
 
